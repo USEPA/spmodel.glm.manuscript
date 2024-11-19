@@ -1,0 +1,1680 @@
+% Options for packages loaded elsewhere
+\PassOptionsToPackage{unicode}{hyperref}
+\PassOptionsToPackage{hyphens}{url}
+\PassOptionsToPackage{dvipsnames,svgnames,x11names}{xcolor}
+%
+\documentclass[
+  article]{jss}
+
+\usepackage{amsmath,amssymb}
+\usepackage{iftex}
+\ifPDFTeX
+  \usepackage[T1]{fontenc}
+  \usepackage[utf8]{inputenc}
+  \usepackage{textcomp} % provide euro and other symbols
+\else % if luatex or xetex
+  \usepackage{unicode-math}
+  \defaultfontfeatures{Scale=MatchLowercase}
+  \defaultfontfeatures[\rmfamily]{Ligatures=TeX,Scale=1}
+\fi
+\usepackage{lmodern}
+\ifPDFTeX\else
+    % xetex/luatex font selection
+\fi
+% Use upquote if available, for straight quotes in verbatim environments
+\IfFileExists{upquote.sty}{\usepackage{upquote}}{}
+\IfFileExists{microtype.sty}{% use microtype if available
+  \usepackage[]{microtype}
+  \UseMicrotypeSet[protrusion]{basicmath} % disable protrusion for tt fonts
+}{}
+\makeatletter
+\@ifundefined{KOMAClassName}{% if non-KOMA class
+  \IfFileExists{parskip.sty}{%
+    \usepackage{parskip}
+  }{% else
+    \setlength{\parindent}{0pt}
+    \setlength{\parskip}{6pt plus 2pt minus 1pt}}
+}{% if KOMA class
+  \KOMAoptions{parskip=half}}
+\makeatother
+\usepackage{xcolor}
+\setlength{\emergencystretch}{3em} % prevent overfull lines
+\setcounter{secnumdepth}{-\maxdimen} % remove section numbering
+% Make \paragraph and \subparagraph free-standing
+\ifx\paragraph\undefined\else
+  \let\oldparagraph\paragraph
+  \renewcommand{\paragraph}[1]{\oldparagraph{#1}\mbox{}}
+\fi
+\ifx\subparagraph\undefined\else
+  \let\oldsubparagraph\subparagraph
+  \renewcommand{\subparagraph}[1]{\oldsubparagraph{#1}\mbox{}}
+\fi
+
+
+\providecommand{\tightlist}{%
+  \setlength{\itemsep}{0pt}\setlength{\parskip}{0pt}}\usepackage{longtable,booktabs,array}
+\usepackage{calc} % for calculating minipage widths
+% Correct order of tables after \paragraph or \subparagraph
+\usepackage{etoolbox}
+\makeatletter
+\patchcmd\longtable{\par}{\if@noskipsec\mbox{}\fi\par}{}{}
+\makeatother
+% Allow footnotes in longtable head/foot
+\IfFileExists{footnotehyper.sty}{\usepackage{footnotehyper}}{\usepackage{footnote}}
+\makesavenoteenv{longtable}
+\usepackage{graphicx}
+\makeatletter
+\def\maxwidth{\ifdim\Gin@nat@width>\linewidth\linewidth\else\Gin@nat@width\fi}
+\def\maxheight{\ifdim\Gin@nat@height>\textheight\textheight\else\Gin@nat@height\fi}
+\makeatother
+% Scale images if necessary, so that they will not overflow the page
+% margins by default, and it is still possible to overwrite the defaults
+% using explicit options in \includegraphics[width, height, ...]{}
+\setkeys{Gin}{width=\maxwidth,height=\maxheight,keepaspectratio}
+% Set default figure placement to htbp
+\makeatletter
+\def\fps@figure{htbp}
+\makeatother
+
+\usepackage{orcidlink,thumbpdf,lmodern}
+
+\newcommand{\class}[1]{`\code{#1}'}
+\newcommand{\fct}[1]{\code{#1()}}
+\makeatletter
+\@ifpackageloaded{caption}{}{\usepackage{caption}}
+\AtBeginDocument{%
+\ifdefined\contentsname
+  \renewcommand*\contentsname{Table of contents}
+\else
+  \newcommand\contentsname{Table of contents}
+\fi
+\ifdefined\listfigurename
+  \renewcommand*\listfigurename{List of Figures}
+\else
+  \newcommand\listfigurename{List of Figures}
+\fi
+\ifdefined\listtablename
+  \renewcommand*\listtablename{List of Tables}
+\else
+  \newcommand\listtablename{List of Tables}
+\fi
+\ifdefined\figurename
+  \renewcommand*\figurename{Figure}
+\else
+  \newcommand\figurename{Figure}
+\fi
+\ifdefined\tablename
+  \renewcommand*\tablename{Table}
+\else
+  \newcommand\tablename{Table}
+\fi
+}
+\@ifpackageloaded{float}{}{\usepackage{float}}
+\floatstyle{ruled}
+\@ifundefined{c@chapter}{\newfloat{codelisting}{h}{lop}}{\newfloat{codelisting}{h}{lop}[chapter]}
+\floatname{codelisting}{Listing}
+\newcommand*\listoflistings{\listof{codelisting}{List of Listings}}
+\makeatother
+\makeatletter
+\makeatother
+\makeatletter
+\@ifpackageloaded{caption}{}{\usepackage{caption}}
+\@ifpackageloaded{subcaption}{}{\usepackage{subcaption}}
+\makeatother
+\makeatletter
+\@ifpackageloaded{tcolorbox}{}{\usepackage[skins,breakable]{tcolorbox}}
+\makeatother
+\makeatletter
+\@ifundefined{shadecolor}{\definecolor{shadecolor}{rgb}{.97, .97, .97}}{}
+\makeatother
+\makeatletter
+\makeatother
+\makeatletter
+\ifdefined\Shaded\renewenvironment{Shaded}{\begin{tcolorbox}[boxrule=0pt, enhanced, sharp corners, borderline west={3pt}{0pt}{shadecolor}, frame hidden, interior hidden, breakable]}{\end{tcolorbox}}\fi
+\makeatother
+\ifLuaTeX
+  \usepackage{selnolig}  % disable illegal ligatures
+\fi
+\usepackage{bookmark}
+
+\IfFileExists{xurl.sty}{\usepackage{xurl}}{} % add URL line breaks if available
+\urlstyle{same} % disable monospaced font for URLs
+\hypersetup{
+  pdftitle={Spatial Generalized Linear Models in  Using },
+  pdfauthor={Michael Dumelle; Jay M. Ver Hoef; Matt Higham},
+  pdfkeywords={Autoregressive Model, Geostatistics, Spatial
+Covariance, Spatially-Explicit Model, Statistical Model},
+  colorlinks=true,
+  linkcolor={blue},
+  filecolor={Maroon},
+  citecolor={Blue},
+  urlcolor={Blue},
+  pdfcreator={LaTeX via pandoc}}
+
+%% -- Article metainformation (author, title, ...) -----------------------------
+
+%% Author information
+\author{Michael Dumelle~\orcidlink{0000-0002-3393-5529}\\United States\\
+Environmental Protection Agency \And Jay M. Ver
+Hoef~\orcidlink{0000-0003-4302-6895}\\National Oceanic and\\
+Atmospheric Administration \AND Matt
+Higham~\orcidlink{0009-0006-4217-625X}\\St.~Lawrence University}
+\Plainauthor{Michael Dumelle, Jay M. Ver Hoef, Matt
+Higham} %% comma-separated
+
+\title{Spatial Generalized Linear Models in \proglang{R} Using
+\pkg{spmodel}}
+\Plaintitle{Spatial Generalized Linear Models in
+Using} %% without formatting
+
+%% an abstract and keywords
+\Abstract{Generalized linear models (GLMs) describe a non-normal
+response variable that may be binary, count, skewed, or a proportion.
+Typically, observations in a GLM are assumed independent of one another.
+For spatial data, this independence assumption is impractical, as nearby
+locations tend to be more similar than locations far apart. The
+\pkg{spmodel} \proglang{R} package provides tools to fit GLMs that
+incorporate spatial autocorrelation (i.e., spatial generalized linear
+models, or SPGLMs). SPGLMs are fit in \pkg{spmodel} using a novel
+application of the Laplace approximation via \fct{spglm} for
+point-referenced data or \fct{spgautor} for areal (i.e., lattice), data.
+\fct{spglm} and \fct{spgautor} closely resemble \fct{glm} from base
+\proglang{R} but include arguments that control the spatial
+autocorrelation structure. \pkg{spmodel} has many helper functions for
+model inspection and diagnostics, some of which leverage other
+\proglang{R} packages like \pkg{broom} and \pkg{emmeans}. \pkg{spmodel}
+has tools to make predictions of the latent spatial-mean process at
+unobserved locations. \pkg{spmodel} also provides many advanced features
+like accommodating geometric anisotropy and nonspatial random effects,
+simulating spatially autocorrelated data, and more. Here we use
+\pkg{spmodel} to illustrate the modeling of binary, count, skewed and
+proportion response variables from several point-referenced and areal
+data sets.}
+
+%% at least one keyword must be supplied
+\Keywords{Autoregressive Model, Geostatistics, Spatial
+Covariance, Spatially-Explicit Model, Statistical Model}
+\Plainkeywords{Autoregressive Model, Geostatistics, Spatial
+Covariance, Spatially-Explicit Model, Statistical Model}
+
+%% publication information
+%% NOTE: Typically, this can be left commented and will be filled out by the technical editor
+%% \Volume{50}
+%% \Issue{9}
+%% \Month{June}
+%% \Year{2012}
+%% \Submitdate{2012-06-04}
+%% \Acceptdate{2012-06-04}
+%% \setcounter{page}{1}
+%% \Pages{1--xx}
+
+%% The address of (at least) one author should be given
+%% in the following format:
+\Address{
+Michael Dumelle\\
+Pacific Ecological Systems Division\\
+200 SW 35th St\\
+Corvallis OR\\
+E-mail: \email{dumelle.michael@epa.gov}\\
+\\~
+Jay M. Ver Hoef\\
+Alaska Fisheries Science Center\\
+\\~
+Matt Higham\\
+Department of Math, Computer Science, and Statistics\\
+\\~
+
+}
+
+\begin{document}
+\maketitle
+
+\newpage
+
+\section{Introduction}\label{sec-intro}
+
+Binary, count, proportion, and skewed data are ubiquitous in practice.
+These data types are naturally modeled using a generalized linear model
+(GLM) framework
+\citep{nelder1972generalized, mccullagh1989generalized, myers2012generalized, faraway2016extending}.
+In a GLM, a response variable \(\text{y}\) belongs to a particular
+statistical distribution with mean \(\mu\). For example, \(\text{y}\)
+may be distributed as a Poisson random variable with some mean \(\mu\).
+Based on the response distribution assumed for \(\text{y}\), GLMs link a
+function of \(\mu\) to explanatory variables via a link function:
+\begin{equation}\label{eq-glm}
+f(\boldsymbol{\mu}) \equiv \mathbf{w} = \mathbf{X} \boldsymbol{\beta},
+\end{equation} where for a sample size \(n\), \(\boldsymbol{\mu}\) is
+the mean of an \(n \times 1\) response vector \(\mathbf{y}\),
+\(f(\boldsymbol{\mu})\) is the link function that connects
+\(\boldsymbol{\mu}\) to \(\mathbf{w}\), \(\mathbf{X}\) is the
+\(n \times p\) design matrix of explanatory variables, and
+\(\boldsymbol{\beta}\) is the \(p \times 1\) vector of fixed effects.
+The mean, \(\boldsymbol{\mu}\), is usually constrained in some way
+(e.g., positive) that depends on the distribution assumed for
+\(\mathbf{y}\), but \(\mathbf{w}\) is unconstrained. The parameters in
+Equation\(~\)\eqref{eq-glm} are typically estimated via maximum
+likelihood (e.g., iteratively reweighted least squares)
+\citep{chambers1992S}. The \fct{glm} function is commonly used to fit
+GLMs in the \proglang{R} programming language \citep{rcore2024}.
+
+The GLM framework in Equation\(~\)\eqref{eq-glm} assumes the elements of
+\(\mathbf{y}\) are independent of one another. This assumption is
+impractical for spatial data, where nearby observations tend to be more
+similar than distant observations \citep{tobler1970computer}. Ignoring
+this spatial dependence can give rise to misleading inference and poor
+prediction \citep{zimmerman2024spatial}. Spatial GLMs (SPGLMs) formally
+incorporate spatial autocorrelation into a GLM by adding to
+Equation\(~\)\eqref{eq-glm} two random effects that elucidate spatial
+structure: \begin{equation}\label{eq-spglm}
+f(\boldsymbol{\mu}) \equiv \mathbf{w} = \mathbf{X} \boldsymbol{\beta} + \boldsymbol{\tau} + \boldsymbol{\epsilon},
+\end{equation} where \(\boldsymbol{\tau}\) is an \(n \times 1\) column
+vector of spatially dependent random errors, and
+\(\boldsymbol{\epsilon}\) is an \(n \times 1\) column vector of
+spatially independent random errors. We make a few assumptions about
+\(\boldsymbol{\tau}\) and \(\boldsymbol{\epsilon}\): first, that
+\(\text{E}(\boldsymbol{\tau}) = \text{E}(\boldsymbol{\epsilon}) = \boldsymbol{0}\),
+where \(\text{E}(\cdot)\) denotes expectation; second, that
+\(\text{Cov}(\boldsymbol{\tau}) = \sigma^2_\tau \mathbf{R}\), where
+\(\mathbf{R}\) is an \(n \times n\) matrix that determines the spatial
+dependence structure in \(\mathbf{w}\) (which is linked to
+\(\boldsymbol{\mu}\) and hence \(\mathbf{y}\)) and depends on a range
+parameter, \(\phi\); third, that
+\(\text{Cov}(\boldsymbol{\epsilon}) = \sigma^2_\epsilon \mathbf{I}\),
+where \(\mathbf{I}\) is an \(n \times n\) identity matrix; and fourth,
+that \(\boldsymbol{\tau}\) and \(\boldsymbol{\epsilon}\) are independent
+of one another. The parameter \(\sigma^2_{\tau}\) is called the
+spatially dependent random error variance or partial sill. The parameter
+\(\sigma^2_\epsilon\) is called the spatially independent random error
+variance or nugget. These two variance parameters are henceforth more
+intuitively written as \(\sigma^2_{de}\) and \(\sigma^2_{ie}\),
+respectively. The covariance of \(\mathbf{w}\) is denoted
+\(\boldsymbol{\Sigma}\) and is given by \begin{equation}\label{eq-spcov}
+ \boldsymbol{\Sigma} = \sigma^2_{de}\mathbf{R} + \sigma^2_{ie} \mathbf{I}.
+\end{equation} The parameters \(\sigma^2_{de}\), \(\phi\), and
+\(\sigma^2_{ie}\) are elements of \(\boldsymbol{\theta}\), the
+covariance parameter vector.
+
+The \pkg{spmodel} \proglang{R} package provides tools for fitting
+spatial statistical models and making predictions at unobserved
+locations \citep{dumelle2023spmodel}. A recent major update (v0.4.0) to
+\pkg{spmodel} added SPGLM (Equation\(~\)\ref{eq-spglm}) support for
+binary, count, skewed, and proportion response variables
+(Table\(~\)\ref{table-links}), greatly expanding the class of models
+that \pkg{spmodel} makes accessible to practitioners.
+
+\begin{table}
+
+\centering{
+
+\centering
+\begin{tabular}{||c|ccc||}
+ \hline
+ Family & Link Function & Link Name & Data Type  \\ [0.5ex]
+ \hline \hline
+ Binomial & $f(\mu) = \log(\mu / (1 - \mu))$ & Logit & Binary; Binary Count \\
+ Poisson & $f(\mu) = \log(\mu)$ & Log & Count \\
+ Negative Binomial & $f(\mu) = \log(\mu)$ & Log & Count \\
+ Beta & $f(\mu) = \log(\mu / (1 - \mu))$ & Logit & Proportion \\
+ Gamma & $f(\mu) = \log(\mu)$ & Log & Skewed \\
+ Inverse Gaussian & $f(\mu) = \log(\mu)$ & Log & Skewed \\
+ \hline\hline
+\end{tabular}
+
+}
+
+\caption{\label{table-links}SPGLM response distributions and their link functions and data types.}
+
+\end{table}%
+
+SPGLMs for point-referenced data are called geostatistical GLMs and are
+fit using \fct{spglm}. Data are point-referenced when the elements in
+\(\mathbf{y}\) are observed at point-locations indexed by x-coordinates
+and y-coordinates on a spatially continuous surface with an infinite
+number of locations (e.g., point locations in a field). SPGLMs for areal
+data are called spatial autoregresive models and are fit using
+\fct{spgautor}. Data are areal (i.e., lattice) when they are part of a
+finite network of polygons whose connections are indexed by a
+neighborhood structure (e.g., states in a country).
+
+Several other \proglang{R} packages exist for analyzing SPGLMs. The
+\pkg{brms} \citep{burkner2017brms}, \pkg{carBayes}
+\citep{lee2013carbayes}, \pkg{ngspatial} \citep{hughes2020ngspatial},
+\pkg{R-INLA} \citep{lindgren2015bayesian}, \pkg{spBayes}
+\citep{finley2007spbayes}, and \pkg{spNNGP} \citep{finley2002spnngp}
+packages take a Bayesian approach, either directly sampling from
+posterior distributions of parameters (e.g., using MCMC) or
+approximating them. A benefit of Bayesian approaches is that prior
+information can be incorporated and uncertainty quantification of
+parameter estimates is straightforward. However, Bayesian approaches,
+especially those using MCMC, tend to be computationally expensive. In
+order to reduce computation time, many of these packages work with the
+precision matrix instead of the covariance matrix so that inverting
+matrices (a computational bottleneck) is not required. For example,
+\pkg{R-INLA} uses the precision matrix (often directly modeled as with
+autoregressive models) and tends to be very fast. Working with precision
+matrices, however, can be more restrictive and less intuitive than
+working directly with the covariance matrix. The \pkg{FRK}
+\citep{sainsbury2024modeling}, \pkg{glmmTMB} \citep{brooks2017glmmtmb},
+\pkg{hglm} \citep{ronnegard2010hglm}, \pkg{mgcv}
+\citep{wood2017generalized}, and \pkg{spaMM} \citep{rousset2014spamm}
+packages directly use Laplace, quasi-likelihood, or reduced-rank
+approaches to estimate parameters. These direct approaches tend to be
+computationally efficient, as they don't rely on MCMC sampling. In
+contrast to the Bayesian approach, a drawback of these direct approaches
+is that prior information cannot be formally incorporated and covariance
+parameter uncertainty is challenging to quantify. SPGLMs in
+\pkg{spmodel} are most similar to those in \pkg{glmmTMB} --
+\pkg{spmodel} uses analytical solutions for maximizing the likelihood
+(which we describe in the next section), while \pkg{glmmTMB} uses
+automatic differentiation for maximizing the likelihood (which tends to
+be much slower than analytical solutions).
+
+Missing from the aforementioned \proglang{R} packages is the complete
+set of tools for SPGLMs that \pkg{spmodel} provides. Importantly, the
+\fct{spglm} and \fct{spautor} functions act as a spatial analogue to the
+familiar \fct{glm} from base \proglang{R}, making the transition from
+GLMs to SPGLMs relatively seamless. \pkg{spmodel} leverages many
+commonly used \proglang{R} generics like \fct{summary} to better
+understand fitted models. Six GLM families (Table\(~\)\ref{table-links})
+and 20 spatial covariance (or precision) functions are supported. Also
+available are functions for data visualization, model fitting, model
+summaries, model diagnostics, model comparison, and prediction, all
+crucial components of a data analysis. Through extra function arguments,
+\pkg{spmodel} supports advanced features like geometric anisotropy,
+non-spatial random effects, methods for large data sets, and more.
+Importantly, \pkg{spmodel} extends popular packages like \pkg{broom}
+\citep{robinson2021broom, kuhn2022tidy} and \pkg{emmeans}
+\citep{lenth2024emmeans}. \pkg{spmodel} also provides function for
+simulating SPGLM data (e.g., \fct{sprbinom}, \fct{sprpois}).
+
+The rest of this article is organized as follows. In
+Section~\ref{sec-spglm}, we provide some background for the SPGLM
+fitting and prediction routines in \pkg{spmodel}. In
+Section~\ref{sec-applications}, we provide several applications of
+\pkg{spmodel} to spatial binary, count, skewed and proportion data with
+both point-referenced and areal supports. And in
+Section~\ref{sec-discussion}, we end with a discussion synthesizing
+\pkg{spmodel}'s contributions to the analysis of SPGLMs in \proglang{R}.
+
+\section{Spatial generalized linear models using the Laplace
+approximation}\label{sec-spglm}
+
+GLMs with random effects are often written hierarchically
+\citep{lee1996hierarchical, bolker2009generalized, wood2017generalized}.
+\pkg{spmodel} leverages this hierarchical structure and uses a novel
+application of the Laplace approximation \citep{ver2024marginal} to fit
+models. This marginal approach is quite flexible, accommodating a wide
+range of possible dependence structures and formally maximizing a
+likelihood. Maximizing a likelihood yields convenient likelihood-based
+statistics like AIC \citep{akaike1974new}, AICc
+\citep{hoeting2006model}, BIC \citep{schwarz1978estimating}, deviance
+\citep{mccullagh1989generalized}, and likelihood ratio tests for model
+comparison, a benefit compared to quasi-likelihood
+\citep{wedderburn1974quasi, breslow1993approximate} or pseudo-likelihood
+approaches \citep{wolfinger1993generalized}, which only specify the
+first two moments of a distribution. \citet{ver2024marginal} provide
+thorough context for the marginal approach and its associated details,
+but next we provide an short overview of the methodology.
+
+Our goal is to marginalize over the latent mean \(\mathbf{w}\) and fixed
+effects \(\boldsymbol{\beta}\) in Equation\(~\)\eqref{eq-spglm} to
+obtain a response distribution for \(\mathbf{y}\) that depends only on
+the explanatory variables, \(\mathbf{X}\), the response distribution's
+dispersion parameter, \(\varphi\), and the covariance parameters,
+\(\boldsymbol{\theta}\). We can represent this marginal distribution
+hierarchically as \begin{equation}\label{eq-marginal}
+  [\mathbf{y}|\mathbf{X}, \varphi, \boldsymbol{\theta}] = \int_{\mathbf{w}} \int_{\boldsymbol{\beta}} [\mathbf{y} | f^{-1}(\mathbf{w}), \varphi] [\mathbf{w} | \mathbf{X}, \boldsymbol{\theta}] d\boldsymbol{\beta} d\mathbf{w} .
+\end{equation} In Equation\(~\)\eqref{eq-marginal},
+\([\mathbf{y} | f^{-1}(\mathbf{w}), \varphi]\) is the density for
+\(\mathbf{y}\) (e.g., binomial, Poisson) given the latent mean and
+dispersion parameter and
+\([\mathbf{w} | \mathbf{X}, \boldsymbol{\theta}]\) is the Gaussian
+density for \(\mathbf{w}\) given the explanatory variables, fixed
+effects, and covariance parameters. Integrating \(\boldsymbol{\beta}\)
+out of Equation\(~\)\eqref{eq-spglm} yields
+\begin{equation}\label{eq-marginal2}
+  [\mathbf{y}|\mathbf{X}, \varphi, \boldsymbol{\theta}] = \int_{\mathbf{w}} [\mathbf{y} | f^{-1}(\mathbf{w}), \varphi] [\mathbf{w} | \mathbf{X}, \boldsymbol{\theta}] d\mathbf{w},
+\end{equation} where \([\mathbf{w} | \mathbf{X}, \boldsymbol{\theta}]\)
+is the restricted (i.e., residual) Gaussian density
+\citep[\citet{harville1977maximum},
+\citet{wolfinger1994computing}]{patterson1971recovery} for
+\(\mathbf{w}\) given the explanatory variables and covariance
+parameters. This restricted Gaussian density is given by
+\begin{equation}\label{eq-reml-def}
+[\mathbf{w} | \mathbf{X}, \boldsymbol{\theta}] = \frac{\exp(-\frac{1}{2}(\mathbf{y} - \mathbf{X}\tilde{\boldsymbol{\beta}}) \boldsymbol{\Sigma}^{-1} (\mathbf{y} - \mathbf{X}\tilde{\boldsymbol{\beta}})^T)}{(2 \pi)^{(n - p)/2} |\boldsymbol{\Sigma}|^{1/2}|\mathbf{X}^T \boldsymbol{\Sigma}^{-1} \mathbf{X}|^{1/2}},
+\end{equation} where
+\(\tilde{\boldsymbol{\beta}} = (\mathbf{X}^T \boldsymbol{\Sigma}^{-1} \mathbf{X})^{-1} \mathbf{X}^T \boldsymbol{\Sigma}^{-1} \mathbf{w}\)
+and \(|\cdot|\) denotes the determinant.
+
+Next, let
+\(\ell_\mathbf{w} = \log([\mathbf{y} | f^{-1}(\mathbf{w}), \varphi] [\mathbf{w} | \mathbf{X}, \boldsymbol{\theta}])\)
+and then notice that Equation\(~\)\eqref{eq-marginal2} can be written as
+\begin{equation}\label{eq-marginal3}
+  [\mathbf{y}|\mathbf{X}, \varphi, \boldsymbol{\theta}] = \int_{\mathbf{w}} \exp(\ell_\mathbf{w}) d\mathbf{w}.
+\end{equation} A Taylor series expansion of \(\ell_\mathbf{w}\) around a
+point \(\mathbf{a}\) yields \begin{equation}\label{eq-marginal4}
+  [\mathbf{y}|\mathbf{X}, \varphi, \boldsymbol{\theta}] \approx \int_{\mathbf{w}} \exp(\ell_\mathbf{a} + \mathbf{g}^T(\mathbf{w} - \mathbf{a}) + \frac{1}{2}(\mathbf{w} - \mathbf{a})^T \mathbf{G} (\mathbf{w} - \mathbf{a}))d\mathbf{w},
+\end{equation} where \(\mathbf{g}\) and \(\mathbf{G}\) are the gradient
+and Hessian, respectively, of \(\ell_\mathbf{w}\) with respect to
+\(\mathbf{w}\). If \(\mathbf{a}\) is a value for which
+\(\mathbf{g} = \mathbf{0}\), \begin{equation}\label{eq-marginal5}
+  [\mathbf{y}|\mathbf{X}, \varphi, \boldsymbol{\theta}] \approx \exp(\ell_\mathbf{a}) \int_{\mathbf{w}} \exp(-\frac{1}{2}(\mathbf{w} - \mathbf{a})^T (-\mathbf{G}) (\mathbf{w} - \mathbf{a}))d\mathbf{w}.
+\end{equation} Notice that the integral in
+Equation\(~\)\ref{eq-marginal5} can be solved in the same manner as the
+normalizing constant in a multivariate Gaussian distribution, and
+rewriting \(\exp(\ell_\mathbf{a})\) yields
+\begin{equation}\label{eq-marginal6}
+  [\mathbf{y}|\mathbf{X}, \varphi, \boldsymbol{\theta}] \approx [\mathbf{y} | f^{-1}(\mathbf{a}), \varphi] [\mathbf{a} | \mathbf{X}, \boldsymbol{\theta}] (2 \pi)^{n/2}|-\mathbf{G}_{\mathbf{a}}|^{-1/2}.
+\end{equation} \citet{ver2024marginal} show how to evaluate
+\(\mathbf{g}\) and \(\mathbf{G}\) to obtain \textbf{a} and maximize (the
+natural logarithm of) Equation\(~\)\eqref{eq-marginal6} for the six
+response distributions in Table\(~\)\ref{table-links}. Maximizing
+Equation\(~\)\eqref{eq-marginal6} using a Newton-Rhapson approach yields
+the marginal restricted maximum likelihood estimators \(\hat{\varphi}\)
+and \(\hat{\boldsymbol{\theta}}\). \citet{ver2024marginal} show that the
+fixed effect estimator is
+\(\hat{\boldsymbol{\beta}} = (\mathbf{X}^T \hat{\boldsymbol{\Sigma}}^{-1}\mathbf{X})^{-1}\mathbf{X}^T \hat{\boldsymbol{\Sigma}}^{-1}\mathbf{w}\),
+where \(\hat{\boldsymbol{\Sigma}}\) is the covariance matrix
+\(\boldsymbol{\Sigma}\) evaluated at \(\hat{\boldsymbol{\theta}}\).
+\citet{ver2024marginal} also derive the covariance matrix of
+\(\hat{\boldsymbol{\beta}}\) and show how to predict \(\mathbf{w}\) at
+unobserved locations and quantify their uncertainties.
+
+\section{Application}\label{sec-applications}
+
+The \fct{spglm} (for point-referenced data) and \fct{spgautor} (for
+areal data) functions in \pkg{spmodel} fit SPGLMs using the Laplace
+approximation outlined in Section~\ref{sec-spglm}. Both \fct{spglm} and
+\fct{spgautor} generally require the following four arguments:
+\texttt{formula}, a formula that describes the relationship between the
+response variable and explanatory variables; \texttt{family}, the
+response distribution (which can be \texttt{binomial}, \texttt{poisson},
+\texttt{nbinomial}, \texttt{Gamma}, \texttt{inverse.gaussian}, or
+\texttt{beta}); \texttt{data}, the data frame that holds the variables
+in \texttt{formula} as well as spatial locations; and
+\texttt{spcov\_type}, the spatial covariance type. The first three
+arguments are shared by \fct{glm}; thus, the transition from GLMs to
+SPGLMs requires only one additional argument: \texttt{spcov\_type}. The
+\fct{spglm} spatial covariance types measure dependence as a function of
+Euclidean distance among observations; an example is the exponential
+spatial covariance: \begin{equation}\label{eq-spcov-exp}
+  \boldsymbol{\Sigma} = \sigma^2_{de} \exp(-\mathbf{H}/\phi) + \sigma^2_{ie}\mathbf{I},
+\end{equation} where \(\mathbf{H}\) is a matrix of pairwise distances
+among all observations. \fct{spglm} currently supports 18 distinct
+spatial covariance functions.
+
+The \fct{spgautor} spatial covariance types measure dependence as a
+function of neighborhood distance among observations; an example is the
+simultaneous autoregressive covariance matrix:
+\begin{equation}\label{eq-spcov-sar}
+  \boldsymbol{\Sigma} = \sigma^2_{de} [(\mathbf{I} - \phi \mathbf{W})(\mathbf{I} - \phi \mathbf{W})^T]^{-1} + \sigma^2_{ie}\mathbf{I},
+\end{equation} where \(\mathbf{W}\) is a matrix that represents the
+neighborhood structure among all observations. \fct{spgautor} currently
+supports two distinct spatial covariance functions.
+
+In the rest of this section, we use \pkg{spmodel} to study binary,
+count, skewed, and proportion response variables that are either
+point-referenced or areal. We use \pkg{spmodel} for all parts of the
+data analysis, from estimation to inference to model diagnostics to
+prediction. We first describe core \pkg{spmodel} functionality in an
+application to binary data, while additional analyses highlight count,
+skewed, and proportion data as well as some additional \pkg{spmodel}
+features. Before proceeding, load \pkg{spmodel} into the current
+\proglang{R} session:
+
+\begin{verbatim}
+R> library("spmodel")
+\end{verbatim}
+
+\subsection{Binary data}\label{binary-data}
+
+The \texttt{moose} data in \pkg{spmodel} contain information on moose
+presence in Alaska. They are an \texttt{sf} object, a special data frame
+that is supplemented with spatial information using the \pkg{sf} package
+\citep{pebesma2018sf}. The first few rows look like:
+
+\begin{verbatim}
+R> head(moose)
+\end{verbatim}
+
+\begin{verbatim}
+Simple feature collection with 6 features and 4 fields
+Geometry type: POINT
+Dimension:     XY
+Bounding box:  xmin: 281896.4 ymin: 1518398 xmax: 311325.3 ymax: 1541016
+Projected CRS: NAD83 / Alaska Albers
+# A tibble: 6 x 5
+   elev strat count presence           geometry
+  <dbl> <chr> <dbl> <fct>           <POINT [m]>
+1  469. L         0 0        (293542.6 1541016)
+2  362. L         0 0        (298313.1 1533972)
+3  173. M         0 0        (281896.4 1532516)
+4  280. L         0 0        (298651.3 1530264)
+5  620. L         0 0        (311325.3 1527705)
+6  164. M         0 0        (291421.5 1518398)
+\end{verbatim}
+
+There are five columns: \texttt{elev}, the numeric site elevation
+(meters); \texttt{strat} a stratification variable for sampling with two
+levels, \texttt{"L"} and \texttt{"M"}, which are categorized by
+landscape metrics at each site; \texttt{count}, the number of moose at
+each site; \texttt{presence}, a factor that indicates whether at least
+one moose was observed at each site (\texttt{0} implies no moose;
+\texttt{1} implies at least one moose); and \texttt{geometry}, the NAD83
+projected coordinate of each site. The \texttt{moose\_preds} data in
+\pkg{spmodel} contain spatial locations at which predictions of moose
+presence are desired. They are also an \texttt{sf} object with the same
+projection and measurements for \texttt{elev} and \texttt{strat}.
+Figure~\ref{fig-moose-data} shows the \texttt{presence} variable in
+\texttt{moose} as well as the spatial locations of both \texttt{moose}
+and \texttt{moose\_preds}. Moose are most common in the southwestern and
+eastern parts of the domain and least common in the northwest.
+
+\begin{figure}
+
+\centering{
+
+\includegraphics[width=0.7\textwidth,height=0.7\textheight]{figures/figure-1.png}
+
+}
+
+\caption{\label{fig-moose-data}Moose presence in Alaska. Circles
+represent moose presence or absence (based on color) and triangles
+represent locations at which moose presence probability predictions are
+desired.}
+
+\end{figure}%
+
+To study the effect of elevation, stratum, and their interaction on
+moose presence while accounting for spatial autocorrelation, we fit a
+SPGLM for binary data (i.e., a spatial logistic regression model) using
+\fct{spglm}:
+
+\begin{verbatim}
+R> spbin <- spglm(
++  formula = presence ~ elev + strat + elev:strat,
++  family = binomial,
++  data = moose,
++  spcov_type = "spherical"
++)
+\end{verbatim}
+
+Summarizing the model object yields a summary similar to that provided
+by the familiar \fct{glm}:
+
+\begin{verbatim}
+R> summary(spbin)
+\end{verbatim}
+
+\begin{verbatim}
+
+Call:
+spglm(formula = presence ~ elev + strat + elev:strat, family = binomial,
+    data = moose, spcov_type = "spherical")
+
+Deviance Residuals:
+    Min      1Q  Median      3Q     Max
+-1.8423 -0.7538  0.3883  0.7604  1.6018
+
+Coefficients (fixed):
+             Estimate Std. Error z value Pr(>|z|)
+(Intercept) -3.039992   1.205695  -2.521  0.01169 *
+elev         0.009133   0.004126   2.213  0.02687 *
+stratM       3.276511   1.162603   2.818  0.00483 **
+elev:stratM -0.010882   0.006697  -1.625  0.10418
+---
+Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+
+Pseudo R-squared: 0.08845
+
+Coefficients (spherical spatial covariance):
+       de        ie     range
+5.083e+00 2.580e-03 5.158e+04
+
+Coefficients (Dispersion for binomial family):
+dispersion
+         1
+\end{verbatim}
+
+The summary contains the original function call, a summary of residuals,
+the fixed effects coefficients table, the spatial covariance parameter
+estimates, and additional model information like the pseudo R-squared,
+which quantifies the variability in the model attributable to the fixed
+effects. While useful, this summary information is hard to work with, as
+it is printed directly to the \proglang{R} console. The \pkg{broom}
+package from the tidymodels \citep{kuhn2022tidy} ecosystem has functions
+to provide helpful model output in the form of tibbles (i.e., data
+frames) that are easily manipulated. \pkg{spmodel} has methods for the
+\fct{tidy}, \fct{glance}, and \fct{augment} functions from \pkg{broom}.
+The first \pkg{broom} function is \fct{tidy}, which tidies the model
+output:
+
+\begin{verbatim}
+R> tidy(spbin)
+\end{verbatim}
+
+\begin{verbatim}
+# A tibble: 4 x 5
+  term        estimate std.error statistic p.value
+  <chr>          <dbl>     <dbl>     <dbl>   <dbl>
+1 (Intercept) -3.04      1.21        -2.52 0.0117
+2 elev         0.00913   0.00413      2.21 0.0269
+3 stratM       3.28      1.16         2.82 0.00483
+4 elev:stratM -0.0109    0.00670     -1.62 0.104
+\end{verbatim}
+
+The estimates and standard errors returned are on the log odds link
+(Table\(~\)\ref{table-links}) scale (\fct{coef} and \fct{vcov} may also
+be used). The output provides evidence that elevation is positively
+associated with moose presence in the \texttt{"L"} stratum (\(p-\)value
+\(<0.05\)) and, at zero elevation, moose are more likely in the
+\texttt{"M"} stratum than the \texttt{"L"} stratum (\(p-\)value
+\(<0.01\)). This output provides marginal evidence that the effect of
+elevation on moose presence varies across strata (\(p-\)value
+\(\approx 0.1\)). The model effectively quantifies the impact of
+elevation on moose presence for moose in the \texttt{"L"} strata, but an
+analogous statement for moose in the \texttt{"M"} strata requires more
+context. We could refit the model treating \texttt{"M"} as the reference
+group instead of \texttt{"L"}:
+
+\begin{verbatim}
+R> moose$strat2 <- factor(moose$strat, levels = c("M", "L"))
+R> update(spbin, formula = presence ~ elev + strat2 + elev:strat2) |>
++  summary()
+\end{verbatim}
+
+\begin{verbatim}
+
+Call:
+spglm(formula = presence ~ elev + strat2 + elev:strat2, family = binomial,
+    data = moose, spcov_type = "spherical")
+
+Deviance Residuals:
+    Min      1Q  Median      3Q     Max
+-1.8423 -0.7538  0.3883  0.7604  1.6018
+
+Coefficients (fixed):
+              Estimate Std. Error z value Pr(>|z|)
+(Intercept)   0.236519   1.305198   0.181  0.85620
+elev         -0.001750   0.006090  -0.287  0.77385
+strat2L      -3.276511   1.162603  -2.818  0.00483 **
+elev:strat2L  0.010882   0.006697   1.625  0.10418
+---
+Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+
+Pseudo R-squared: 0.08845
+
+Coefficients (spherical spatial covariance):
+       de        ie     range
+5.083e+00 2.580e-03 5.158e+04
+
+Coefficients (Dispersion for binomial family):
+dispersion
+         1
+\end{verbatim}
+
+A simpler solution, especially if there categorical variables with many
+levels, is to leverage \pkg{emmeans}. \pkg{emmeans} is an \proglang{R}
+package for estimating marginal means of model objects. The
+\fct{emtrends} function in \pkg{emmeans} characterizes the effect of a
+continuous variable (here, \texttt{elev}) for each level of a
+categorical variable (here, \texttt{strat}):
+
+\begin{verbatim}
+R> library("emmeans")
+\end{verbatim}
+
+\begin{verbatim}
+R> emtrends(spbin, "strat", "elev")
+\end{verbatim}
+
+\begin{verbatim}
+ strat elev.trend      SE  df asymp.LCL asymp.UCL
+ L        0.00913 0.00413 Inf   0.00105    0.0172
+ M       -0.00175 0.00609 Inf  -0.01369    0.0102
+
+Degrees-of-freedom method: asymptotic
+Confidence level used: 0.95
+\end{verbatim}
+
+The asymptotic confidence intervals show that there is more evidence of
+an association between elevation and moose presence in the \texttt{"L"}
+stratum than in the \texttt{"M"} stratum. Notice that
+\texttt{elev.trend} for the \texttt{"L"} stratum matches the
+\texttt{elev} effect when \texttt{"L"} is the reference group, and
+similarly for \texttt{elev.trend} when \texttt{"M"} is the reference
+group.
+
+The second \pkg{broom} function is \fct{glance}, which glances at the
+model fit:
+
+\begin{verbatim}
+R> glance(spbin)
+\end{verbatim}
+
+\begin{verbatim}
+# A tibble: 1 x 10
+      n     p  npar value   AIC  AICc   BIC logLik deviance pseudo.r.squared
+  <int> <dbl> <int> <dbl> <dbl> <dbl> <dbl>  <dbl>    <dbl>            <dbl>
+1   218     4     3  681.  687.  687.  697.  -340.     161.           0.0885
+\end{verbatim}
+
+\fct{glance} returns several useful statistics like the sample size
+(\texttt{n}), number of fixed effects (\texttt{p}), number of covariance
+parameters (\texttt{npar}), several likelihood-based statistics (e.g.,
+\texttt{AIC}, \texttt{AICc}, \texttt{BIC}), and pseudo R-squared.
+
+\begin{figure}
+
+\centering{
+
+\includegraphics[width=1\textwidth,height=1\textheight]{figures/figure-2.png}
+
+}
+
+\caption{\label{fig-sp-diagnostic}Spatial logistic regression model
+diagnostics from \fct{augment}. The leverage (i.e., hat) values (left)
+and standardized residuals (right).}
+
+\end{figure}%
+
+The third \pkg{broom} function is \fct{augment}, which augments the
+model data with diagnostics:
+
+\begin{verbatim}
+R> head(augment(spbin))
+\end{verbatim}
+
+\begin{verbatim}
+Simple feature collection with 6 features and 8 fields
+Geometry type: POINT
+Dimension:     XY
+Bounding box:  xmin: 281896.4 ymin: 1518398 xmax: 311325.3 ymax: 1541016
+Projected CRS: NAD83 / Alaska Albers
+# A tibble: 6 x 9
+  presence  elev strat .fitted .resid    .hat   .cooksd .std.resid
+  <fct>    <dbl> <chr>   <dbl>  <dbl>   <dbl>     <dbl>      <dbl>
+1 0         469. L      -1.47  -0.644 0.101   0.0130        -0.679
+2 0         362. L      -2.77  -0.349 0.0166  0.000523      -0.352
+3 0         173. M      -2.23  -0.451 0.00390 0.000200      -0.452
+4 0         280. L      -3.59  -0.234 0.00343 0.0000472     -0.234
+5 0         620. L      -0.774 -0.871 0.319   0.130         -1.06
+6 0         164. M      -2.01  -0.502 0.00459 0.000292      -0.503
+# i 1 more variable: geometry <POINT [m]>
+\end{verbatim}
+
+The \fct{augment} function returns the fitted \(\mathbf{w}\) values
+(\texttt{.fitted}), deviance residuals (\texttt{.resid}), leverage
+(i.e., hat) values (\texttt{.hat}), Cook's distance (\texttt{.cooksd}),
+and standardized residuals (\texttt{.std.resid}). When the data are an
+\texttt{sf} object, \fct{augment} returns another \texttt{sf} object,
+helpful for visualizing model diagnostics spatially as in
+Figure~\ref{fig-sp-diagnostic}. Leverage measures the unusualness of an
+observation's set of explanatory variables, while Cook's distances
+measures how influential an observation is on the resulting model fit
+\citep{montgomery2021introduction}. Model diagnostics are also
+accessible as vectors using the appropriate generic function (e.g.,
+\fct{fitted}, \fct{residuals}).
+
+Similar to \fct{glm} model objects, \fct{plot} can be used to visualize
+diagnostics (Figure~\ref{fig-sp-diagnostic2}):
+
+\begin{verbatim}
+R> plot(spbin, which = c(4, 7))
+\end{verbatim}
+
+\begin{figure}
+
+\centering{
+
+\includegraphics[width=1\textwidth,height=1\textheight]{figures/figure-3.png}
+
+}
+
+\caption{\label{fig-sp-diagnostic2}Spatial logistic regression model
+diagnostics from \fct{plot}. The Cook's distance values (left) and the
+fitted spatial covariance as a function of distance (right).}
+
+\end{figure}%
+
+Components of model variation are partitioned using \fct{varcomp}:
+
+\begin{verbatim}
+R> varcomp(spbin)
+\end{verbatim}
+
+\begin{verbatim}
+# A tibble: 3 x 2
+  varcomp            proportion
+  <chr>                   <dbl>
+1 Covariates (PR-sq)   0.0885
+2 de                   0.911
+3 ie                   0.000462
+\end{verbatim}
+
+The fixed effects explain roughly 9\% of model variation, while the
+spatially dependent variance explains most of the remaining variability.
+
+\begin{figure}
+
+\centering{
+
+\includegraphics[width=0.7\textwidth,height=0.7\textheight]{figures/figure-4.png}
+
+}
+
+\caption{\label{fig-moose-fit}Moose presence probability fitted values
+and predictions. Fitted values are represeneted by circles and
+predictions by triangles.}
+
+\end{figure}%
+
+We make predictions of the log odds of moose probability presence at
+each site in \texttt{moose\_preds} using \fct{predict}:
+
+\begin{verbatim}
+R> head(predict(spbin, newdata = moose_preds))
+\end{verbatim}
+
+\begin{verbatim}
+          1           2           3           4           5           6
+ 0.08588581 -0.40762380 -1.87510889 -1.14172781  1.45701519 -2.74275553
+\end{verbatim}
+
+\fct{augment} may also be used to augment the prediction data with
+predictions:
+
+\begin{verbatim}
+head(augment(
+  spbin,
+  newdata = moose_preds,
+  type.predict = "response",
+  interval = "prediction"
+))
+\end{verbatim}
+
+\begin{verbatim}
+Simple feature collection with 6 features and 5 fields
+Geometry type: POINT
+Dimension:     XY
+Bounding box:  xmin: 291839.8 ymin: 1436192 xmax: 401239.6 ymax: 1512103
+Projected CRS: NAD83 / Alaska Albers
+# A tibble: 6 x 6
+   elev strat .fitted  .lower .upper           geometry
+  <dbl> <chr>   <dbl>   <dbl>  <dbl>        <POINT [m]>
+1  143. L      0.521  0.0983   0.916 (401239.6 1436192)
+2  324. L      0.399  0.0331   0.928 (352640.6 1490695)
+3  158. L      0.133  0.00957  0.709 (360954.9 1491590)
+4  221. M      0.242  0.0261   0.792 (291839.8 1466091)
+5  209. M      0.811  0.289    0.978 (310991.9 1441630)
+6  218. L      0.0605 0.00360  0.534 (304473.8 1512103)
+\end{verbatim}
+
+Here, we requested predictions on the probability (i.e., response) scale
+(Figure~\ref{fig-moose-fit}) alongside lower and upper bounds of a 95\%
+(see \texttt{level}) prediction interval (Figure~\ref{fig-moose-int}).
+
+\begin{figure}
+
+\centering{
+
+\includegraphics[width=1\textwidth,height=1\textheight]{figures/figure-5.png}
+
+}
+
+\caption{\label{fig-moose-int}Moose presence probability prediction
+intervals. 95\% prediction interval lower bound (left) and 95\%
+prediction interval upper bound (right).}
+
+\end{figure}%
+
+Thus far we have heuristically argued, based on first principles, that
+there are benefits to incorporating spatial autocorrelation for GLMs
+applied to spatial data. Now we provide some empirical evidence to
+support this claim by comparing the fits of the SPGLM and a GLM. If
+\texttt{spcov\_type\ =\ "none"}, the resulting model fit is nearly
+identical to that from \fct{glm}:
+
+\begin{verbatim}
+R> # fit nonspatial model using spglm()
+R> bin <- spglm(
++  formula = presence ~ elev + strat + elev:strat,
++  family = binomial,
++  data = moose,
++  spcov_type = "none"
++)
+R> # fit nonspatial model using glm()
+R> bin_glm <- glm(
++  formula = presence ~ elev + strat + elev:strat,
++  family = binomial,
++  data = moose
++)
+R> # compare fixed effect coefficients and standard errors up to four decimals
+R> data.frame(
++  est_none = coef(bin),
++  est_glm = coef(bin_glm),
++  se_none = sqrt(diag(vcov(bin))),
++  se_glm = sqrt(diag(vcov(bin_glm)))
++) |>
++  apply(2, round, digits = 4)
+\end{verbatim}
+
+\begin{verbatim}
+            est_none est_glm se_none se_glm
+(Intercept)  -0.5219 -0.5219  0.5082 0.5082
+elev          0.0002  0.0002  0.0024 0.0024
+stratM        1.0274  1.0274  0.7150 0.7150
+elev:stratM  -0.0013 -0.0013  0.0038 0.0038
+\end{verbatim}
+
+The advantage of using \fct{spglm} to fit a model with
+\texttt{spcov\_type\ =\ "none"} is that it provides access to other
+\pkg{spmodel} functions for model objects (e.g., \fct{glances} below)
+and accounts for the additional terms in the likelihood from
+Equation\(~\)\eqref{eq-marginal6}. These additional terms make the
+likelihood for \fct{spglm} and \fct{glm} different, though the models
+convey the same information. A glance at the spatial and nonspatial
+models reveals:
+
+\begin{verbatim}
+R> glances(spbin, bin)
+\end{verbatim}
+
+\begin{verbatim}
+# A tibble: 2 x 11
+  model     n     p  npar value   AIC  AICc   BIC logLik deviance
+  <chr> <int> <dbl> <int> <dbl> <dbl> <dbl> <dbl>  <dbl>    <dbl>
+1 spbin   218     4     3  681.  687.  687.  697.  -340.     161.
+2 bin     218     4     0  717.  717.  717.  717.  -359.     294.
+# i 1 more variable: pseudo.r.squared <dbl>
+\end{verbatim}
+
+The spatial model has a notably lower AIC, AICc, BIC, and deviance,
+suggesting it is the superior model. Another model comparison approach
+is leave-one-out cross validation. In leave-one-out cross validation,
+separately each observation is held out, a model is fit to the remaining
+data, and a prediction is made for the mean of the held out observation
+on the response scale. Then, statistics like leave-one-out bias,
+mean-squared-prediction error (MSPE), and the square root of MSPE
+(RMSPE) may be computed:
+
+\begin{verbatim}
+R> loocv(spbin) |>
++  apply(2, round, digits = 4)
+\end{verbatim}
+
+\begin{verbatim}
+   bias    MSPE   RMSPE
+-0.0006  0.1458  0.3818
+\end{verbatim}
+
+\begin{verbatim}
+R> loocv(bin) |>
++  apply(2, round, digits = 4)
+\end{verbatim}
+
+\begin{verbatim}
+  bias   MSPE  RMSPE
+0.0000 0.2403 0.4902
+\end{verbatim}
+
+Both models are nearly unbiased, but the spatial model has an
+approximately 39\% lower MSPE, suggesting the probability predictions
+tend to be much closer to the observed presence values.
+
+A third model comparison tool is area under the receiver operating
+characteristic (AUROC) curve. The AUROC curve ranges from zero to one
+and conveys a model's classification performance over all possible
+probability thresholds \citep{james2013introduction}. Larger values of
+AUROC indicate a more accurate model:
+
+\begin{verbatim}
+R> AUROC(spbin)
+\end{verbatim}
+
+\begin{verbatim}
+[1] 0.9490741
+\end{verbatim}
+
+\begin{verbatim}
+R> AUROC(bin)
+\end{verbatim}
+
+\begin{verbatim}
+[1] 0.647138
+\end{verbatim}
+
+All three performance metrics (likelihood-based statistics,
+leave-one-out statistics, and AUROC) prefer the spatial model.
+
+\subsection{Count data}\label{count-data}
+
+\begin{figure}
+
+\centering{
+
+\includegraphics[width=0.7\textwidth,height=0.7\textheight]{figures/figure-6.png}
+
+}
+
+\caption{\label{fig-moose-data-count}Moose counts in Alaska. Circles
+represent moose counts (based on color) and triangles represent
+locations at which mean count predictions are desired.}
+
+\end{figure}%
+
+The \texttt{count} variable in \texttt{moose} contains the number of
+moose observed at a site (Figure~\ref{fig-moose-data-count}). Count data
+are often modeled using Poisson or negative binomial regression with the
+log link function. The Poisson regression model assumes each datum's
+underlying latent mean equals its variance, while the negative binomial
+accommodates overdispersion (where the variance is greater than the
+mean) at the cost of estimating an extra parameter.
+
+So far our spatial models have made an implicit assumption of geometric
+isotropy. A spatial covariance is geometrically isotropic if its
+dependence decays with distance equally in all directions. A spatial
+covariance is geometrically anisotropic if its dependence decays
+differently in different directions. The geometric anisotropy's
+directionality and strength are controlled by rotation and scale
+parameters that are applied to the original coordinates, creating a
+transformed set of coordinates whose spatial covariance is geometrically
+isotropic. Geometrically anisotropic models are fit by specifying
+\texttt{anisotropy}:
+
+\begin{verbatim}
+R> sppois <- spglm(
++  formula = count ~ elev + strat + elev:strat,
++  family = poisson,
++  data = moose,
++  spcov_type = "gaussian",
++  anisotropy = TRUE
++)
+R>
+R> spnbin <- update(sppois, family = nbinomial)
+\end{verbatim}
+
+Because the models have the same support (i.e., both non-negative count
+models), we can use likelihood-based statistics to compare them:
+
+\begin{verbatim}
+R> glances(sppois, spnbin, sort_by = "AIC") |>
++  subset(select = c(model, npar, AIC, AICc, BIC))
+\end{verbatim}
+
+\begin{verbatim}
+# A tibble: 2 x 5
+  model   npar   AIC  AICc   BIC
+  <chr>  <int> <dbl> <dbl> <dbl>
+1 spnbin     6 1318. 1319. 1339.
+2 sppois     5 1320. 1321. 1337.
+\end{verbatim}
+
+The negative binomial model has a slightly lower AIC and AICc, while the
+Poisson model has a slightly lower BIC. This is reasonable given the BIC
+penalizes additional parameters (here, an overdispersion parameter) more
+heavily than AIC and AICc. The leave-out-out MSPE prefers the negative
+binomial model:
+
+\begin{verbatim}
+R> loocv(sppois) |>
++  apply(2, round, digits = 4)
+\end{verbatim}
+
+\begin{verbatim}
+   bias    MSPE   RMSPE
+ 1.2882 31.7882  5.6381
+\end{verbatim}
+
+\begin{verbatim}
+R> loocv(spnbin) |>
++  apply(2, round, digits = 4)
+\end{verbatim}
+
+\begin{verbatim}
+   bias    MSPE   RMSPE
+ 0.3485 28.3760  5.3269
+\end{verbatim}
+
+A likelihood-based comparison between the negative binomial anisotropic
+model and the negative binomial isotropic model suggests that the
+anisotropic model is preferred (lower AIC, AICc, and BIC):
+
+\begin{verbatim}
+R> spnbin_iso <- update(spnbin, anisotropy = FALSE)
+R> glances(spnbin_iso, spnbin, sort_by = "AIC") |>
++  subset(select = c(model, npar, AIC, AICc, BIC))
+\end{verbatim}
+
+\begin{verbatim}
+# A tibble: 2 x 5
+  model       npar   AIC  AICc   BIC
+  <chr>      <int> <dbl> <dbl> <dbl>
+1 spnbin         6 1318. 1319. 1339.
+2 spnbin_iso     4 1333. 1333. 1346.
+\end{verbatim}
+
+\fct{plot} returns the spatial covariance as a function of direction
+(Figure~\ref{fig-tropy}):
+
+\begin{verbatim}
+R> plot(spnbin_iso, which = 8)
+R> plot(spnbin, which = 8)
+\end{verbatim}
+
+\begin{figure}
+
+\centering{
+
+\includegraphics[width=1\textwidth,height=1\textheight]{figures/figure-7.png}
+
+}
+
+\caption{\label{fig-tropy}Level curves of equal autocorrelation for the
+negative binomial moose count models. The ellipse is centered at zero
+distance in the x-direction and y-direction, and points along the
+ellipse have equal levels of autocorrelation. In the isotropic level
+curve (left), spatial covariance decays equally in all directions. In
+the anistropic level curve (right), spatial covariance decays fastest in
+the northeast-southwest direction and slowest in the northwest-southeast
+direction (this pattern can be seen in the observed counts).}
+
+\end{figure}%
+
+Earlier we used \fct{tidy} to tidy the model's fixed effects, but we can
+also use tidy to tidy the spatial covariance parameters:
+
+\begin{verbatim}
+R> tidy(spnbin, effects = "spcov")
+\end{verbatim}
+
+\begin{verbatim}
+# A tibble: 5 x 3
+  term    estimate is_known
+  <chr>      <dbl> <lgl>
+1 de         4.65  FALSE
+2 ie         0.148 FALSE
+3 range  84013.    FALSE
+4 rotate     2.74  FALSE
+5 scale      0.259 FALSE
+\end{verbatim}
+
+The \texttt{rotate} parameter is the number of radians in \([0, \pi]\)
+the ellipse is rotated and the \texttt{scale} parameter is the ratio in
+\((0, 1]\) of the minor axis length to the major axis length. The
+\texttt{is\_known} column indicates whether the parameter was assumed
+known during optimization, controlled by specifying the
+\texttt{spcov\_initial} argument.
+
+\subsection{Skewed data}\label{skewed-data}
+
+The \texttt{seal} data in \pkg{spmodel} is an \texttt{sf} object with
+data on harbor seal trends in Alaska. The \texttt{log\_trend} variable
+is the logarithm of a seal abundance temporal trend measure at the site
+(based on historical data), and the \texttt{stock} variable is a factor
+with two levels, \texttt{8} and \texttt{10}, where each level represents
+one of twelve seal stocks (i.e., breeds) in Alaska. The \texttt{seal}
+geometry is an areal polygon geometry and hence, spatial autoregressive
+models based on neighborhood distance are appropriate.
+
+SPGLMs for areal data are are fit in \pkg{spmodel} using \fct{spgautor},
+which has similar syntax as \fct{spglm} but contains arguments to
+control the weight matrix (\(\mathbf{W}\) in
+Equation\(~\)\ref{eq-spcov-sar}) and whether or not row-standardization
+\citep{ver2018spatial} is applied. By default, polygons are neighbors if
+they share a boundary (i.e., Queen's contiguity; see
+\citet{pebesma2023spatial}) and row standardization is assumed. Weight
+matrices may be provided via the \texttt{W} argument and row
+standardization may be ignored via the \texttt{row\_st} arguent.
+Following \citet{ver2018spatial}, polygons without a neighbor are given
+their own (independent) variance parameter called \texttt{extra}.
+
+The trend data were originally logged to remove skew
+\citep{ver2018spatial}, but we will exponentiate \texttt{log\_trend}
+(Figure~\ref{fig-seal}) and model this skew directly using a SPGLM:
+
+\begin{verbatim}
+R> seal$trend <- exp(seal$log_trend)
+\end{verbatim}
+
+The \texttt{trend} variable has several missing (\texttt{NA}) values,
+which represent polygons at which predictions of \texttt{trend} are
+desired. To make predictions using spatial autoregressive models, the
+prediction locations must be known prior to model fitting because these
+locations affect the neighborhood structure of the observed data
+\citep{ver2018spatial}. This restriction is notably different than
+SPGLMs for point-referenced data (i.e., geostatistical models), which
+completely separates the estimation and prediction steps.
+
+\begin{figure}
+
+\centering{
+
+\includegraphics[width=1\textwidth,height=1\textheight]{figures/figure-8.png}
+
+}
+
+\caption{\label{fig-seal}Seal trend distribution in Alaska. Observed and
+missing seal polygons by stock (left) and observed seal trends (right).}
+
+\end{figure}%
+
+\pkg{spmodel} supports the gamma and inverse Gaussian families for
+modeling skewed, positive response variables. \pkg{spmodel} also
+supports nonspatial random effects specified via the \texttt{random}
+argument, which uses a similar formula syntax as \pkg{nlme}
+\citep{pinheiro2006mixed} and \pkg{lme4} \citep{bates2015lme4}. Using
+likelihood-based statistics, we compare two models fit using the
+simultaneous autoregressive covariance and the Gamma and inverse
+Gaussian families. Both models have a random effect for seal stock,
+which builds additional correlation into the model for two polygons from
+the same stock:
+
+\begin{verbatim}
+R> spgam <- spgautor(
++  formula = trend ~ 1,
++  family = Gamma,
++  data = seal,
++  spcov_type = "sar",
++  random = ~ stock
++)
+R> spinvg <- update(spgam, family = inverse.gaussian)
+R> glances(spgam, spinvg, sort_by = "AIC") |>
++  subset(select = c(model, npar, AIC, AICc, BIC))
+\end{verbatim}
+
+\begin{verbatim}
+# A tibble: 2 x 5
+  model   npar   AIC  AICc   BIC
+  <chr>  <int> <dbl> <dbl> <dbl>
+1 spinvg     5  108.  109.  121.
+2 spgam      5  114.  115.  127.
+\end{verbatim}
+
+The inverse Gaussian model has a lower AIC, AICc, and BIC, which
+indicates it is a better fit than the gamma model.
+
+We may \fct{tidy} the estimated stock random effect variance:
+
+\begin{verbatim}
+R> tidy(spinvg, effects = "randcov")
+\end{verbatim}
+
+\begin{verbatim}
+# A tibble: 1 x 3
+  term      estimate is_known
+  <chr>        <dbl> <lgl>
+1 1 | stock  0.00411 FALSE
+\end{verbatim}
+
+The locations to predict \texttt{trend} (\texttt{NA} values) are stored
+in the \texttt{newdata} element of \texttt{spinvg} and used for
+prediction:
+
+\begin{verbatim}
+R> # output omitted
+R> predict(spinvg, type = "response", interval = "prediction")
+\end{verbatim}
+
+If using \fct{augment} for prediction, \texttt{newdata} must be
+specified:
+
+\begin{verbatim}
+R> head(augment(
++  spinvg,
++  newdata = spinvg$newdata,
++  type.predict = "response",
++  interval = "prediction"
++))
+\end{verbatim}
+
+\begin{verbatim}
+Simple feature collection with 6 features and 6 fields
+Geometry type: POLYGON
+Dimension:     XY
+Bounding box:  xmin: 1030504 ymin: 1012786 xmax: 1115097 ymax: 1057579
+Projected CRS: NAD83 / Alaska Albers
+# A tibble: 6 x 7
+  log_trend stock trend .fitted .lower .upper                           geometry
+      <dbl> <fct> <dbl>   <dbl>  <dbl>  <dbl>                      <POLYGON [m]>
+1        NA 8        NA   0.942  0.893  0.993 ((1035002 1054710, 1035002 105454~
+2        NA 8        NA   0.942  0.893  0.993 ((1043093 1020553, 1043097 102055~
+3        NA 8        NA   0.942  0.893  0.993 ((1099737 1054310, 1099752 105426~
+4        NA 8        NA   0.942  0.893  0.993 ((1099002 1036542, 1099134 103646~
+5        NA 8        NA   0.942  0.893  0.993 ((1076902 1053189, 1076912 105317~
+6        NA 8        NA   0.942  0.893  0.993 ((1070501 1046969, 1070317 104659~
+\end{verbatim}
+
+\subsection{Proportion data}\label{proportion-data}
+
+We end with two examples of beta regression for proportion data
+\citep{ferrari2004beta}. First, we model the nitrogen percentage in a
+caribou foraging experiment. Second, we model the proportion of voter
+turnout by Texas county in the United States (US) 1980 presidential
+election.
+
+\begin{figure}
+
+\centering{
+
+\includegraphics[width=0.7\textwidth,height=0.7\textheight]{figures/figure-9.png}
+
+}
+
+\caption{\label{fig-caribou}Caribou data from a spatial experimental
+design measuring the percentage of nitrogen (\texttt{z}) in soil and
+testing two factors: tarp type and water presence.}
+
+\end{figure}%
+
+The \texttt{caribou} data in \pkg{spmodel} are a data frame from a
+caribou foraging experiment in Alaska meant to study the impact of water
+and tarp cover on the percentage of nitrogen in surrounding plants
+(Figure~\ref{fig-caribou}). \citet{lenart2002climate} studied these data
+treating nitrogen percentage as a continuous variable, but here we treat
+nitrogen percentage (\texttt{z}) as a proportion:
+
+\begin{verbatim}
+R> spbeta <- spglm(
++    formula = z/100 ~ water + tarp + water:tarp,
++    family = "beta",
++    data = caribou,
++    spcov_type = "matern",
++    xcoord = x,
++    ycoord = y
++)
+\end{verbatim}
+
+The nitrogen percentage is dynamically scaled in \texttt{formula} from
+(0, 100) to (0, 1) so that it is a proportion. Nitrogen percentage is
+modeled as a function of \texttt{water} (two levels: \texttt{"Y"} for
+water and \texttt{"N"} for no water), \texttt{tarp} (three levels:
+\texttt{"clear"} for a clear tarp, \texttt{"none"} for no tarp, and
+\texttt{"shade"} for a shaded tarp), and their interaction, which lets
+the effect of water presence vary across tarp type. \texttt{caribou} is
+a data frame (not an \texttt{sf} object), so we supply the x-coordinate
+and y-coordinate directly via \texttt{xcoord} and \texttt{ycoord}, and,
+consistent with the tidyverse approach \citep{wickham2019welcome},
+column names in \texttt{data} do not need to be quoted when referenced
+(but can be quoted).
+
+A summary of \texttt{spbeta} returns a coefficients table that provides
+parameter estimates relative to a reference group. When factors have
+more than two levels, it is not straightforward to use these contrasts
+to determine overall significance of the factor. The \texttt{anova()}
+function tests marginal (i.e., Type III sums of squares) significance of
+factors using the general linear hypothesis test for spatial (i.e.,
+correlated) data \citep{schabenberger2017statistical}:
+
+\begin{verbatim}
+tidy(anova(spbeta))
+\end{verbatim}
+
+\begin{verbatim}
+# A tibble: 4 x 4
+  effects        df statistic       p.value
+  <chr>       <int>     <dbl>         <dbl>
+1 (Intercept)     1  35783.   0
+2 water           1      1.52 0.218
+3 tarp            2     38.4  0.00000000468
+4 water:tarp      2      5.74 0.0566
+\end{verbatim}
+
+These results suggest there is some evidence that the effect of water on
+nitrogen percentage differ depending on the type of tarp used (0.01
+\textless{} \(p~\)value \textless{} 0.1).
+
+Sometimes averages or contrasts between factor levels that are not in
+the reference group are of interest. We again leverage \pkg{spmodel}'s
+built-in support for \pkg{emmeans} and use it to obtain the averages of
+each factor combination on the link (here, logit) scale:
+
+\begin{verbatim}
+spemm <- emmeans(spbeta, ~ water + tarp)
+spemm
+\end{verbatim}
+
+\begin{verbatim}
+ water tarp  emmean     SE  df asymp.LCL asymp.UCL
+ N     clear  -3.94 0.0208 Inf     -3.98     -3.90
+ Y     clear  -3.90 0.0206 Inf     -3.94     -3.86
+ N     none   -3.88 0.0204 Inf     -3.92     -3.84
+ Y     none   -3.91 0.0206 Inf     -3.95     -3.87
+ N     shade  -3.77 0.0196 Inf     -3.81     -3.73
+ Y     shade  -3.83 0.0200 Inf     -3.87     -3.79
+
+Degrees-of-freedom method: asymptotic
+Results are given on the logit (not the response) scale.
+Confidence level used: 0.95
+\end{verbatim}
+
+Delta method \citep{ver2012invented} standard errors are used when
+averages on the response (here, proportion) scale are desired:
+
+\begin{verbatim}
+update(spemm, type = "response")
+\end{verbatim}
+
+\begin{verbatim}
+ water tarp  response       SE  df asymp.LCL asymp.UCL
+ N     clear   0.0191 0.000390 Inf    0.0183    0.0198
+ Y     clear   0.0198 0.000398 Inf    0.0190    0.0205
+ N     none    0.0202 0.000404 Inf    0.0194    0.0210
+ Y     none    0.0197 0.000398 Inf    0.0189    0.0205
+ N     shade   0.0226 0.000434 Inf    0.0218    0.0235
+ Y     shade   0.0213 0.000418 Inf    0.0205    0.0221
+
+Degrees-of-freedom method: asymptotic
+Confidence level used: 0.95
+Intervals are back-transformed from the logit scale
+\end{verbatim}
+
+Pairwise contrasts use a Tukey \(p~\)value adjustment
+\citep{tukey1949comparing} by default. Here, we request no \(p~\)value
+adjustment:
+
+\begin{verbatim}
+head(pairs(spemm, adjust = "none"))
+\end{verbatim}
+
+\begin{verbatim}
+ contrast          estimate     SE  df z.ratio p.value
+ N clear - Y clear  -0.0361 0.0293 Inf  -1.233  0.2177
+ N clear - N none   -0.0601 0.0292 Inf  -2.063  0.0391
+ N clear - Y none   -0.0327 0.0293 Inf  -1.118  0.2637
+ N clear - N shade  -0.1735 0.0286 Inf  -6.061  <.0001
+ N clear - Y shade  -0.1136 0.0289 Inf  -3.932  0.0001
+ Y clear - N none   -0.0241 0.0290 Inf  -0.830  0.4064
+
+Degrees-of-freedom method: asymptotic
+Results are given on the log odds ratio (not the response) scale.
+\end{verbatim}
+
+\begin{figure}
+
+\centering{
+
+\includegraphics[width=0.7\textwidth,height=0.7\textheight]{figures/figure-10.png}
+
+}
+
+\caption{\label{fig-texas}Proportion of voter turnout in Texas for the
+1980 presidential election. Circles represent voter turnout (based on
+color) and triangles represent locations at which voter turnout
+predictions are desired.}
+
+\end{figure}%
+
+We now model the \texttt{elect80} data in \pkg{spData}
+\citep{bivand2024spdata}, which contains voter turnout data by county in
+the 1980 US Presidential election \citep{pace1997quick}. The
+\texttt{texas} data in \pkg{spmodel} contains a subset of these data in
+the state of Texas. These data are point-referenced, but we may still
+use autoregressive models if neighborhood distance is determined using
+county centroids (i.e., counties whose centroid distance is less than
+some cutoff are defined as neighbors). The response variable of
+interest, \texttt{turnout}, is the proportion of registered voters in
+the county who voted in the election (Figure~\ref{fig-texas}).
+
+\begin{verbatim}
+R> spgautor_mods <- spgautor(
++  formula = turnout ~ log_income,
++  family = beta,
++  data = texas,
++  spcov_type = c("car", "sar"),
++  cutoff = 2e5,
++  estmethod = "ml"
++)
+\end{verbatim}
+
+We model voter turnout as a function of log income using both the
+conditional and simultaneous autoregressive models with a neighbor
+distance cutoff of 200 kilometers and the maximum likelihood estimation
+method. When a vector is provided to \texttt{spcov\_type} in
+\fct{spgautor} (or \fct{spglm}), a model is fit for each spatial
+covariance type and stored in a list with name equal to the respective
+type. Then it is simple to glance at each model fit:
+
+\begin{verbatim}
+R> glances(spgautor_mods) |>
++  subset(select = c(model, npar, AIC, AICc, BIC))
+\end{verbatim}
+
+\begin{verbatim}
+# A tibble: 2 x 5
+  model  npar   AIC  AICc   BIC
+  <chr> <int> <dbl> <dbl> <dbl>
+1 car       3 -38.3 -38.1 -21.2
+2 sar       3 -35.7 -35.5 -18.6
+\end{verbatim}
+
+The conditional autoregressive model has the best fit (in terms of AIC,
+AICc, and BIC). In this model, there is significant evidence
+\texttt{log\_income} is positively related to average voter turnout
+(\(p~\)value \textless{} 0.001):
+
+\begin{verbatim}
+tidy(spgautor_mods$car)
+\end{verbatim}
+
+\begin{verbatim}
+# A tibble: 2 x 5
+  term        estimate std.error statistic    p.value
+  <chr>          <dbl>     <dbl>     <dbl>      <dbl>
+1 (Intercept)   -4.74      1.06      -4.47 0.00000783
+2 log_income     0.532     0.117      4.55 0.00000531
+\end{verbatim}
+
+Another way to assess the impact of \texttt{log\_income} on
+\texttt{turnout} is a likelihood ratio test:
+
+\begin{verbatim}
+reduced_car <- update(spgautor_mods$car, formula = turnout ~ 1)
+tidy(anova(reduced_car, spgautor_mods$car))
+\end{verbatim}
+
+\begin{verbatim}
+# A tibble: 1 x 5
+  full              reduced        df statistic     p.value
+  <chr>             <chr>       <dbl>     <dbl>       <dbl>
+1 spgautor_mods$car reduced_car     1      24.1 0.000000930
+\end{verbatim}
+
+Likelihood ratio tests compare the fit of a ``full'' model compared to a
+``reduced'' model that is completely nested within the full model. If
+there is evidence the full model explains significantly more information
+than the reduced model, the likelihood ratio test \(p~\)value will be
+small. Similar to the summary output from the general linear hypothesis
+test, the likelihood ratio suggests \texttt{log\_income} is related to
+average voter turnout (\(p~\)value \textless{} 0.001).
+
+The default estimation method in \pkg{spmodel} is REML, but note that
+these models used maximum likelihood (ML). ML is very similar to REML --
+the difference is that for ML, the fixed effects \(\boldsymbol{\beta}\)
+are not integrated out of Equation\(~\)\eqref{eq-marginal} but are
+rather back-substituted. While REML typically performs better for fixed
+effect estimation and prediction \citep{zimmerman2024spatial}, ML allows
+likelihood-based comparisons (e.g., AIC) for models with simultaneously
+varying fixed effect and covariance structures, while REML
+likelihood-based comparisons are only valid for models sharing the same
+fixed effect structure (though \citet{gurka2006selecting} provides some
+evidence that this restriction may be unnecessary).
+
+The point-referenced \texttt{texas} and \texttt{caribou} data may be
+analyzed using \fct{spgautor} or \fct{spglm} and comparisons across
+these structures can be made using likelihood-based statistics (as long
+as the supports of the response distribution are the same). Put another
+way, likelihood-based statistics can be used to determine whether
+geostatistical (distance-based) or autoregressive (neighbor-based)
+structures perform best when the data are point-referenced.
+
+\section{Discussion}\label{sec-discussion}
+
+SPGLMs are fit in \pkg{spmodel} using a novel application of the Laplace
+approximation that marginalizes over the latent (i.e., unobserved) mean,
+\(\mathbf{w}\), and the fixed effects, \(\boldsymbol{\beta}\). The
+approach is quite flexible and accommodates any general response
+distribution and covariance structure. \citet{ver2024marginal} show that
+the approach, as implemented in \pkg{spmodel}, generally yields unbiased
+estimators with proper interval coverage and often outperforms the
+Bayesian approach from \pkg{spBayes}, the INLA approach from
+\pkg{R-INLA}, and the automatic differentiation approach from
+\fct{glmmTMB}.
+
+\pkg{spmodel}'s \fct{spglm} and \fct{spgautor} functions are similar in
+structure and syntax as the base-\proglang{R} \fct{glm} function, easing
+the transition from GLMs to SPGLMs. These functions support six response
+distributions (Table\(~\)\ref{table-links}) and 20 spatial covariance
+functions. \pkg{spmodel} provides several additional features that
+accommodate geometric anisotropy, nonspatial random effects, fixing
+spatial covariance parameters at known values, data having thousands of
+observations (following \citet{ver2023indexing}), incorporating spatial
+dependence in machine learning (e.g., random forests;
+\citet{breiman2001random}), simulating spatially dependent data (e.g.,
+\fct{sprbinom}, \fct{sprpois}), and several others. Learn more at
+\url{https://CRAN.R-project.org/package=spmodel} and links therein.
+
+\section*{Computational details}\label{computational-details}
+\addcontentsline{toc}{section}{Computational details}
+
+The results in this paper were obtained using \proglang{R} 4.4.0 with
+the \pkg{spmodel} 0.9.0 package. Figures were created using the
+\pkg{ggplot2} 3.5.1 package \citep{wickham2016ggplot2} and base
+\proglang{R}.
+
+\section*{Data and code availability}\label{data-and-code-availability}
+\addcontentsline{toc}{section}{Data and code availability}
+
+All writing and code associated with this manuscript is available for
+viewing and download on GitHub at
+\url{https://github.com/USEPA/spmodel.glm.manuscript}. All data used are
+part of the \pkg{spmodel} \proglang{R} package available for download
+from CRAN at \url{https://CRAN.R-project.org/package=spmodel}.
+
+\section*{Acknowledgments}\label{acknowledgments}
+\addcontentsline{toc}{section}{Acknowledgments}
+
+We would like to thank initial reviewers and editors for feedback that
+has greatly improved the manuscript.
+
+The views expressed in this manuscript are those of the authors and do
+not necessarily represent the views or policies of the U.S.
+Environmental Protection Agency or the National Oceanic and Atmospheric
+Administration. Any mention of trade names, products, or services does
+not imply an endorsement by the U.S. government, the U.S. Environmental
+Protection Agency, or the National Oceanic and Atmospheric
+Administration. The U.S. Environmental Protection Agency and the
+National Oceanic and Atmospheric Administration do not endorse any
+commercial products, services or enterprises.
+
+\section*{References}\label{references}
+\addcontentsline{toc}{section}{References}
+
+\renewcommand{\bibsection}{}
+\bibliography{references.bib}
+
+
+
+
+\end{document}
