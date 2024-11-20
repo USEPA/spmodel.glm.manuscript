@@ -130,7 +130,7 @@
 \makeatletter
 \makeatother
 \makeatletter
-\ifdefined\Shaded\renewenvironment{Shaded}{\begin{tcolorbox}[boxrule=0pt, enhanced, sharp corners, borderline west={3pt}{0pt}{shadecolor}, frame hidden, interior hidden, breakable]}{\end{tcolorbox}}\fi
+\ifdefined\Shaded\renewenvironment{Shaded}{\begin{tcolorbox}[boxrule=0pt, breakable, borderline west={3pt}{0pt}{shadecolor}, enhanced, frame hidden, sharp corners, interior hidden]}{\end{tcolorbox}}\fi
 \makeatother
 \ifLuaTeX
   \usepackage{selnolig}  % disable illegal ligatures
@@ -1620,7 +1620,7 @@ the approach, as implemented in \pkg{spmodel}, generally yields unbiased
 estimators with proper interval coverage and often outperforms the
 Bayesian approach from \pkg{spBayes}, the INLA approach from
 \pkg{R-INLA}, and the automatic differentiation approach from
-\fct{glmmTMB}.
+\pkg{glmmTMB}.
 
 \pkg{spmodel}'s \fct{spglm} and \fct{spgautor} functions are similar in
 structure and syntax as the base-\proglang{R} \fct{glm} function, easing
@@ -1671,10 +1671,10 @@ commercial products, services or enterprises.
 \section*{References}\label{references}
 \addcontentsline{toc}{section}{References}
 
-\renewcommand{\bibsection}{}
-\bibliography{references.bib}
+%bib-loc-124C8010
 
 
+  \bibliography{references.bib}
 
 
 \end{document}
