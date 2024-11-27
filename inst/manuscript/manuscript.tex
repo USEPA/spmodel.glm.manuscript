@@ -130,7 +130,7 @@
 \makeatletter
 \makeatother
 \makeatletter
-\ifdefined\Shaded\renewenvironment{Shaded}{\begin{tcolorbox}[boxrule=0pt, breakable, borderline west={3pt}{0pt}{shadecolor}, enhanced, frame hidden, sharp corners, interior hidden]}{\end{tcolorbox}}\fi
+\ifdefined\Shaded\renewenvironment{Shaded}{\begin{tcolorbox}[frame hidden, borderline west={3pt}{0pt}{shadecolor}, interior hidden, boxrule=0pt, sharp corners, enhanced, breakable]}{\end{tcolorbox}}\fi
 \makeatother
 \ifLuaTeX
   \usepackage{selnolig}  % disable illegal ligatures
@@ -397,8 +397,7 @@ both point-referenced and areal supports. And in
 Section~\ref{sec-discussion}, we end with a discussion synthesizing
 \pkg{spmodel}'s contributions to the analysis of SPGLMs in \proglang{R}.
 
-\section{Spatial generalized linear models using the Laplace
-approximation}\label{sec-spglm}
+\section{Marginal SPGLMs and the Laplace approximation}\label{sec-spglm}
 
 GLMs with random effects are often written hierarchically
 \citep{lee1996hierarchical, bolker2009generalized, wood2017generalized}.
@@ -1671,10 +1670,10 @@ commercial products, services or enterprises.
 \section*{References}\label{references}
 \addcontentsline{toc}{section}{References}
 
-%bib-loc-124C8010
+\renewcommand{\bibsection}{}
+\bibliography{references.bib}
 
 
-  \bibliography{references.bib}
 
 
 \end{document}

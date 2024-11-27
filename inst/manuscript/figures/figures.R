@@ -3,7 +3,7 @@ library(tidyverse)
 library(spmodel)
 library(patchwork)
 library(here)
-fig_path <- here("inst", "jss", "manuscript", "figures")
+fig_path <- here("inst", "manuscript", "figures")
 
 #######################
 ######## Figure 1
