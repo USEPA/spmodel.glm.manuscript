@@ -99,7 +99,7 @@ Missing from the aforementioned [R]{.proglang} packages is the complete set of t
 
 The rest of this article is organized as follows. In @sec-spglm, we provide some background for the SPGLM fitting and prediction routines in [spmodel]{.pkg}. In @sec-applications, we provide several applications of [spmodel]{.pkg} to spatial binary, count, skewed and proportion data with both point-referenced and areal supports. And in @sec-discussion, we end with a discussion synthesizing \pkg{spmodel}'s contributions to the analysis of SPGLMs in [R]{.proglang}.
 
-## Spatial generalized linear models using the Laplace approximation {#sec-spglm}
+## Marginal SPGLMs and the Laplace approximation {#sec-spglm}
 
 GLMs with random effects are often written hierarchically [@lee1996hierarchical; @bolker2009generalized; @wood2017generalized]. [spmodel]{.pkg} leverages this hierarchical structure and uses a novel application of the Laplace approximation [@ver2024marginal] to fit models. This marginal approach is quite flexible, accommodating a wide range of possible dependence structures and formally maximizing a likelihood. Maximizing a likelihood yields convenient likelihood-based statistics like AIC [@akaike1974new], AICc [@hoeting2006model], BIC [@schwarz1978estimating], deviance [@mccullagh1989generalized], and likelihood ratio tests for model comparison, a benefit compared to quasi-likelihood [@wedderburn1974quasi; @breslow1993approximate] or pseudo-likelihood approaches [@wolfinger1993generalized], which only specify the first two moments of a distribution. @ver2024marginal provide thorough context for the marginal approach and its associated details, but next we provide an short overview of the methodology.
 
