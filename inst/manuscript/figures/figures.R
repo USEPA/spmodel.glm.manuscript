@@ -5,6 +5,54 @@ library(patchwork)
 library(here)
 fig_path <- here("inst", "manuscript", "figures")
 
+
+#######################
+######## Figure 1
+#######################
+h <- seq(0, 1, length.out = 1000)
+range1 <- 0.2
+dat1 <- data.frame(Distance = h, Correlation = exp(-h/range1), Range = "0.2")
+range2 <- 0.5
+dat2 <- data.frame(Distance = h, Correlation = exp(-h/range2), Range = "0.5")
+range3 <- 0.8
+dat3 <- data.frame(Distance = h, Correlation = exp(-h/range3), Range = "0.8")
+dat <- bind_rows(dat1, dat2, dat3)
+cor_range <- ggplot(dat, aes(x = Distance, y = Correlation, color = Range, linetype = Range)) +
+  geom_line(linewidth = 1.2) +
+  scale_color_viridis_d() +
+  theme_bw(base_size = 14)
+cor_range
+ggsave(
+  filename = paste0(fig_path, "/figure-01.png"),
+  plot = cor_range,
+  dpi = 300,
+  height = 6.07,
+  width = 6.49
+)
+
+#######################
+######## Figure 1
+#######################
+h <- seq(0, 1, length.out = 1000)
+range <- 0.5
+dat1 <- data.frame(Distance = h, Correlation = exp(-h/range), Type = "Exponential")
+dat2 <- data.frame(Distance = h, Correlation = exp(-(h/range)^2), Type = "Gaussian")
+dat3 <- data.frame(Distance = h, Correlation = (1 - 1.5 * h/range + 0.5 * (h/range)^3) * (h <= range), Type = "Spherical")
+dat <- bind_rows(dat1, dat2, dat3)
+cor_type <- ggplot(dat, aes(x = Distance, y = Correlation, color = Type, linetype = Type)) +
+  geom_line(linewidth = 1.2) +
+  scale_color_viridis_d() +
+  theme_bw(base_size = 14)
+cor_type
+ggsave(
+  filename = paste0(fig_path, "/figure-02.png"),
+  plot = cor_type,
+  dpi = 300,
+  height = 6.07,
+  width = 6.49
+)
+
+
 #######################
 ######## Figure 1
 #######################
