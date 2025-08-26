@@ -420,17 +420,76 @@ computationally expensive operation that involves repeatedly evaluating
 
 \subsection{Estimating fixed effects}\label{estimating-fixed-effects}
 
-\citet{ver2024marginal} show that the fixed effect estimator is
-\(\hat{\boldsymbol{\beta}} = (\mathbf{X}^T \hat{\boldsymbol{\Sigma}}^{-1}\mathbf{X})^{-1}\mathbf{X}^T \hat{\boldsymbol{\Sigma}}^{-1}\mathbf{w}\),
-where \(\hat{\boldsymbol{\Sigma}}\) is the covariance matrix
-\(\boldsymbol{\Sigma}\) evaluated at \(\hat{\boldsymbol{\theta}}\).
+Though the fixed effects are integrated out of the likelihood, we can
+still estimate them using generalized least squares (GLS) principles, a
+common practice for linear models estimated using restricted maximum
+likelihood methods. Had we observed \(\mathbf{w}\), a GLS estimator for
+\(\boldsymbol{\beta}\) is given by \begin{equation}\label{eq-gls1}
+  \hat{\boldsymbol{\beta}} = (\mathbf{X}^\top \boldsymbol{\Sigma}^{-1}\mathbf{X})^{-1}\mathbf{X}^\top \boldsymbol{\Sigma}^{-1}\mathbf{w} = \mathbf{B}\mathbf{w},
+\end{equation} where
+\(\mathbf{B} = (\mathbf{X}^\top \boldsymbol{\Sigma}^{-1}\mathbf{X})^{-1}\mathbf{X}^\top \boldsymbol{\Sigma}^{-1}\).
+However, we only observe \(\hat{\mathbf{w}}\), so it is reasonable to
+define \(\hat{\boldsymbol{\beta}} = \mathbf{B}\hat{\mathbf{w}}\). Thus,
+to derive properties of \(\hat{\boldsymbol{\beta}}\) like expectation
+and variance, we must derive these properties for \(\hat{\mathbf{w}}\).
+To do so, we must condition on \(\mathbf{w}\) as if it were observed and
+invoke properties of the laws of total expectation and variance. Because
+\(\hat{\mathbf{w}}\) was optimized via the likelihood, we assume that
+given \(\mathbf{w}\), \(\hat{\mathbf{w}}\) has mean \(\mathbf{w}\) and
+variance approximately equal to \(-\mathbf{H}^{-1}\) (the inverse
+Hessian). It follows that \(\text{E}(\hat{\mathbf{w}})\) is given by
+\begin{equation}
+  \text{E}(\hat{\mathbf{w}}) = \text{E}(\text{E}(\hat{\mathbf{w}} | \mathbf{w}))
+   = \text{E}(\mathbf{w}) 
+   = \mathbf{X}\boldsymbol{\beta}
+\end{equation} and \(\text{Var}(\hat{\mathbf{w}})\) is given by
+\begin{align}
+  \text{Var}(\hat{\mathbf{w}}) & = \text{E}(\text{Var}(\hat{\mathbf{w}} | \mathbf{w})) + \text{Var}(\text{E}(\hat{\mathbf{w}} | \mathbf{w})) \\
+  & = \text{E}(-\mathbf{H}^{-1}) + \text{Var}(\mathbf{w})\\
+  & = -\mathbf{H}^{-1} + \boldsymbol{\Sigma}
+\end{align} Putting this all together, it follows that \begin{equation}
+  \text{E}(\hat{\boldsymbol{\beta}})  = \text{E}(\mathbf{B}\hat{\mathbf{w}}) 
+  = \mathbf{B}\text{E}(\hat{\mathbf{w}}) =  (\mathbf{X}^\top \boldsymbol{\Sigma}^{-1}\mathbf{X})^{-1}(\mathbf{X}^\top \boldsymbol{\Sigma}^{-1} \mathbf{X})\boldsymbol{\beta} = \boldsymbol{\beta}
+\end{equation} and \begin{align}
+  \text{Var}(\hat{\boldsymbol{\beta}}) & = \text{Var}(\mathbf{B}\hat{\mathbf{w}}) \\
+  & = \mathbf{B} \text{Var}(\hat{\mathbf{w}}) \mathbf{B}^\top\\
+  & = \mathbf{B} (-\mathbf{H}^{-1} + \boldsymbol{\Sigma}) \mathbf{B}^\top \\
+  & = \mathbf{B}-\mathbf{H}^{-1}\mathbf{B}^\top + \mathbf{B}\boldsymbol{\Sigma}\mathbf{B}^\top \\
+  & = \mathbf{B}-\mathbf{H}^{-1}\mathbf{B}^\top + (\mathbf{X}^\top \boldsymbol{\Sigma}^{-1}\mathbf{X})^{-1}
+\end{align} In practice, \(\text{Var}(\hat{\boldsymbol{\beta}})\) is
+estimated by evaluating \(\boldsymbol{\Sigma}\) at
+\(\hat{\boldsymbol{\theta}}\), the estimated covariance parameter
+vector.
+
+These results are important because they justify closed-form solutions
+for \(\hat{\boldsymbol{\beta}}\) and its associated variance.
+Closed-form solutions are useful because they bypass the need for
+computationally expensive sampling-based strategies to evaluate the mean
+and variance of \(\hat{\boldsymbol{\beta}}\) -- a common technique for
+other approaches to SPGLMs like Bayesian MCMC.
 
 \subsection{Predicting at new
 locations}\label{predicting-at-new-locations}
 
-\citet{ver2024marginal} also derive the covariance matrix of
-\(\hat{\boldsymbol{\beta}}\) and show how to predict \(\mathbf{w}\) at
-unobserved locations and quantify their uncertainties.
+We may also predict values of the latent mean (on the link scale) at new
+locations by leveraging the spatial covariance between observed
+locations and new locations. Again suppose that we observed
+\(\mathbf{w}\) and we want to make predictions at \(\mathbf{u}\), a
+vector of latent means at the new locations that follows the same SPGLM
+from Equation\textasciitilde{}\ref{eq-spglm} with fixed effects design
+matrix, \(\mathbf{X}_{\mathbf{u}}\). The vector
+\((\mathbf{w}, \mathbf{u})^\top\) has the following properties:
+\begin{align}
+  \text{E}(\mathbf{w}, \mathbf{u})^\top & = (\text{E}(\mathbf{w}), \text{E}(\mathbf{u}))^\top = (\mathbf{X}\boldsymbol{\beta}, \mathbf{X}_\mathbf{u}\boldsymbol{\beta})^\top \\
+  \text{Var}(\mathbf{w}, \mathbf{u})^\top & = \begin{bmatrix} \text{Var}(\mathbf{w}, \mathbf{w}) & \text{Var}(\mathbf{w}, \mathbf{u}) \\ \text{Var}(\mathbf{u}, \mathbf{w}) & \text{Var}(\mathbf{u}, \mathbf{u}) \end{bmatrix} = \begin{bmatrix} \boldsymbol{\Sigma} & \boldsymbol{\Sigma}_{\mathbf{w}\mathbf{u}} \\ \boldsymbol{\Sigma}_{\mathbf{u}\mathbf{w}} & \boldsymbol{\Sigma}_{\mathbf{u}\mathbf{u}} \end{bmatrix}
+\end{align} Because we have observed \(\mathbf{w}\), we may derive the
+conditional distribution of \(\mathbf{u}|\mathbf{w}\), which has the
+following properties: \begin{align}
+  \text{E}(\mathbf{w} | \mathbf{u}) & = \mathbf{X}_{\mathbf{u}} \boldsymbol{\beta} + \boldsymbol{\Sigma}_{\mathbf{u}, \mathbf{w}}\boldsymbol{\Sigma}^{-1}(\mathbf{w} - \mathbf{X}\boldsymbol{\beta}) \\
+  \text{E}(\mathbf{w} | \mathbf{u}) & = \boldsymbol{\Sigma}_{\mathbf{u}, \mathbf{u}} - \boldsymbol{\Sigma}_{\mathbf{u}, \mathbf{w}} \boldsymbol{\Sigma}^{-1} \boldsymbol{\Sigma}_{\mathbf{w}, \mathbf{u}}
+\end{align} Two more sources of uncertainty,
+\(\hat{\boldsymbol{\beta}}\) and \(\hat{\mathbf{w}}\). Spatial
+prediction is often also called Kriging \citep{cressie1990origins}.
 
 \section{Modeling moose presence in Alaska, USA}\label{sec-applications}
 
