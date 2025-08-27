@@ -49,7 +49,8 @@ options(prompt = 'R> ', continue = '+ ')
 library(spmodel)
 library(ggplot2)
 library(dplyr)
-library(emmeans)
+#library(emmeans)
+#library(car)
 library(here)
 fig_path <- here("inst", "manuscript", "figures")
 ```
@@ -108,7 +109,7 @@ The \pkg{spmodel} \proglang{R} package [@dumelle2023spmodel] recently provided a
 \label{fig-type}
 \end{figure}
 
-\pkg{spmodel} (version 0.11.0) is arguably most similar to \pkg{sdmTMB} (version 0.7.4) in terms of scope and feel. Both packages use similar syntax as \code{glm()}, accommodate flexible \code{formula} arguments (e.g., offsets, splines), handle spatial covariance that decays at different rates in different rates (i.e., geometric anisotropy), incorporate nonspatial random effects, support other \proglang{R} packages for modeling like \pkg{broom} [@robinson2021broom; @kuhn2022tidy] and \pkg{emmeans} [@lenth2024emmeans], and have tools for model summaries, prediction, and simulating data. There are some notable differences between the two packages, however. \pkg{sdmTMB} supports several additional GLM distributions like the Tweedie, supports Hurdle models, and can incorporate prior information through Bayesian applications. \pkg{sdmTMB} also provides tools for working with temporal data and enhanced visualizations of marginal effects. \pkg{sdmTMB} does require a preprocessing step of constructing a mesh for the stochastic partial differential equation approach, and the density of the mesh can affect model results and computational complexity. \pkg{spmodel} does not require the construction of a mesh prior to modeling. \pkg{spmodel} supports 20 different spatial covariances and models them directly, rather than using a precision matrix approximation to the Matérn spatial covariance as in \pkg{sdmTMB}. \pkg{spmodel} also provides experimental design tools (e.g., analysis of variance, contrasts), supports \pkg{sf} objects in modeling and prediction functions [@pebesma2018sf], has several specialized model diagnostics like leverage values and Cook's distances, and has analytic solutions for prediction standard errors. Other similarities and differences do exist between \pkg{sdmTMB} and \pkg{spmodel}, and both packages continue to evolve. Overall, we believe that these packages are complementary and enhance the suite of SPGLM tools accessible to practitioners.
+\pkg{spmodel} (version 0.11.0) is arguably most similar to \pkg{sdmTMB} (version 0.7.4) in terms of scope and feel. Both packages use similar syntax as \code{glm()}, accommodate flexible \code{formula} arguments (e.g., offsets, splines), handle spatial covariance that decays at different rates in different rates (i.e., geometric anisotropy), incorporate nonspatial random effects, support other \proglang{R} packages for modeling like \pkg{broom} [@robinson2021broom; @kuhn2022tidy], \pkg{emmeans} [@lenth2024emmeans], and \pkg{car} [@fox2019car], and have tools for model summaries, prediction, and simulating data. There are some notable differences between the two packages, however. \pkg{sdmTMB} supports several additional GLM distributions like the Tweedie, supports Hurdle models, and can incorporate prior information through Bayesian applications. \pkg{sdmTMB} also provides tools for working with temporal data and enhanced visualizations of marginal effects. \pkg{sdmTMB} does require a preprocessing step of constructing a mesh for the stochastic partial differential equation approach, and the density of the mesh can affect model results and computational complexity. \pkg{spmodel} does not require the construction of a mesh prior to modeling. \pkg{spmodel} supports 20 different spatial covariances and models them directly, rather than using a precision matrix approximation to the Matérn spatial covariance as in \pkg{sdmTMB}. \pkg{spmodel} also provides experimental design tools (e.g., analysis of variance, contrasts), supports \pkg{sf} objects in modeling and prediction functions [@pebesma2018sf], has several specialized model diagnostics like leverage values and Cook's distances, and has analytic solutions for prediction standard errors. Other similarities and differences do exist between \pkg{sdmTMB} and \pkg{spmodel}, and both packages continue to evolve. Overall, we believe that these packages are complementary and enhance the suite of SPGLM tools accessible to practitioners.
 
 The rest of this article is organized as follows. In Section$~$\ref{sec-spglm}, we provide some background for the SPGLM fitting and prediction routines in \pkg{spmodel}. In Section$~$\ref{sec-applications}, we provide several applications of \pkg{spmodel} to spatial binary, count, skewed and proportion data with both point-referenced and areal supports. And in Section$~$\ref{sec-discussion}, we end with a discussion synthesizing \pkg{spmodel}'s contributions to the analysis of SPGLMs in \proglang{R}.
 
@@ -215,6 +216,7 @@ In a linear model, the $R^2$ (R-squared) statistic quantifies the proportion of 
   PR^2 = 1 - \frac{deviance_{fit}}{deviance_{null}},
 \end{equation}
 where $deviance_{fit}$ is the deviance of the fitted model (sometimes called the residual deviance) and $deviance_{null}$ is the deviance of the model taking $\mathbf{X} \equiv \mathbf{1}$, a column of all ones (i.e., an intercept-only model). In practice, $deviance_{null}$ is derived by computing $\hat{\mathbf{w}}$ when $\mathbf{X} \equiv \mathbf{1}$ given $\hat{\boldsymbol{\theta}}$ and $\hat{\varphi}$ from the fitted model. Like the standard $R^2$, this statistic attempts to capture variability (i.e., deviance) attributable to the explanatory variables. Because the $deviance_{null}$ denominator changes across fitted models (as the values of $\hat{\boldsymbol{\theta}}$ and $\hat{\varphi}$ change), this statistic should not be used as a model comparison tool. Instead, it should be used as an informative diagnostic tool unique to each model fit.
+
 ## Predicting at new locations
 
 We may also predict values of the latent mean (on the link scale) at new locations by leveraging the spatial covariance between observed locations and new locations (spatial prediction is also called Kriging; see @cressie1990origins). Again suppose that we observed $\mathbf{w}$ and we want to make predictions at $\mathbf{u}$, a vector of latent means at the new locations that follows the same SPGLM from Equation~\ref{eq-spglm} with fixed effects design matrix, $\mathbf{X}_{\mathbf{u}}$. The vector $(\mathbf{w}, \mathbf{u})^\top$ has the following properties:
@@ -340,19 +342,176 @@ the \code{"spherical"} spatial covariance (\code{spbin2}). Both spatial covarian
 
 ## Model Diagnostics
 
-\code{spmodel} provides a suite of tools for model diagnostics. 
+\code{spmodel} provides a suite of tools for model diagnostics. The \code{augment()} function augments the model data with diagnostics:
+```{r}
+augment(spbin)
+```
+
+The fitted values (\code{.fitted}) can be returned on either the link ($\hat{\mathbf{w}}$) or response ($f^{-1}\hat{\mathbf{w}}$) scale and the residuals (\code{.resid}) can deviance, pearson, or response residuals. The defaults are the link scale and deviance residuals, respectively. Also returned by \code{augment()} are the leverage (\code{.hat}), Cook's distance (\code{.cooksd}), and standardized residuals \code{.std.resid}. A benefit of using \code{augment()} when \code{data} is an \code{sf} object is that the output is also an \code{sf} object, which makes it straightforward to create spatial diagnostic plots (Figure$~$\ref{fig-sp-diagnostic}). Standard \proglang{R} helpers (e.g., \code{fitted()}, \code{residuals()}) are available to alternatively extract model diagnostics from the model object.
+
+\begin{figure}
+\centering
+\includegraphics[width = 1\linewidth]{figures/figure-2.png}
+\caption{Spatial logistic regression model diagnostics from [augment]{.fct}. The leverage (i.e., hat) values (left) and standardized residuals (right).}
+\label{fig-sp-diagnostic}
+\end{figure}
+
+The \code{plot()} function can also be used to return similar diagnostics as from \code{lm()} and \code{glm()} with additional tools for spatial covariance. For example, we can inspect Cook's distance values and the empirical spatial covariance as a function (Figure$~$\ref{fig-sp-diagnostic2}) with 
+```{r, eval = FALSE}
+plot(spbin, which = c(4, 7))
+```
+
+\begin{figure}
+\centering
+\includegraphics[width = 1\linewidth]{figures/figure-3.png}
+\caption{Spatial logistic regression model diagnostics from [plot]{.fct}. The Cook's distance values (left) and the fitted spatial covariance as a function of distance (right).}
+\label{fig-sp-diagnostic2}
+\end{figure}
+
+The \code{varcomp()} function partitions model variability into several different components:
+```{r}
+varcomp(spbin)
+```
+
+The pseudo R-squared ($PR^2$), the proportion of variability attributable to the explanatory variables, is reported in the first row. The remaining variability ($1 - PR^2$) is allocated proportionally to \code{de} and \code{ie} according to $\sigma^2_{de}$ and $\sigma^2_{ie}$. This variability partitioning is a useful that helps quantify how much the explanatory variables, residual spatial variance, and residual nonspatial variance contribute to model fit, but as with $PR^2$, should not be used as a model comparison tool.
 
 ## Prediction
 
+We can predict the probability of moose presence using \code{predict()}:
+```{r}
+predict(spbin, newdata = moose_preds)[1:5]
+```
+
+By default, predictions are returned on the link scale, but this can be changed to the response scale via \code{type}:
+```{r}
+predict(spbin, newdata = moose_preds, type = "response")[1:5]
+```
+
+Predictions on the response scale are visualized alongside the fitted values ($f^{-1}\hat{\mathbf{w}}$) in Figure$~$\ref{fig-moose-fit}.
+
+\begin{figure}
+\centering
+\includegraphics[width = 0.70\linewidth]{figures/figure-4.png}
+\caption{Moose presence probability fitted values and predictions. Fitted values are represeneted by circles and predictions by triangles.}
+\label{fig-moose-fit}
+\end{figure}
+
+Prediction intervals are returned via \code{interval}
+```{r}
+predict(spbin, newdata = moose_preds, interval = "prediction")[1:5, ]
+```
+
+We can alternatively use \code{augment()} to augment the prediction data with predictions. Arguments to \code{predict()} can also be passed to \code{augment()}:
+```{r}
+augment(spbin, newdata = moose_preds, interval = "prediction")
+```
+
+By using \code{augment()} when \code{newdata} is an \code{sf} object, predictions and their corresponding uncertainties are readily available for spatial mapping (Figure$~$\ref{fig-moose-int}).
+
+\begin{figure}
+\centering
+\includegraphics[width = 1\linewidth]{figures/figure-5.png}
+\caption{Moose presence probability prediction intervals. 95\% prediction interval lower bound (left) and 95\% prediction interval upper bound (right).}
+\label{fig-moose-int}
+\end{figure}
+
+
 # Additional applications {#sec-applications2}
 
-## Modeling moose counts in Alaska, USA
+Throughout the remainder of this section, we briefly highlight some additional \pkg{spmodel} capabilities for SPGLMs. In Section$~$\ref{sec-moose-count}, we fit Poisson and negative binomial models with and without geometric anisotropy for the point-referenced moose count data. In Section$~$\ref{sec-seal}, we fit a binomial model to the areal seal trend data with a nonspatial random effect. In Section$~$\ref{sec-texas}, we fit beta models to Texas voter turnout data. We explore how the Texas data can be treated as point-referenced or areal and compare the two spatial covariance structures empirically. We also highlight how the maximum likelihood estimation method is useful when comparing two models with different explanatory variables. Finally, in Section$~$\ref{sec-lake}, we fit a Gamma model to the point-referenced lake conductivity data. We show how to perform a spatial analysis of variance (ANOVA) and leverage modeling functions from other \proglang{R} packages like \pkg{emmeans} and \pkg{car}.
 
-## Modeling harbor seal trends in Alaska, USA
+## Modeling moose counts in Alaska, USA {#sec-moose-count}
 
-## Modeling voter turnout in Texas, USA
+```{r}
+sppois <- spglm(
+  formula = count ~ elev + strat,
+  family = poisson,
+  data = moose,
+  spcov_type = "gaussian"
+)
+spnb <- update(sppois, family = nbinomial)
+sppois_anis <- update(sppois, anisotropy = TRUE)
+spnb_anis <- update(sppois_anis, family = nbinomial)
+```
 
-## Modeling lake conductivity in Southwest, USA
+```{r}
+BIC(sppois, spnb, sppois_anis, spnb_anis)
+```
+
+```{r, eval = FALSE}
+plot(spnb, which = 8)
+plot(spnb_anis, which = 8)
+```
+
+
+## Modeling harbor seal trends in Alaska, USA {#sec-seal}
+
+```{r}
+spbin <- spgautor(
+  formula = log_trend > 0 ~ 1,
+  family = binomial,
+  data = seal,
+  spcov_type = "car",
+  random = ~ stock
+)
+tidy(spbin, conf.int = TRUE)
+```
+
+
+## Modeling voter turnout in Texas, USA {#sec-texas}
+
+```{r}
+spbeta_geo <- spglm(
+  formula = turnout ~ log_income,
+  family = "beta", 
+  data = texas,
+  spcov_type = "matern"
+)
+
+spbeta_auto <- spgautor(
+  formula = turnout ~ log_income,
+  family = "beta", 
+  data = texas,
+  spcov_type = "car",
+  cutoff = 1e5
+)
+```
+
+```{r}
+AIC(spbeta_geo, spbeta_auto)
+```
+
+```{r}
+tidy(spbeta_geo)
+spbeta_full_ml <- update(spbeta_geo, estmethod = "ml")
+spbeta_red_ml <- update(spbeta_full_ml, formula = turnout ~ 1)
+tidy(anova(spbeta_full_ml, spbeta_red_ml))
+```
+
+## Modeling lake conductivity in Southwest, USA {#sec-lake}
+
+```{r}
+spgam <- spglm(
+  formula = exp(log_cond) ~ temp * state + origin, 
+  family = "Gamma",
+  data = lake,
+  spcov_type = "cauchy",
+  partition_factor = ~ year
+)
+```
+
+```{r}
+anova(spgam)
+```
+
+```{r}
+car::vif(spgam)
+```
+
+```{r}
+pairs(emmeans::emmeans(spgam, ~ state | temp))
+emmeans::emtrends(spgam, ~ state, var = "temp")
+```
 
 # Discussion
 

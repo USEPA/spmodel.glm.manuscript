@@ -298,18 +298,18 @@ syntax as \code{glm()}, accommodate flexible \code{formula} arguments
 different rates in different rates (i.e., geometric anisotropy),
 incorporate nonspatial random effects, support other \proglang{R}
 packages for modeling like \pkg{broom}
-\citep{robinson2021broom, kuhn2022tidy} and \pkg{emmeans}
-\citep{lenth2024emmeans}, and have tools for model summaries,
-prediction, and simulating data. There are some notable differences
-between the two packages, however. \pkg{sdmTMB} supports several
-additional GLM distributions like the Tweedie, supports Hurdle models,
-and can incorporate prior information through Bayesian applications.
-\pkg{sdmTMB} also provides tools for working with temporal data and
-enhanced visualizations of marginal effects. \pkg{sdmTMB} does require a
-preprocessing step of constructing a mesh for the stochastic partial
-differential equation approach, and the density of the mesh can affect
-model results and computational complexity. \pkg{spmodel} does not
-require the construction of a mesh prior to modeling. \pkg{spmodel}
+\citep{robinson2021broom, kuhn2022tidy}, \pkg{emmeans}
+\citep{lenth2024emmeans}, and \pkg{car} \citep{fox2019car}, and have
+tools for model summaries, prediction, and simulating data. There are
+some notable differences between the two packages, however. \pkg{sdmTMB}
+supports several additional GLM distributions like the Tweedie, supports
+Hurdle models, and can incorporate prior information through Bayesian
+applications. \pkg{sdmTMB} also provides tools for working with temporal
+data and enhanced visualizations of marginal effects. \pkg{sdmTMB} does
+require a preprocessing step of constructing a mesh for the stochastic
+partial differential equation approach, and the density of the mesh can
+affect model results and computational complexity. \pkg{spmodel} does
+not require the construction of a mesh prior to modeling. \pkg{spmodel}
 supports 20 different spatial covariances and models them directly,
 rather than using a precision matrix approximation to the Matérn spatial
 covariance as in \pkg{sdmTMB}. \pkg{spmodel} also provides experimental
@@ -550,7 +550,10 @@ denominator changes across fitted models (as the values of
 \(\hat{\boldsymbol{\theta}}\) and \(\hat{\varphi}\) change), this
 statistic should not be used as a model comparison tool. Instead, it
 should be used as an informative diagnostic tool unique to each model
-fit. \#\# Predicting at new locations
+fit.
+
+\subsection{Predicting at new
+locations}\label{predicting-at-new-locations}
 
 We may also predict values of the latent mean (on the link scale) at new
 locations by leveraging the spatial covariance between observed
@@ -936,23 +939,411 @@ metrics. For practical purposes, these models fit quite similarly.
 
 \subsection{Model Diagnostics}\label{model-diagnostics}
 
-\code{spmodel} provides a suite of tools for model diagnostics.
+\code{spmodel} provides a suite of tools for model diagnostics. The
+\code{augment()} function augments the model data with diagnostics:
+
+\begin{CodeChunk}
+\begin{CodeInput}
+R> augment(spbin)
+\end{CodeInput}
+\begin{CodeOutput}
+Simple feature collection with 218 features and 8 fields
+Geometry type: POINT
+Dimension:     XY
+Bounding box:  xmin: 269085 ymin: 1416151 xmax: 419057.4 ymax: 1541016
+Projected CRS: NAD83 / Alaska Albers
+# A tibble: 218 x 9
+   presence  elev strat .fitted .resid    .hat  .cooksd .std.resid
+ * <fct>    <dbl> <chr>   <dbl>  <dbl>   <dbl>    <dbl>      <dbl>
+ 1 0         469. L       -1.95 -0.516 0.0476  0.00465      -0.528
+ 2 0         362. L       -2.70 -0.361 0.0123  0.000548     -0.363
+ 3 0         173. M       -1.96 -0.514 0.00455 0.000405     -0.516
+ 4 0         280. L       -3.15 -0.290 0.00413 0.000117     -0.291
+ 5 0         620. L       -1.19 -0.728 0.168   0.0427       -0.798
+ 6 0         164. M       -1.71 -0.576 0.00534 0.000598     -0.578
+ 7 0         164. M       -1.60 -0.606 0.00576 0.000714     -0.608
+ 8 0         186. L       -2.50 -0.397 0.00439 0.000233     -0.398
+ 9 0         362. L       -1.88 -0.532 0.0239  0.00237      -0.539
+10 0         430. L       -1.54 -0.623 0.0497  0.00713      -0.639
+# i 208 more rows
+# i 1 more variable: geometry <POINT [m]>
+\end{CodeOutput}
+\end{CodeChunk}
+
+The fitted values (\code{.fitted}) can be returned on either the link
+(\(\hat{\mathbf{w}}\)) or response (\(f^{-1}\hat{\mathbf{w}}\)) scale
+and the residuals (\code{.resid}) can deviance, pearson, or response
+residuals. The defaults are the link scale and deviance residuals,
+respectively. Also returned by \code{augment()} are the leverage
+(\code{.hat}), Cook's distance (\code{.cooksd}), and standardized
+residuals \code{.std.resid}. A benefit of using \code{augment()} when
+\code{data} is an \code{sf} object is that the output is also an
+\code{sf} object, which makes it straightforward to create spatial
+diagnostic plots (Figure\(~\)\ref{fig-sp-diagnostic}). Standard
+\proglang{R} helpers (e.g., \code{fitted()}, \code{residuals()}) are
+available to alternatively extract model diagnostics from the model
+object.
+
+\begin{figure}
+\centering
+\includegraphics[width = 1\linewidth]{figures/figure-2.png}
+\caption{Spatial logistic regression model diagnostics from [augment]{.fct}. The leverage (i.e., hat) values (left) and standardized residuals (right).}
+\label{fig-sp-diagnostic}
+\end{figure}
+
+The \code{plot()} function can also be used to return similar
+diagnostics as from \code{lm()} and \code{glm()} with additional tools
+for spatial covariance. For example, we can inspect Cook's distance
+values and the empirical spatial covariance as a function
+(Figure\(~\)\ref{fig-sp-diagnostic2}) with
+
+\begin{CodeChunk}
+\begin{CodeInput}
+R> plot(spbin, which = c(4, 7))
+\end{CodeInput}
+\end{CodeChunk}
+
+\begin{figure}
+\centering
+\includegraphics[width = 1\linewidth]{figures/figure-3.png}
+\caption{Spatial logistic regression model diagnostics from [plot]{.fct}. The Cook's distance values (left) and the fitted spatial covariance as a function of distance (right).}
+\label{fig-sp-diagnostic2}
+\end{figure}
+
+The \code{varcomp()} function partitions model variability into several
+different components:
+
+\begin{CodeChunk}
+\begin{CodeInput}
+R> varcomp(spbin)
+\end{CodeInput}
+\begin{CodeOutput}
+# A tibble: 3 x 2
+  varcomp            proportion
+  <chr>                   <dbl>
+1 Covariates (PR-sq)   0.0627  
+2 de                   0.937   
+3 ie                   0.000236
+\end{CodeOutput}
+\end{CodeChunk}
+
+The pseudo R-squared (\(PR^2\)), the proportion of variability
+attributable to the explanatory variables, is reported in the first row.
+The remaining variability (\(1 - PR^2\)) is allocated proportionally to
+\code{de} and \code{ie} according to \(\sigma^2_{de}\) and
+\(\sigma^2_{ie}\). This variability partitioning is a useful that helps
+quantify how much the explanatory variables, residual spatial variance,
+and residual nonspatial variance contribute to model fit, but as with
+\(PR^2\), should not be used as a model comparison tool.
 
 \subsection{Prediction}\label{prediction}
 
+We can predict the probability of moose presence using \code{predict()}:
+
+\begin{CodeChunk}
+\begin{CodeInput}
+R> predict(spbin, newdata = moose_preds)[1:5]
+\end{CodeInput}
+\begin{CodeOutput}
+          1           2           3           4           5 
+ 0.06664165 -0.79069107 -1.60387940 -0.83159357  1.38183928 
+\end{CodeOutput}
+\end{CodeChunk}
+
+By default, predictions are returned on the link scale, but this can be
+changed to the response scale via \code{type}:
+
+\begin{CodeChunk}
+\begin{CodeInput}
+R> predict(spbin, newdata = moose_preds, type = "response")[1:5]
+\end{CodeInput}
+\begin{CodeOutput}
+        1         2         3         4         5 
+0.5166542 0.3120203 0.1674401 0.3033082 0.7992862 
+\end{CodeOutput}
+\end{CodeChunk}
+
+Predictions on the response scale are visualized alongside the fitted
+values (\(f^{-1}\hat{\mathbf{w}}\)) in Figure\(~\)\ref{fig-moose-fit}.
+
+\begin{figure}
+\centering
+\includegraphics[width = 0.70\linewidth]{figures/figure-4.png}
+\caption{Moose presence probability fitted values and predictions. Fitted values are represeneted by circles and predictions by triangles.}
+\label{fig-moose-fit}
+\end{figure}
+
+Prediction intervals are returned via \code{interval}
+
+\begin{CodeChunk}
+\begin{CodeInput}
+R> predict(spbin, newdata = moose_preds, interval = "prediction")[1:5, ]
+\end{CodeInput}
+\begin{CodeOutput}
+          fit        lwr       upr
+1  0.06664165 -2.0374370 2.1707203
+2 -0.79069107 -3.4758514 1.8944692
+3 -1.60387940 -4.0953329 0.8875741
+4 -0.83159357 -3.0704818 1.4072947
+5  1.38183928 -0.7692107 3.5328893
+\end{CodeOutput}
+\end{CodeChunk}
+
+We can alternatively use \code{augment()} to augment the prediction data
+with predictions. Arguments to \code{predict()} can also be passed to
+\code{augment()}:
+
+\begin{CodeChunk}
+\begin{CodeInput}
+R> augment(spbin, newdata = moose_preds, interval = "prediction")
+\end{CodeInput}
+\begin{CodeOutput}
+Simple feature collection with 100 features and 5 fields
+Geometry type: POINT
+Dimension:     XY
+Bounding box:  xmin: 269386.2 ymin: 1418453 xmax: 419976.2 ymax: 1541763
+Projected CRS: NAD83 / Alaska Albers
+# A tibble: 100 x 6
+    elev strat .fitted .lower  .upper           geometry
+ * <dbl> <chr>   <dbl>  <dbl>   <dbl>        <POINT [m]>
+ 1  143. L      0.0666 -2.04   2.17   (401239.6 1436192)
+ 2  324. L     -0.791  -3.48   1.89   (352640.6 1490695)
+ 3  158. L     -1.60   -4.10   0.888  (360954.9 1491590)
+ 4  221. M     -0.832  -3.07   1.41   (291839.8 1466091)
+ 5  209. M      1.38   -0.769  3.53   (310991.9 1441630)
+ 6  218. L     -2.59   -5.20   0.0177 (304473.8 1512103)
+ 7  127. L     -2.73   -5.24  -0.220  (339011.1 1459318)
+ 8  122. L     -2.32   -4.74   0.0920 (342827.3 1463452)
+ 9  191  L     -1.17   -4.01   1.66   (284453.8 1502837)
+10  105. L     -0.905  -3.05   1.24   (391343.9 1483791)
+# i 90 more rows
+\end{CodeOutput}
+\end{CodeChunk}
+
+By using \code{augment()} when \code{newdata} is an \code{sf} object,
+predictions and their corresponding uncertainties are readily available
+for spatial mapping (Figure\(~\)\ref{fig-moose-int}).
+
+\begin{figure}
+\centering
+\includegraphics[width = 1\linewidth]{figures/figure-5.png}
+\caption{Moose presence probability prediction intervals. 95\% prediction interval lower bound (left) and 95\% prediction interval upper bound (right).}
+\label{fig-moose-int}
+\end{figure}
+
 \section{Additional applications}\label{sec-applications2}
 
-\subsection{Modeling moose counts in Alaska,
-USA}\label{modeling-moose-counts-in-alaska-usa}
+Throughout the remainder of this section, we briefly highlight some
+additional \pkg{spmodel} capabilities for SPGLMs. In
+Section\(~\)\ref{sec-moose-count}, we fit Poisson and negative binomial
+models with and without geometric anisotropy for the point-referenced
+moose count data. In Section\(~\)\ref{sec-seal}, we fit a binomial model
+to the areal seal trend data with a nonspatial random effect. In
+Section\(~\)\ref{sec-texas}, we fit beta models to Texas voter turnout
+data. We explore how the Texas data can be treated as point-referenced
+or areal and compare the two spatial covariance structures empirically.
+We also highlight how the maximum likelihood estimation method is useful
+when comparing two models with different explanatory variables. Finally,
+in Section\(~\)\ref{sec-lake}, we fit a Gamma model to the
+point-referenced lake conductivity data. We show how to perform a
+spatial analysis of variance (ANOVA) and leverage modeling functions
+from other \proglang{R} packages like \pkg{emmeans} and \pkg{car}.
 
-\subsection{Modeling harbor seal trends in Alaska,
-USA}\label{modeling-harbor-seal-trends-in-alaska-usa}
+\subsection{Modeling moose counts in Alaska, USA}\label{sec-moose-count}
 
-\subsection{Modeling voter turnout in Texas,
-USA}\label{modeling-voter-turnout-in-texas-usa}
+\begin{CodeChunk}
+\begin{CodeInput}
+R> sppois <- spglm(
++   formula = count ~ elev + strat,
++   family = poisson,
++   data = moose,
++   spcov_type = "gaussian"
++ )
+R> spnb <- update(sppois, family = nbinomial)
+R> sppois_anis <- update(sppois, anisotropy = TRUE)
+R> spnb_anis <- update(sppois_anis, family = nbinomial)
+\end{CodeInput}
+\end{CodeChunk}
+
+\begin{CodeChunk}
+\begin{CodeInput}
+R> BIC(sppois, spnb, sppois_anis, spnb_anis)
+\end{CodeInput}
+\begin{CodeOutput}
+            df      BIC
+sppois       3 1343.892
+spnb         4 1340.706
+sppois_anis  5 1337.610
+spnb_anis    6 1335.051
+\end{CodeOutput}
+\end{CodeChunk}
+
+\begin{CodeChunk}
+\begin{CodeInput}
+R> plot(spnb, which = 8)
+R> plot(spnb_anis, which = 8)
+\end{CodeInput}
+\end{CodeChunk}
+
+\subsection{Modeling harbor seal trends in Alaska, USA}\label{sec-seal}
+
+\begin{CodeChunk}
+\begin{CodeInput}
+R> spbin <- spgautor(
++   formula = log_trend > 0 ~ 1,
++   family = binomial,
++   data = seal,
++   spcov_type = "car",
++   random = ~ stock
++ )
+R> tidy(spbin, conf.int = TRUE)
+\end{CodeInput}
+\begin{CodeOutput}
+# A tibble: 1 x 7
+  term        estimate std.error statistic p.value conf.low conf.high
+  <chr>          <dbl>     <dbl>     <dbl>   <dbl>    <dbl>     <dbl>
+1 (Intercept)   -0.340     0.673    -0.506   0.613    -1.66     0.979
+\end{CodeOutput}
+\end{CodeChunk}
+
+\subsection{Modeling voter turnout in Texas, USA}\label{sec-texas}
+
+\begin{CodeChunk}
+\begin{CodeInput}
+R> spbeta_geo <- spglm(
++   formula = turnout ~ log_income,
++   family = "beta", 
++   data = texas,
++   spcov_type = "matern"
++ )
+R> 
+R> spbeta_auto <- spgautor(
++   formula = turnout ~ log_income,
++   family = "beta", 
++   data = texas,
++   spcov_type = "car",
++   cutoff = 1e5
++ )
+\end{CodeInput}
+\end{CodeChunk}
+
+\begin{CodeChunk}
+\begin{CodeInput}
+R> AIC(spbeta_geo, spbeta_auto)
+\end{CodeInput}
+\begin{CodeOutput}
+            df       AIC
+spbeta_geo   5 -44.53113
+spbeta_auto  3 -22.46104
+\end{CodeOutput}
+\end{CodeChunk}
+
+\begin{CodeChunk}
+\begin{CodeInput}
+R> tidy(spbeta_geo)
+\end{CodeInput}
+\begin{CodeOutput}
+# A tibble: 2 x 5
+  term        estimate std.error statistic    p.value
+  <chr>          <dbl>     <dbl>     <dbl>      <dbl>
+1 (Intercept)   -5.20      1.11      -4.70 0.00000260
+2 log_income     0.579     0.122      4.76 0.00000194
+\end{CodeOutput}
+\begin{CodeInput}
+R> spbeta_full_ml <- update(spbeta_geo, estmethod = "ml")
+R> spbeta_red_ml <- update(spbeta_full_ml, formula = turnout ~ 1)
+R> tidy(anova(spbeta_full_ml, spbeta_red_ml))
+\end{CodeInput}
+\begin{CodeOutput}
+# A tibble: 1 x 5
+  full          reduced           df statistic    p.value
+  <chr>         <chr>          <dbl>     <dbl>      <dbl>
+1 spbeta_red_ml spbeta_full_ml     1      23.2 0.00000149
+\end{CodeOutput}
+\end{CodeChunk}
 
 \subsection{Modeling lake conductivity in Southwest,
-USA}\label{modeling-lake-conductivity-in-southwest-usa}
+USA}\label{sec-lake}
+
+\begin{CodeChunk}
+\begin{CodeInput}
+R> spgam <- spglm(
++   formula = exp(log_cond) ~ temp * state + origin, 
++   family = "Gamma",
++   data = lake,
++   spcov_type = "cauchy",
++   partition_factor = ~ year
++ )
+\end{CodeInput}
+\end{CodeChunk}
+
+\begin{CodeChunk}
+\begin{CodeInput}
+R> anova(spgam)
+\end{CodeInput}
+\begin{CodeOutput}
+Analysis of Variance Table
+
+Response: exp(log_cond)
+            Df    Chi2 Pr(>Chi2)    
+(Intercept)  1 51.5270 7.062e-13 ***
+temp         1 25.5146 4.390e-07 ***
+state        3  3.0747 0.3802528    
+origin       1  0.1429 0.7053819    
+temp:state   3 19.7668 0.0001897 ***
+---
+Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+\end{CodeOutput}
+\end{CodeChunk}
+
+\begin{CodeChunk}
+\begin{CodeInput}
+R> car::vif(spgam)
+\end{CodeInput}
+\begin{CodeOutput}
+                 GVIF Df GVIF^(1/(2*Df))
+temp         4.691914  1        2.166083
+state      127.082397  3        2.242234
+origin       1.264940  1        1.124695
+temp:state  76.387383  3        2.059856
+\end{CodeOutput}
+\end{CodeChunk}
+
+\begin{CodeChunk}
+\begin{CodeInput}
+R> pairs(emmeans::emmeans(spgam, ~ state | temp))
+\end{CodeInput}
+\begin{CodeOutput}
+temp = 7.63:
+ contrast estimate    SE  df z.ratio p.value
+ AZ - CO    -1.012 0.337 Inf  -3.004  0.0142
+ AZ - NV    -0.900 0.348 Inf  -2.584  0.0480
+ AZ - UT    -1.331 0.326 Inf  -4.082  0.0003
+ CO - NV     0.112 0.258 Inf   0.434  0.9727
+ CO - UT    -0.319 0.223 Inf  -1.427  0.4822
+ NV - UT    -0.431 0.244 Inf  -1.763  0.2915
+
+Results are averaged over the levels of: origin 
+Degrees-of-freedom method: asymptotic 
+Results are given on the log (not the response) scale. 
+P value adjustment: tukey method for comparing a family of 4 estimates 
+\end{CodeOutput}
+\begin{CodeInput}
+R> emmeans::emtrends(spgam, ~ state, var = "temp")
+\end{CodeInput}
+\begin{CodeOutput}
+ state temp.trend     SE  df asymp.LCL asymp.UCL
+ AZ         0.152 0.0301 Inf    0.0929     0.211
+ CO         0.289 0.0370 Inf    0.2161     0.361
+ NV         0.171 0.0504 Inf    0.0718     0.270
+ UT         0.352 0.0372 Inf    0.2791     0.425
+
+Results are averaged over the levels of: origin 
+Degrees-of-freedom method: asymptotic 
+Results are given on the exp (not the response) scale. 
+Confidence level used: 0.95 
+\end{CodeOutput}
+\end{CodeChunk}
 
 \section{Discussion}\label{discussion}
 
