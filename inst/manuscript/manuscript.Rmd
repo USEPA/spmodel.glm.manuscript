@@ -122,7 +122,7 @@ We can write the SPGLM likelihood hierarchically as
 \begin{equation}\label{eq-marginal}
   [\mathbf{y}|\mathbf{X}, \varphi, \boldsymbol{\theta}] = \int_{\mathbf{w}} \int_{\boldsymbol{\beta}} [\mathbf{y} | f^{-1}(\mathbf{w}), \varphi] [\mathbf{w} | \mathbf{X}, \boldsymbol{\theta}] d\boldsymbol{\beta} d\mathbf{w},
 \end{equation}
-where $[\mathbf{y} | f^{-1}(\mathbf{w}), \varphi]$ is the density for the appropriate response distribution of $\mathbf{y}$ (e.g., binomial, Poisson) given the latent $\mathbf{w}$ and dispersion parameter ($\varphi$), and $[\mathbf{w} | \mathbf{X}, \boldsymbol{\theta}]$ is the multivariate Gaussian density for $\mathbf{w}$ given the explanatory variables ($\mathbf{X}$), fixed effects ($\boldsymbol{\beta}$), and spatial covariance parameters ($\boldsymbol{\theta}$). Following @@harville1977maximum, we can integrate $\boldsymbol{\beta}$ out of Equation$~$\ref{eq-spglm}, which yields
+where $[\mathbf{y} | f^{-1}(\mathbf{w}), \varphi]$ is the density for the appropriate response distribution of $\mathbf{y}$ (e.g., binomial, Poisson) given the latent $\mathbf{w}$ and dispersion parameter ($\varphi$), and $[\mathbf{w} | \mathbf{X}, \boldsymbol{\theta}]$ is the multivariate Gaussian density for $\mathbf{w}$ given the explanatory variables ($\mathbf{X}$), fixed effects ($\boldsymbol{\beta}$), and spatial covariance parameters ($\boldsymbol{\theta}$). The elements of $[\mathbf{y} | f^{-1}(\mathbf{w}), \varphi]$ are conditionally independent (given $\mathbf{w}$), but the elements of $[\mathbf{w} | \mathbf{X}, \boldsymbol{\theta}]$ share spatial covariance. Following @harville1977maximum, we can integrate $\boldsymbol{\beta}$ out of Equation$~$\ref{eq-spglm}, which yields
 \begin{equation}\label{eq-marginal2}
   [\mathbf{y}|\mathbf{X}, \varphi, \boldsymbol{\theta}] = \int_{\mathbf{w}} [\mathbf{y} | f^{-1}(\mathbf{w}), \varphi] [\mathbf{w} | \mathbf{X}, \boldsymbol{\theta}] d\mathbf{w},
 \end{equation}
@@ -188,9 +188,36 @@ In practice, $\text{Var}(\hat{\boldsymbol{\beta}})$ is estimated by evaluating $
 
 These results are important because they justify closed-form solutions for $\hat{\boldsymbol{\beta}}$ and its associated variance. Closed-form solutions are useful because they bypass the need for computationally expensive sampling-based strategies to evaluate the mean and variance of $\hat{\boldsymbol{\beta}}$ -- a common technique for other approaches to SPGLMs like Bayesian MCMC. 
 
+## Inspecting model diagnostics
+
+Inspecting model diagnostics is an important step of the modeling process that can yield valuable insights into model behavior and unusual observations. @montgomery2021introduction contextualize three components of unusual observations: outliers, leverage, and influence. An observation is an outlier if it has an unusual response value relative to expectation. The response GLM residuals simply compare the observation to its fitted latent mean:
+\begin{equation}
+  \mathbf{r}_{r} = \mathbf{y} - f^{-1}(\hat{\mathbf{w}})
+\end{equation}
+Because observations often have a unique support in a GLM (e.g., only two possible response values for binary data) and the variance of an observation generally depends on its mean, response residuals lack some utility. Deviance residuals are a function of response residuals that are appropriately scaled to behave more like response residuals in a standard linear model. Deviance residuals are given by
+\begin{equation}
+  \mathbf{r}_{d} = sign(\mathbf{r}_{r})\sqrt{\mathbf{d}},
+\end{equation}
+where $\mathbf{d}$ is a vector of individual deviances. The sum of the squared deviance residuals equals the sum of $\mathbf{d}$. The sum of $\mathbf{d}$ is the deviance of the model fit, which quantifies twice the difference in log likelihoods between the a saturated model that fits every observation perfectly (i.e., $\mathbf{y} = f^{-1}(\hat{\mathbf{w}}_i)$ for all $i$) and the fitted model. Deviance is often used as a fit statistic; lower values of deviance imply a better model fit. Pearson and standardized residuals are other types of GLM residuals that involve some scaling of the response residuals; the Pearson residuals scale $\mathbf{r}_{r}$ by the squrae root of $\mathbf{V}$, while the standardized residuals scale the deviance residuals by $\frac{1}{\sqrt{(1 - \mathbf{L}_{ii})}}$, where $\mathbf{L}_{ii}$ is the $i$th diagonal element of the leverage matrix, which we discuss next.
+An observation has high leverage if its combination of explanatory variables is far away from other observations. In a linear model, the leverage values are the diagonal of the leverage (i.e., projection, hat) matrix, $\mathbf{L} = \mathbf{X}(\mathbf{X}^\top \mathbf{X})^{-1}\mathbf{X}^\top$. In a GLM, the leverage matrix is given by
+\begin{equation}
+  \mathbf{L} = \mathbf{V}^{1/2} \mathbf{X} (\mathbf{X}^\top \mathbf{V} \mathbf{X}) \mathbf{X}^\top \mathbf{V}^{1/2},
+\end{equation}
+where $\mathbf{V}$ is a diagonal matrix with $i$th diagonal element equal to the variance of the response distribution evaluated at $f^{-1}(\mathbf{w}_i)$ [@faraway2016extending]. The matrix $\mathbf{V}$ is sometimes called the GLM weight matrix. The larger the $i$th diagonal element of the hat matrix, the more severe the leverage from the $i$th observation.
+An observation is influential if it has a sizeable impact on model fit. Influence is measured using Cook's distance [@cook1979influential; @cook1982residuals], which is given for a GLM by
+\begin{equation}
+  \mathbf{c} = \mathbf{r}^2_{s} \frac{diag(\mathbf{L})}{\text{tr}(\mathbf{L})(\mathbf{1} - diag(\mathbf{L}))},
+\end{equation}
+where $\mathbf{r}^2_{s}$ are the standardized residuals and $diag(\mathbf{L})$ indicates the diagonal elements of the leverage matrix. The larger the $i$th diagonal element of the hat matrix, the more severe the influence from the $i$th observation.  @montgomery2021introduction provide guidance for interpreting these types of statistics, including cutoffs to consider when identifying unusual residual, leverage, or influence values.
+
+In a linear model, the $R^2$ (R-squared) statistic quantifies the proportion of variability in the data captured by the explanatory variables and is calculated as one minus the ratio of the error sum of squares to the total sum of squares [@rencher2008linear]. In a GLM, there are many ways to define such a statistic [@smith2013comparison]. One such approach is to use one minus the deviance ratio:
+\begin{equation}
+  PR^2 = 1 - \frac{deviance_{fit}}{deviance_{null}},
+\end{equation}
+where $deviance_{fit}$ is the deviance of the fitted model (sometimes called the residual deviance) and $deviance_{null}$ is the deviance of the model taking $\mathbf{X} \equiv \mathbf{1}$, a column of all ones (i.e., an intercept-only model). In practice, $deviance_{null}$ is derived by computing $\hat{\mathbf{w}}$ when $\mathbf{X} \equiv \mathbf{1}$ given $\hat{\boldsymbol{\theta}}$ and $\hat{\varphi}$ from the fitted model. Like the standard $R^2$, this statistic attempts to capture variability (i.e., deviance) attributable to the explanatory variables. Because the $deviance_{null}$ denominator changes across fitted models (as the values of $\hat{\boldsymbol{\theta}}$ and $\hat{\varphi}$ change), this statistic should not be used as a model comparison tool. Instead, it should be used as an informative diagnostic tool unique to each model fit.
 ## Predicting at new locations
 
-We may also predict values of the latent mean (on the link scale) at new locations by leveraging the spatial covariance between observed locations and new locations. Again suppose that we observed $\mathbf{w}$ and we want to make predictions at $\mathbf{u}$, a vector of latent means at the new locations that follows the same SPGLM from Equation~\ref{eq-spglm} with fixed effects design matrix, $\mathbf{X}_{\mathbf{u}}$. The vector $(\mathbf{w}, \mathbf{u})^\top$ has the following properties:
+We may also predict values of the latent mean (on the link scale) at new locations by leveraging the spatial covariance between observed locations and new locations (spatial prediction is also called Kriging; see @cressie1990origins). Again suppose that we observed $\mathbf{w}$ and we want to make predictions at $\mathbf{u}$, a vector of latent means at the new locations that follows the same SPGLM from Equation~\ref{eq-spglm} with fixed effects design matrix, $\mathbf{X}_{\mathbf{u}}$. The vector $(\mathbf{w}, \mathbf{u})^\top$ has the following properties:
 \begin{align}
   \text{E}(\mathbf{w}, \mathbf{u})^\top & = (\text{E}(\mathbf{w}), \text{E}(\mathbf{u}))^\top = (\mathbf{X}\boldsymbol{\beta}, \mathbf{X}_\mathbf{u}\boldsymbol{\beta})^\top \\
   \text{Var}(\mathbf{w}, \mathbf{u})^\top & = \begin{bmatrix} \text{Var}(\mathbf{w}, \mathbf{w}) & \text{Var}(\mathbf{w}, \mathbf{u}) \\ \text{Var}(\mathbf{u}, \mathbf{w}) & \text{Var}(\mathbf{u}, \mathbf{u}) \end{bmatrix} = \begin{bmatrix} \boldsymbol{\Sigma} & \boldsymbol{\Sigma}_{\mathbf{w}\mathbf{u}} \\ \boldsymbol{\Sigma}_{\mathbf{u}\mathbf{w}} & \boldsymbol{\Sigma}_{\mathbf{u}\mathbf{u}} \end{bmatrix}
@@ -200,12 +227,124 @@ Because we have observed $\mathbf{w}$, we may derive the conditional distributio
   \text{E}(\mathbf{w} | \mathbf{u}) & = \mathbf{X}_{\mathbf{u}} \boldsymbol{\beta} + \boldsymbol{\Sigma}_{\mathbf{u}, \mathbf{w}}\boldsymbol{\Sigma}^{-1}(\mathbf{w} - \mathbf{X}\boldsymbol{\beta}) \\
   \text{E}(\mathbf{w} | \mathbf{u}) & = \boldsymbol{\Sigma}_{\mathbf{u}, \mathbf{u}} - \boldsymbol{\Sigma}_{\mathbf{u}, \mathbf{w}} \boldsymbol{\Sigma}^{-1} \boldsymbol{\Sigma}_{\mathbf{w}, \mathbf{u}}
 \end{align}
-Two more sources of uncertainty, $\hat{\boldsymbol{\beta}}$ and $\hat{\mathbf{w}}$.
-Spatial prediction is often also called Kriging [@cressie1990origins]. 
+@ver2024marginal show how these equations are adjusted to reflect uncertainty in both $\hat{\boldsymbol{\beta}}$ and $\hat{\mathbf{w}}$ while leveraging the laws of total expectation and variance yet again. They derive the predictor of $\mathbf{u}$, $\hat{\mathbf{u}}$, and its associated variance, given by:
+\begin{align}
+  \hat{\mathbf{u}} & = \mathbf{X}_{\mathbf{u}} \hat{\boldsymbol{\beta}} + \boldsymbol{\Sigma}_{\mathbf{u}, \mathbf{w}}\boldsymbol{\Sigma}^{-1}(\hat{\mathbf{w}} - \mathbf{X}\hat{\boldsymbol{\beta}}) \\
+  \text{Var}(\hat{\mathbf{u}}) & = \boldsymbol{\Sigma}_{\mathbf{u}, \mathbf{u}} - \boldsymbol{\Sigma}_{\mathbf{u}, \mathbf{w}} \boldsymbol{\Sigma}^{-1} \boldsymbol{\Sigma}_{\mathbf{w}, \mathbf{u}} + \mathbf{K}(\mathbf{X}^\top \boldsymbol{\Sigma}^{-1}\mathbf{X})^{-1}\mathbf{K}^\top + \boldsymbol{\Lambda}(-\mathbf{H})^{-1}\boldsymbol{\Lambda}^\top,
+\end{align}
+where $\mathbf{K} = \mathbf{X}_{\mathbf{u}} - \boldsymbol{\Sigma}_{\mathbf{u}, \mathbf{w}} \boldsymbol{\Sigma}^{-1} \mathbf{X}$ and $\boldsymbol{\Lambda} = \mathbf{X}_{\mathbf{u}}\mathbf{B} + \boldsymbol{\Sigma}_{\mathbf{u}, \mathbf{w}}\boldsymbol{\Sigma}^{-1}(\mathbf{1} - \mathbf{X}\mathbf{B})$ for a vector of ones, $\mathbf{1}$.
+
+As with $\hat{\boldsymbol{\beta}}$, in practice these covariance matrices are evaluated at $\hat{\boldsymbol{\theta}}$. Moreover, these closed-form solutions provided enhance computational efficiency and clarity of the predictor's behavior. 
 
 # Modeling moose presence in Alaska, USA {#sec-applications}
 
-## Additional applications {#sec-applications2}
+The \code{moose} data in \pkg{spmodel} contain information on moose (Alces Alces) presence in the Togiak region of Alaska, USA.   \code{moose}is an \code{sf} object, a special data frame that is supplemented with spatial information using the \pkg{sf} package in \proglang{R} [@pebesma2018sf]. The first few rows of \code{moose} look like:
+
+```{r}
+head(moose)
+```
+
+There are five columns: \code{elev}, the numeric site elevation (meters); \code{strat} a stratification variable for sampling with two levels, \code{"L"} and \code{"M"}, which are categorized by landscape metrics at each site; \code{count}, the number of moose at each site; \code{presence}, a factor that indicates whether at least one moose was observed at each site (\code{0} implies no moose; \code{1} implies at least one moose); and \code{geometry}, the NAD83/Alaska Albers (EPSG: 3338) projected coordinate of each site (these data are point-referenced because each observation occurs at point coordinates and are represented by a \code{POINT} geometry. The \code{moose_preds} data in \pkg{spmodel} contain spatial locations at which predictions of moose presence are desired (and is also point-referenced). \code{moose_preds} is also an \code{sf} object with measurements for \code{elev} and \code{strat} and the same projection system. Figure$~$\ref{fig-moose-data} shows the \code{presence} variable in \code{moose} as well as the spatial locations of both \code{moose} and \code{moose_preds}. Moose are most commonly present in the southwestern and eastern parts of the domain and least commonly present in the northwest (Figure$~$\ref{fig-moose-data}). Next we show how to use \pkg{spmodel} to study the effect of elevation and strata on moose presence while accounting for spatial covariance and to make predictions of moose presence at new locations.
+
+\begin{figure}
+\centering
+\includegraphics[width = 0.70\linewidth]{figures/figure-1.png}
+\caption{Moose presence in Alaska. Circles represent moose presence or absence (based on color) and triangles represent locations at which moose presence probability predictions are desired.}
+\label{fig-moose-data}
+\end{figure}
+
+## Model Fitting
+
+SPGLMs in \pkg{spmodel} are fit using the \code{spglm()} function. The \code{spglm()} function requires four arguments: `formula`, the relationship between the response and explanatory variables; `family`, the response distribution assumed for the repsonse variable; `data`, the data frame that contains the variables in `formula`, and `spcov_type`, the type of spatial covariance. These first three arguments are the three required arguments to \code{glm()} for nonspatial GLMs. So, the transition from \code{glm()} to \code{spglm()}
+simply requires one additional argument: \code{spcov_type}. When \code{data} is not an \code{sf} object, \code{spglm()} also requires the \code{xcoord} and \code{ycoord} arguments, which indicate the columns in \code{data} that represent the x- and y-coordinates, respectively (it is assumed these coordinates are already projected).
+
+We use \code{spglm()} to fit a spatial logistic regression model quantifying the effect of elevation and strata on moose presence:
+```{r}
+spbin <- spglm(
+  formula = presence ~ elev + strat,
+  family = binomial,
+  data = moose,
+  spcov_type = "exponential"
+)
+```
+
+The \code{summary()} function returns a model summary that returns relevant information like the function call, deviance residuals, a coefficients table of fixed effects, the pseudo R-squared, spatial covariance parameter coefficient estimates, and the GLM dispersion parameter (fixed at one in logistic regression):
+```{r}
+summary(spbin)
+```
+
+Based on this model, there is some evidence that elevation is associated with higher probabilities of moose presence ($p$-value $\approx$ 0.087) but strong evidence that moose are more prevalent in the \code{"M"} strata than the \code{"L"} strata ($p$-value < 0.001). The fixed effects coefficients table from \code{summary()} is often of primary practical interest, but it is not easily usable when printed directly to the \proglang{R} console. The \code{tidy()} function tidies this table, turning it into a data frame (i.e., a tibble) with standard column names:
+```{r}
+tidy(spbin, conf.int = TRUE)
+```
+
+## Model Comparison
+
+The strength of spatial covarinace in the data affects how beneficial a SPGLM is relative to a GLM. When the spatial covariance is strong, the SPGLM should notably outperform the GLM. When the spatial covariance is weak, the SPGLM and GLM should perform similarly. We can quantify the benefits of incorporating spatial covariance for a particular data set by comparing the fit of a SPGLM to a GLM. We can fit a GLM in \code{spmodel} by specifying \code{spcov_type = "none"}: 
+
+```{r}
+bin <- spglm(
+  formula = presence ~ elev + strat,
+  family = binomial,
+  data = moose,
+  spcov_type = "none"
+)
+```
+
+While the \code{spglm()} approach evaluates the HGLMM likelhood with $\sigma^2_{de} = 0$ and $\sigma^2_{ie} \approx 0$ instead of just the GLM likelihood, the parameter estimates and their standard errors are the same:
+
+```{r}
+bin_glm <- glm(
+  formula = presence ~ elev + strat,
+  family = binomial,
+  data = moose,
+)
+round(coef(bin), digits = 4)
+round(coef(bin_glm), digits = 4)
+round(sqrt(diag(vcov(bin))), digits = 4)
+round(sqrt(diag(vcov(bin_glm))), digits = 4)
+```
+
+However, using \code{spglm()} instead of \code{glm()} ensures that \pkg{spmodel} helper functions are available and that each of the \code{spglm()} models uses the same likelihood:
+```{r}
+glance(spbin)
+glance(bin)
+```
+
+The likelihood-based statistics AIC, AICc, BIC, and deviance are much lower for the SPGLM, indicating a better fit relative to the GLM. We may also perform a likelihood ratio test (LRT) between the two models, as the GLM is a special case of the SPGLM (i.e., is nested within the SPGLM):
+```{r}
+tidy(anova(spbin, bin))
+```
+
+The LRT test statistic is $\approx$ 31.5 with three degrees of freedom (the difference in covariance parameters), yielding a $p$-value $< 0.001$ that indicates preference for the full model (SPGLM) relative to the reduced model (GLM).
+
+An alternative approach to model comparison is to use a cross-validation procedure [@james2013introduction]. The \code{loocv()} function performs leave-one-out cross validation, comparing the predicted mean (on the response scale) to the observed response variable for each hold-out observation, recomputing estimates of $\boldsymbol{\beta}$ each time. Then, statistics like bias, mean-squared-prediction error (MSPE), and the square root of MSPE (RMSPE) can be used to evaluate models:
+
+```{r}
+loocv(spbin)
+loocv(bin)
+```
+
+Both models have negligible bias, but the SPGLM has much lower MSPE and RMSPE than the GLM, indicating the SPGLM predictions are far more efficient. Three separate metrics (likelihood-based statistics, likelihood-ratio test, and leave-one-out cross validation) prefer the SPGLM to the GLM.
+
+We can compare two SPGLMs with different spatial covariance functions using likelihood-based statistics and leave-one-out cross validation, but we can't use the LRT because generally, the spatial covariance functions aren't nested:
+```{r}
+spbin2 <- update(spbin, spcov_type = "spherical")
+glances(spbin, spbin2)
+loocv(spbin)
+loocv(spbin2)
+```
+
+The \code{"exponential"} spatial covariance (\code{spbin}) has a slightly lower deviance but slightly higher AIC, AICc, and BIC than 
+the \code{"spherical"} spatial covariance (\code{spbin2}). Both spatial covariance functions nearly identical leave-one-out cross validation metrics. For practical purposes, these models fit quite similarly.
+
+## Model Diagnostics
+
+\code{spmodel} provides a suite of tools for model diagnostics. 
+
+## Prediction
+
+# Additional applications {#sec-applications2}
 
 ## Modeling moose counts in Alaska, USA
 
@@ -215,6 +354,6 @@ Spatial prediction is often also called Kriging [@cressie1990origins].
 
 ## Modeling lake conductivity in Southwest, USA
 
-
+# Discussion
 
 \bibliography{references.bib}
