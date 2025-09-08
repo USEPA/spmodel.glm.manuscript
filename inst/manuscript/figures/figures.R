@@ -229,7 +229,7 @@ dev.off()
 ########################
 ####### Figure 8
 ########################
-seal$trend <- exp(seal$log_trend)
+seal$trend <- seal$log_trend
 seal$sampled <- factor(if_else(is.na(seal$trend), "no", "yes"), levels = c("yes", "no"))
 p1 <- ggplot(seal, aes(fill = sampled, color = stock)) +
   geom_sf(size = 2) +
@@ -242,7 +242,7 @@ p1 <- ggplot(seal, aes(fill = sampled, color = stock)) +
 p2 <- ggplot(seal, aes(fill = trend)) +
   geom_sf(size = 2) +
   theme_bw(base_size = 14) +
-  scale_fill_viridis_c(option = "D", begin = 0.5, limits = c(0, max(seal$trend))) +
+  scale_fill_viridis_c(option = "D", begin = 0.5, limits = c(min(seal$trend), max(seal$trend))) +
   scale_y_continuous(breaks = seq(57, 59, length.out = 5)) +
   scale_x_continuous(breaks = seq(-139, -134, length.out = 3))
 

@@ -95,12 +95,12 @@ to an exponential family data can be naturally modeled using a
 generalized linear model (GLM) regression framework
 \citep{nelder1972generalized, mccullagh1989generalized, myers2012generalized, faraway2016extending}.
 In a GLM, an \(n \times 1\) response variable \(\mathbf{y}\) belongs to
-a a statistical distribution (e.g., Poisson, Binomial) with some mean
-and variance. Often, the analysis goal is to study the impact of a
-linear function of several explanatory variables on \(\text{y}\) through
-a GLM. In this context, the latent (i.e., unobserved) mean of
-\(\mathbf{y}\), \(\boldsymbol{\mu}\), is linked to these explanatory
-variables via a link function: \begin{equation}\label{eq-glm}
+a statistical distribution (e.g., Poisson, Binomial) with some mean and
+variance. Often, the analysis goal is to study the impact of a linear
+function of several explanatory variables on \(\text{y}\) through a GLM.
+In this context, the latent (i.e., unobserved) mean of \(\mathbf{y}\),
+\(\boldsymbol{\mu}\), is linked to these explanatory variables via a
+link function: \begin{equation}\label{eq-glm}
 f(\boldsymbol{\mu}|\mathbf{X}, \boldsymbol{\beta}) \equiv \mathbf{w} = \mathbf{X} \boldsymbol{\beta},
 \end{equation} where for a sample size \(n\), \(f(\cdot)\) is a link
 function that connects \(\boldsymbol{\mu}\) to \(\mathbf{w}\),
@@ -109,10 +109,10 @@ variables, and \(\boldsymbol{\beta}\) is the \(p \times 1\) vector of
 fixed effects. While the mean is typically constrained in some way
 (e.g., between zero and one if a probability), the link function
 generally makes \(\mathbf{w}\) is unconstrained. Common link functions
-inlude the log odds (i.e., logit) link for binary and proprtion data and
-the log link count and skewed data. Equation\(~\)\ref{eq-glm} can also
-be written in terms of the inverse link function, \(f^{-1}(\cdot)\):
-\begin{equation}\label{eq-glm2}
+inlude the log odds (i.e., logit) link for binary and proportion data
+and the log link count and skewed data. Equation\(~\)\ref{eq-glm} can
+also be written in terms of the inverse link function,
+\(f^{-1}(\cdot)\): \begin{equation}\label{eq-glm2}
 \boldsymbol{\mu}|\mathbf{X}, \boldsymbol{\beta} \equiv f^{-1}(\mathbf{w}) = f^{-1}(\mathbf{X} \boldsymbol{\beta}),
 \end{equation}
 
@@ -148,9 +148,9 @@ assume that \(\text{E}(\boldsymbol{\tau}) = \boldsymbol{0}\) and
 covariance, respectively. The variance parameter \(\sigma^2_\tau\)
 controls the magnitude of spatial covariance and is often called a
 partial sill, while the matrix \(\mathbf{R}\) is an \(n \times n\)
-spatial correlation matrix that depends on a range parameter controls
-the distance-decay rate of the spatial correlation. One example of a
-spatial covariance matrix is the ``exponential'', which is given by
+spatial correlation matrix that depends on a range parameter which
+controls the distance-decay rate of the spatial correlation. One example
+of a spatial covariance matrix is the ``exponential'', which is given by
 \begin{equation}\label{eq-spcov-exp}
   \text{Cov}(\boldsymbol{\tau}) = \sigma^2_{de} \exp(-\mathbf{H}/\phi),
 \end{equation} where \(\mathbf{H}\) is a matrix of pairwise distances
@@ -190,12 +190,12 @@ independence among \(\boldsymbol{\tau}\) and \(\boldsymbol{\epsilon}\),
 it follows that \begin{equation}\label{eq-spcov}
  \text{Cov}(\boldsymbol{\tau} + \boldsymbol{\epsilon}) = \text{Cov}(\boldsymbol{\tau}) + \text{Cov}(\boldsymbol{\epsilon}) = \sigma^2_{\tau}\mathbf{R} + \sigma^2_{\epsilon} \mathbf{I}.
 \end{equation} To better align with intuition, we henceforth
-\(\sigma^2_{\tau}\) as \(\sigma^2_{de}\) (for spatial error variance)
-and \(\sigma^2_{\epsilon}\) as \(\sigma^2_{ie}\) (for independent error
-variance). The parameters \(\sigma^2_{de}\), \(\sigma^2_{ie}\), the
-range parameter \(\phi\) in \(\mathbf{R}\), and any other parameters in
-\(\mathbf{R}\) compose \(\boldsymbol{\theta}\), the covariance parameter
-vector.
+\(\sigma^2_{\tau}\) as \(\sigma^2_{de}\) (for spatially dependent error
+variance) and \(\sigma^2_{\epsilon}\) as \(\sigma^2_{ie}\) (for
+independent error variance). The parameters \(\sigma^2_{de}\),
+\(\sigma^2_{ie}\), the range parameter \(\phi\) in \(\mathbf{R}\), and
+any other parameters in \(\mathbf{R}\) compose \(\boldsymbol{\theta}\),
+the covariance parameter vector.
 
 Fitting and using SPGLMs is challenging both conceptually and
 computationally \citep{bolker2009generalized}. Recently, however, there
@@ -280,7 +280,7 @@ standard \proglang{R} helper functions like \code{summary()},
 tools to predict \(\mathbf{w}\) at new locations and quantify
 uncertainty in those prediction using \code{predict()}. This core
 functionality, combined with several advanced features we describe
-throughout the manuscript, enable \pkg{spmodel} to provide some novel
+throughout the manuscript, enables \pkg{spmodel} to provide some novel
 and important capabilities previously missing from the existing SPGLM
 ecosystem in \proglang{R}.
 
@@ -295,7 +295,7 @@ ecosystem in \proglang{R}.
 (version 0.7.4) in terms of scope and feel. Both packages use similar
 syntax as \code{glm()}, accommodate flexible \code{formula} arguments
 (e.g., offsets, splines), handle spatial covariance that decays at
-different rates in different rates (i.e., geometric anisotropy),
+different rates in different directions (i.e., geometric anisotropy),
 incorporate nonspatial random effects, support other \proglang{R}
 packages for modeling like \pkg{broom}
 \citep{robinson2021broom, kuhn2022tidy}, \pkg{emmeans}
@@ -305,22 +305,26 @@ some notable differences between the two packages, however. \pkg{sdmTMB}
 supports several additional GLM distributions like the Tweedie, supports
 Hurdle models, and can incorporate prior information through Bayesian
 applications. \pkg{sdmTMB} also provides tools for working with temporal
-data and enhanced visualizations of marginal effects. \pkg{sdmTMB} does
-require a preprocessing step of constructing a mesh for the stochastic
-partial differential equation approach, and the density of the mesh can
-affect model results and computational complexity. \pkg{spmodel} does
-not require the construction of a mesh prior to modeling. \pkg{spmodel}
+data and spatiotemporal data and provides enhanced visualizations of the
+model's marginal effects. \pkg{sdmTMB} does require a preprocessing step
+of constructing a mesh for the stochastic partial differential equation
+approach, and the density of the mesh can affect model results and
+computational complexity. On the other hand, \pkg{spmodel} does not
+require the construction of a mesh prior to modeling. \pkg{spmodel}
 supports 20 different spatial covariances and models them directly,
 rather than using a precision matrix approximation to the Matérn spatial
-covariance as in \pkg{sdmTMB}. \pkg{spmodel} also provides experimental
-design tools (e.g., analysis of variance, contrasts), supports \pkg{sf}
-objects in modeling and prediction functions \citep{pebesma2018sf}, has
-several specialized model diagnostics like leverage values and Cook's
-distances, and has analytic solutions for prediction standard errors.
-Other similarities and differences do exist between \pkg{sdmTMB} and
-\pkg{spmodel}, and both packages continue to evolve. Overall, we believe
-that these packages are complementary and enhance the suite of SPGLM
-tools accessible to practitioners.
+covariance as in \pkg{sdmTMB}. \pkg{spmodel} can also model areal data
+directly using neighborhood distance and autoregressive models rather
+than relying on the polygon centroid (as in \pkg{sdmTMB}). \pkg{spmodel}
+also provides experimental design tools (e.g., analysis of variance,
+contrasts), supports \pkg{sf} objects in modeling and prediction
+functions \citep{pebesma2018sf}, has several specialized model
+diagnostics like leverage values and Cook's distances, and has analytic
+solutions for prediction standard errors. Other similarities and
+differences do exist between \pkg{sdmTMB} and \pkg{spmodel}, and both
+packages continue to evolve. Overall, we believe that these packages are
+complementary and enhance the suite of SPGLM tools accessible to
+practitioners.
 
 The rest of this article is organized as follows. In
 Section\(~\)\ref{sec-spglm}, we provide some background for the SPGLM
@@ -1073,7 +1077,8 @@ values (\(f^{-1}\hat{\mathbf{w}}\)) in Figure\(~\)\ref{fig-moose-fit}.
 \label{fig-moose-fit}
 \end{figure}
 
-Prediction intervals are returned via \code{interval}
+Prediction intervals for the probability of moose presence (on the link
+scale) are returned via \code{interval}
 
 \begin{CodeChunk}
 \begin{CodeInput}
@@ -1151,6 +1156,13 @@ from other \proglang{R} packages like \pkg{emmeans} and \pkg{car}.
 
 \subsection{Modeling moose counts in Alaska, USA}\label{sec-moose-count}
 
+In addition to moose presence, moose counts are also recorded in
+\texttt{moose} (Figure\(~\)\ref{fig-moose-data-count}. The Poisson and
+negative binomial response distributions can be used to model SPGLMs for
+count data. Using a Gaussian spatial covariance function, we may fit
+both a Poisson and negative binomial SPGLM changing the \texttt{family}
+argument:
+
 \begin{CodeChunk}
 \begin{CodeInput}
 R> sppois <- spglm(
@@ -1160,10 +1172,74 @@ R> sppois <- spglm(
 +   spcov_type = "gaussian"
 + )
 R> spnb <- update(sppois, family = nbinomial)
-R> sppois_anis <- update(sppois, anisotropy = TRUE)
-R> spnb_anis <- update(sppois_anis, family = nbinomial)
 \end{CodeInput}
 \end{CodeChunk}
+
+\begin{figure}
+\centering
+\includegraphics[width = 0.70\linewidth]{figures/figure-6.png}
+\caption{Moose counts in Alaska. Circles represent moose counts (based on color) and triangles represent locations at which mean count predictions are desired.}
+\label{fig-moose-data-count}
+\end{figure}
+
+Because the Poisson and negative binomial distributions have the same
+support (nonnegative integers), we can compare them using AIC, AICc, or
+BIC:
+
+\begin{CodeChunk}
+\begin{CodeInput}
+R> BIC(sppois, spnb)
+\end{CodeInput}
+\begin{CodeOutput}
+       df      BIC
+sppois  3 1343.892
+spnb    4 1340.706
+\end{CodeOutput}
+\end{CodeChunk}
+
+Implicit in our spatial covariance functions thus far has been an
+assumption of geometric isotropy. A spatial covariance function is
+geometrically isotropic if it decays with distance at the same rate in
+all directions (Figure\(~\)\ref{fig-tropy}; left). A spatial covariance
+is geometrically isotropic if it decays with distance at different rates
+in different directions (Figure\(~\)\ref{fig-tropy}; right). Geometric
+anisotropy is formally incorporated by rotating and scaling original
+coordinates, yielding transformed coordinates that are geometrically
+isotropic: \begin{equation}
+  \begin{bmatrix}
+    x^* \\
+    y^*
+  \end{bmatrix} = 
+  \begin{bmatrix}
+    1 & 0 \\
+    0 & 1 / \omega
+  \end{bmatrix}
+  \begin{bmatrix}
+    \cos(\alpha) & \sin(\alpha) \\
+    -\sin(\alpha) & \cos(\alpha)
+  \end{bmatrix}  
+  \begin{bmatrix}
+    x \\
+    y
+  \end{bmatrix}.
+\end{equation} The parameter \(\alpha\) controls the rotation angle and
+the parameter \(\omega\) controls the scaling\ldots{} Then using these
+transformed coordinates, the partial sill (\(\sigma^2_{de}\)), nugget
+(\(\sigma^2_{ie}\)), and range (\(\phi\)) parameters are estimated.
+
+\begin{CodeChunk}
+\begin{CodeInput}
+R> sppois_anis <- update(sppois, anisotropy = TRUE)
+R> spnb_anis <- update(spnb, anisotropy = TRUE)
+\end{CodeInput}
+\end{CodeChunk}
+
+According to BIC, the spatial negative binomial model performs best.
+This model simultaneously accounts for anisotropy and overdispersion.
+The spatial correlation is strongest in a northwest-southeast direction
+and weakest in the northeast-southwest direction
+(Figure\(~\)\ref{fig-tropy}), which is intuitive given the similar
+patterns in moose counts from Figure\(~\)\ref{fig-moose-data-count}.
 
 \begin{CodeChunk}
 \begin{CodeInput}
@@ -1178,6 +1254,9 @@ spnb_anis    6 1335.051
 \end{CodeOutput}
 \end{CodeChunk}
 
+The \texttt{plot()} function can be used to visualize the anisotropy
+(Figure\(~\)\ref{fig-tropy}):
+
 \begin{CodeChunk}
 \begin{CodeInput}
 R> plot(spnb, which = 8)
@@ -1185,90 +1264,33 @@ R> plot(spnb_anis, which = 8)
 \end{CodeInput}
 \end{CodeChunk}
 
-\subsection{Modeling harbor seal trends in Alaska, USA}\label{sec-seal}
-
-\begin{CodeChunk}
-\begin{CodeInput}
-R> spbin <- spgautor(
-+   formula = log_trend > 0 ~ 1,
-+   family = binomial,
-+   data = seal,
-+   spcov_type = "car",
-+   random = ~ stock
-+ )
-R> tidy(spbin, conf.int = TRUE)
-\end{CodeInput}
-\begin{CodeOutput}
-# A tibble: 1 x 7
-  term        estimate std.error statistic p.value conf.low conf.high
-  <chr>          <dbl>     <dbl>     <dbl>   <dbl>    <dbl>     <dbl>
-1 (Intercept)   -0.340     0.673    -0.506   0.613    -1.66     0.979
-\end{CodeOutput}
-\end{CodeChunk}
-
-\subsection{Modeling voter turnout in Texas, USA}\label{sec-texas}
-
-\begin{CodeChunk}
-\begin{CodeInput}
-R> spbeta_geo <- spglm(
-+   formula = turnout ~ log_income,
-+   family = "beta", 
-+   data = texas,
-+   spcov_type = "matern"
-+ )
-R> 
-R> spbeta_auto <- spgautor(
-+   formula = turnout ~ log_income,
-+   family = "beta", 
-+   data = texas,
-+   spcov_type = "car",
-+   cutoff = 1e5
-+ )
-\end{CodeInput}
-\end{CodeChunk}
-
-\begin{CodeChunk}
-\begin{CodeInput}
-R> AIC(spbeta_geo, spbeta_auto)
-\end{CodeInput}
-\begin{CodeOutput}
-            df       AIC
-spbeta_geo   5 -44.53113
-spbeta_auto  3 -22.46104
-\end{CodeOutput}
-\end{CodeChunk}
-
-\begin{CodeChunk}
-\begin{CodeInput}
-R> tidy(spbeta_geo)
-\end{CodeInput}
-\begin{CodeOutput}
-# A tibble: 2 x 5
-  term        estimate std.error statistic    p.value
-  <chr>          <dbl>     <dbl>     <dbl>      <dbl>
-1 (Intercept)   -5.20      1.11      -4.70 0.00000260
-2 log_income     0.579     0.122      4.76 0.00000194
-\end{CodeOutput}
-\begin{CodeInput}
-R> spbeta_full_ml <- update(spbeta_geo, estmethod = "ml")
-R> spbeta_red_ml <- update(spbeta_full_ml, formula = turnout ~ 1)
-R> tidy(anova(spbeta_full_ml, spbeta_red_ml))
-\end{CodeInput}
-\begin{CodeOutput}
-# A tibble: 1 x 5
-  full          reduced           df statistic    p.value
-  <chr>         <chr>          <dbl>     <dbl>      <dbl>
-1 spbeta_red_ml spbeta_full_ml     1      23.2 0.00000149
-\end{CodeOutput}
-\end{CodeChunk}
+\begin{figure}[h]
+\centering
+\includegraphics[width = 1\linewidth]{figures/figure-7.png}
+\caption{Level curves of equal correlation for the negative binomial moose count models. The ellipse is centered at zero distance in the x-direction and y-direction, and points along the ellipse have equal levels of correlation.  In the isotropic level curve (left), spatial covariance decays equally in all directions. In the anistropic level curve (right), spatial covariance decays fastest in the northeast-southwest direction and slowest in the northwest-southeast direction (this pattern can be seen in the observed counts).}
+\label{fig-tropy}
+\end{figure}
 
 \subsection{Modeling lake conductivity in Southwest,
 USA}\label{sec-lake}
 
+The \code{lake} data in \code{spmodel} contains climate and chemical
+data for several lakes in four southwestern states in the United States:
+Arizona, Colorado, Nevada, and Utah. We desire an SPGLM that
+characterizes the effect of temperature, state, and lake origin (whether
+the lake is naturally occurring or human made) on lake conductivity.
+Conductivity is a measure of dissolved ions (measured here in water),
+which is important for various physical, chemical, and biological
+processes. Chemical data is often heavily right-skewed, so we model it
+using an SPGLM assuming a Gamma distribution for the response. The
+\code{log_cond} variable in \code{lake} is the logarithm of
+conductivity, and we can dynamically exponentiate within \code{formula}
+so that it is on the original scale:
+
 \begin{CodeChunk}
 \begin{CodeInput}
 R> spgam <- spglm(
-+   formula = exp(log_cond) ~ temp * state + origin, 
++   formula = exp(log_cond) ~ temp + state + temp:state + origin, 
 +   family = "Gamma",
 +   data = lake,
 +   spcov_type = "cauchy",
@@ -1276,6 +1298,62 @@ R> spgam <- spglm(
 + )
 \end{CodeInput}
 \end{CodeChunk}
+
+We model conductivity as a function of temperature, state, and lake
+origin, and we allow the effect of temperature to vary by state
+(\code{temp:state}). The partition factor restricts spatial covariance
+to apply only for two observations sampled during the same year. Data
+were collected in 2012 and 2017, so the \code{year} partition factor
+assumes independence between observations in 2012 and 2017. While we
+used the partition factor here illustratively, more generally, the
+utility of partition factors can be highly context dependent.
+
+When categorical variables have more than two levels, the default
+reference group contrasts are not well-suited to assess the variable's
+overall significance:
+
+\begin{CodeChunk}
+\begin{CodeInput}
+R> summary(spgam)
+\end{CodeInput}
+\begin{CodeOutput}
+
+Call:
+spglm(formula = exp(log_cond) ~ temp + state + temp:state + origin, 
+    family = "Gamma", data = lake, spcov_type = "cauchy", partition_factor = ~year)
+
+Deviance Residuals:
+     Min       1Q   Median       3Q      Max 
+-1.35762 -0.20796 -0.03706  0.17869  1.10616 
+
+Coefficients (fixed):
+              Estimate Std. Error z value Pr(>|z|)    
+(Intercept)    3.59325    0.50058   7.178 7.06e-13 ***
+temp           0.15182    0.03006   5.051 4.39e-07 ***
+stateCO       -0.03214    0.56098  -0.057  0.95432    
+stateNV        0.75664    0.66851   1.132  0.25771    
+stateUT       -0.19696    0.55916  -0.352  0.72466    
+originNATURAL  0.08313    0.21988   0.378  0.70538    
+temp:stateCO   0.13679    0.04808   2.845  0.00444 ** 
+temp:stateNV   0.01882    0.05820   0.323  0.74645    
+temp:stateUT   0.20015    0.04846   4.131 3.62e-05 ***
+---
+Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+
+Pseudo R-squared: 0.7061
+
+Coefficients (cauchy spatial covariance):
+       de        ie     range     extra 
+2.069e-02 2.952e-01 4.119e+06 5.645e-01 
+
+Coefficients (Dispersion for Gamma family):
+dispersion 
+     3.761 
+\end{CodeOutput}
+\end{CodeChunk}
+
+A more effective approach is to use an analysis of variance (ANOVA),
+which is well-suited to asses the overall significance of each variable:
 
 \begin{CodeChunk}
 \begin{CodeInput}
@@ -1296,9 +1374,42 @@ Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
 \end{CodeOutput}
 \end{CodeChunk}
 
+The main effect for temperature and the temperature by state interaction
+are highly significant (\(p\)-value \textless{} 0.001), while the main
+effects for state and lake origin are not significant. The ANOVA table
+can be tidied using \code{tidy()}.
+
+Variance inflation factors assess the degree to which standard errors
+\(\hat{\boldsymbol{\beta}}\) are inflated due to covariance among the
+columns of \(\mathbf{X}\). Generalized variance inflation factors can
+capture the variance inflation for subsets of \(\mathbf{X}\) that may
+include categorical variables with more than two levels
+\citep{fox1992generalized}:
+
 \begin{CodeChunk}
 \begin{CodeInput}
-R> car::vif(spgam)
+R> library(car)
+\end{CodeInput}
+\begin{CodeOutput}
+Warning: package 'car' was built under R version 4.4.3
+\end{CodeOutput}
+\begin{CodeOutput}
+Loading required package: carData
+\end{CodeOutput}
+\begin{CodeOutput}
+Warning: package 'carData' was built under R version 4.4.3
+\end{CodeOutput}
+\begin{CodeOutput}
+
+Attaching package: 'car'
+\end{CodeOutput}
+\begin{CodeOutput}
+The following object is masked from 'package:dplyr':
+
+    recode
+\end{CodeOutput}
+\begin{CodeInput}
+R> vif(spgam)
 \end{CodeInput}
 \begin{CodeOutput}
                  GVIF Df GVIF^(1/(2*Df))
@@ -1309,9 +1420,29 @@ temp:state  76.387383  3        2.059856
 \end{CodeOutput}
 \end{CodeChunk}
 
+The GVIF\(^{1/2df}\) values for \code{temp}, \code{state}, and
+\code{temp:state} are just greater than two, which suggests moderate
+multicollinearity for these terms -- unsurprising given the
+\code{temp:state} interaction in the model. The GVIF\(^{1/2df}\) for
+\code{origin} is close to one, which suggests little to no
+multicollinearity for this term.
+
+Because of the interaction between \code{temp} and \code{state},
+contrasts that assess mean differences among states should condition
+upon a specific temperature value. By default, \pkg{emmeans} uses the
+mean temperature value to assess contrasts:
+
 \begin{CodeChunk}
 \begin{CodeInput}
-R> pairs(emmeans::emmeans(spgam, ~ state | temp))
+R> library(emmeans)
+\end{CodeInput}
+\begin{CodeOutput}
+Welcome to emmeans.
+Caution: You lose important information if you filter this package's results.
+See '? untidy'
+\end{CodeOutput}
+\begin{CodeInput}
+R> pairs(emmeans(spgam, ~ state | temp))
 \end{CodeInput}
 \begin{CodeOutput}
 temp = 7.63:
@@ -1328,8 +1459,14 @@ Degrees-of-freedom method: asymptotic
 Results are given on the log (not the response) scale. 
 P value adjustment: tukey method for comparing a family of 4 estimates 
 \end{CodeOutput}
+\end{CodeChunk}
+
+Again because of the interaction between \code{temp} and \code{state},
+we should assess temperature trends separately for each state:
+
+\begin{CodeChunk}
 \begin{CodeInput}
-R> emmeans::emtrends(spgam, ~ state, var = "temp")
+R> emtrends(spgam, ~ state, var = "temp")
 \end{CodeInput}
 \begin{CodeOutput}
  state temp.trend     SE  df asymp.LCL asymp.UCL
@@ -1345,7 +1482,297 @@ Confidence level used: 0.95
 \end{CodeOutput}
 \end{CodeChunk}
 
-\section{Discussion}\label{discussion}
+\subsection{Modeling harbor seal trends in Alaska, USA}\label{sec-seal}
+
+The \code{seal} data in \pkg{spmodel} contains harbor seal abundance
+trends for two different harbor seal stocks (genetically distinct
+populations). While the \code{moose} and \code{lake} data were
+point-referenced, the \code{seal} data are areal. Each polygon in the
+\code{seal} data represents a distinct harbor seal haulout location
+(Figure\(~\)\ref{fig-seal}). A haulout location is a spot on coastal
+rocks that harbor seals go to rest, molt, and give birth, among other
+tasks.
+
+\begin{figure}
+\centering
+\includegraphics[width = 1\linewidth]{figures/figure-8.png}
+\caption{Seal trend distribution in Alaska. Observed and missing seal polygons by stock (left) and observed log seal trends (right).}
+\label{fig-seal}
+\end{figure}
+
+For each polygon, a Poisson regression was used to quantify the mean
+trend in abundance over approximately 30 years. If the logarithm of seal
+abundance (\code{log_trend}) is negative (positive), it means abundance
+is decreasing (increasing). We use a binomial SPGLM to quantify how
+likely it is for abundance trends to be decreasing:
+
+\begin{CodeChunk}
+\begin{CodeInput}
+R> is_decreasing <- seal$log_trend < 0
+R> spbin <- spgautor(
++   formula = is_decreasing ~ 1,
++   family = binomial,
++   data = seal,
++   spcov_type = "car",
++   random = ~ stock
++ )
+\end{CodeInput}
+\end{CodeChunk}
+
+To model spatial dependence, we used a conditional autoregressive
+function. Conditional and simultaneous autoregressive functions
+characterize spatial distance through neighborhood relationships and
+have \code{spcov_type} values of \code{"car"} and \code{"sar"},
+respectively. By default, Queen's distance is used to determine whether
+two sites are neighbors, though custom neighborhood matrices are passed
+via \code{W}. Row standardization is also assumed by default, though
+this can be changed via \code{row_st}. Using \code{random}, we also
+specified a nonspatial random effect for seal stock. The \code{random}
+argument uses similar syntax as \pkg{lme4} \citep{bates2015lme4} and
+\pkg{nlme} \citep{pinheiro2006mixed} to specify nonspatial random
+effects.
+
+Tidying the model reveals the mean probability that trends are
+decreasing is between -0.979 and 1.66 (on the logit scale):
+
+\begin{CodeChunk}
+\begin{CodeInput}
+R> tidy(spbin, conf.int = TRUE)
+\end{CodeInput}
+\begin{CodeOutput}
+# A tibble: 1 x 7
+  term        estimate std.error statistic p.value conf.low conf.high
+  <chr>          <dbl>     <dbl>     <dbl>   <dbl>    <dbl>     <dbl>
+1 (Intercept)    0.340     0.673     0.506   0.613   -0.979      1.66
+\end{CodeOutput}
+\end{CodeChunk}
+
+Back-transforming this interval to the probability scale yields:
+
+\begin{CodeChunk}
+\begin{CodeInput}
+R> emmeans(spbin, ~ 1, type = "response")
+\end{CodeInput}
+\begin{CodeOutput}
+ 1        prob    SE  df asymp.LCL asymp.UCL
+ overall 0.584 0.164 Inf     0.273      0.84
+
+Degrees-of-freedom method: asymptotic 
+Confidence level used: 0.95 
+Intervals are back-transformed from the logit scale 
+\end{CodeOutput}
+\end{CodeChunk}
+
+The \code{SE} column is the standard error on the response scale
+obtained from the delta method \citep{oehlert1992note}.
+
+For areal data, the prediction locations must be specified at the time
+of model fitting, as they affect the spatial covariance function's
+neighborhood structure. Prediction locations whose response values have
+an \code{NA} (i.e., missing) value are converted into a \code{newdata}
+object that is stored in the model output. For example, rows one and
+nine are locations without seal trends, meaning they are not used in
+model fitting but are desired for prediction:
+
+\begin{CodeChunk}
+\begin{CodeInput}
+R> seal
+\end{CodeInput}
+\begin{CodeOutput}
+Simple feature collection with 149 features and 2 fields
+Geometry type: POLYGON
+Dimension:     XY
+Bounding box:  xmin: 913618.8 ymin: 855730.2 xmax: 1221859 ymax: 1145054
+Projected CRS: NAD83 / Alaska Albers
+# A tibble: 149 x 3
+   log_trend stock                                                      geometry
+ *     <dbl> <fct>                                                 <POLYGON [m]>
+ 1  NA       8     ((1035002 1054710, 1035002 1054542, 1035002 1053542, 1035002~
+ 2  -0.282   8     ((1037002 1039492, 1037006 1039490, 1037017 1039492, 1037035~
+ 3  -0.00121 8     ((1070158 1030216, 1070185 1030207, 1070187 1030207, 1070211~
+ 4   0.0354  8     ((1054906 1034826, 1054931 1034821, 1054936 1034822, 1055001~
+ 5  -0.0160  8     ((1025142 1056940, 1025184 1056889, 1025222 1056836, 1025256~
+ 6   0.0872  8     ((1026035 1044623, 1026037 1044605, 1026072 1044610, 1026083~
+ 7  -0.266   8     ((1100345 1060709, 1100287 1060706, 1100228 1060706, 1100170~
+ 8   0.0743  8     ((1030247 1029637, 1030248 1029637, 1030265 1029642, 1030328~
+ 9  NA       8     ((1043093 1020553, 1043097 1020550, 1043101 1020550, 1043166~
+10  -0.00961 8     ((1116002 1024542, 1116002 1023542, 1116002 1022542, 1116002~
+# i 139 more rows
+\end{CodeOutput}
+\end{CodeChunk}
+
+Then, \code{predict()} can be called without having to specify
+\code{newdata}:
+
+\begin{CodeChunk}
+\begin{CodeInput}
+R> predict(spbin, type = "response", interval = "prediction")[1:5, ]
+\end{CodeInput}
+\begin{CodeOutput}
+         fit       lwr       upr
+1  0.6807677 0.3863736 0.8783808
+9  0.5945680 0.2467634 0.8678078
+13 0.6189055 0.2974432 0.8616799
+15 0.6040102 0.2921802 0.8493132
+18 0.6375700 0.3356282 0.8596641
+\end{CodeOutput}
+\end{CodeChunk}
+
+We could have alternatively used a (geostatistical) SPGLM via
+\code{spglm()}. When areal data are used with \code{spglm()}, the
+centroids of each polygon are used as the point-referenced coordinates.
+We further explore comparisons between point-referenced and aeral data
+next.
+
+\subsection{Modeling voter turnout in Texas, USA}\label{sec-texas}
+
+\begin{figure}
+\centering
+\includegraphics[width = 0.70\linewidth]{figures/figure-10.png}
+\caption{Proportion of voter turnout in Texas for the 1980 presidential election. Circles represent voter turnout (based on color) and triangles represent locations at which voter turnout predictions are desired.}
+\label{fig-texas}
+\end{figure}
+
+The \code{texas} data in \pkg{spmodel} contains voter turnout data for
+Texas counties in the 1980 United States Presidential Election
+\citep{bivand2024spdata}. The data are point-referenced, with polygon
+centroids representing the spatial location of each county
+(Figure\(~\)\ref{fig-texas}). Beta regression is a GLM used to model
+rate and proportion data in (0, 1)
+\citep[\citet{cribari2010beta}]{ferrari2004beta}. We model voter turnout
+rates as a function of mean log income of county residents using an
+SPGLM assuming a beta distributed response variable:
+
+\begin{CodeChunk}
+\begin{CodeInput}
+R> spbeta_geo <- spglm(
++   formula = turnout ~ log_income,
++   family = "beta", 
++   data = texas,
++   spcov_type = "matern"
++ )
+\end{CodeInput}
+\end{CodeChunk}
+
+Alternatively, we could use an autoregressive model to fit the model,
+constructing a neighborhood matrix by assuming centroids within
+\code{cutoff} of one another are neighbors:
+
+\begin{CodeChunk}
+\begin{CodeInput}
+R> spbeta_auto <- spgautor(
++   formula = turnout ~ log_income,
++   family = "beta", 
++   data = texas,
++   spcov_type = "car",
++   cutoff = 1e5
++ )
+\end{CodeInput}
+\end{CodeChunk}
+
+According to AIC, the SPGLM for point-referenced data is preferred:
+
+\begin{CodeChunk}
+\begin{CodeInput}
+R> AIC(spbeta_geo, spbeta_auto)
+\end{CodeInput}
+\begin{CodeOutput}
+            df       AIC
+spbeta_geo   5 -44.53113
+spbeta_auto  3 -22.46104
+\end{CodeOutput}
+\end{CodeChunk}
+
+The default estimation method in \pkg{spmodel} is restricted maximum
+likelihood (REML). One drawback of REML is that likelihood-based
+statistics are only valid for model comparison when the models have the
+same explanatory variable and fixed effect structure. This is because
+the error contrasts used to construct the REML likelihood change based
+on \(\mathbf{X}\) and \(\boldsymbol{\beta}\). An alternative is to use
+maximum likelihood, which can use likelihood-based statistics to compare
+models with different explanatory variable and fixed effect structures.
+While we could assess the significance of log turnout with the
+\code{spbeta_geo} model fit with REML (e.g., via \code{tidy()}), an
+alternative approach is to use a likelihood ratio test as long as the
+two models are nested. We refit the point-referenced model using maximum
+likelihood and compare it to a similar model without log income using
+the likelihood ratio test, accessible via \code{anova()} when providing
+two models:
+
+\begin{CodeChunk}
+\begin{CodeInput}
+R> spbeta_full_ml <- update(spbeta_geo, estmethod = "ml")
+R> spbeta_red_ml <- update(spbeta_full_ml, formula = turnout ~ 1)
+R> anova(spbeta_full_ml, spbeta_red_ml)
+\end{CodeInput}
+\begin{CodeOutput}
+Likelihood Ratio Test
+
+Response: turnout
+                                Df   Chi2 Pr(>Chi2)    
+spbeta_red_ml vs spbeta_full_ml  1 23.155 1.494e-06 ***
+---
+Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+\end{CodeOutput}
+\end{CodeChunk}
+
+The likelihood ratio test suggests that log income is significantly
+related to voter turnout. The \code{anova()} output can also be tidied
+using \code{tidy()}.
+
+\section{Discussion}\label{sec-discussion}
+
+SPGLMs are fit in \pkg{spmodel} using a novel application of the Laplace
+approximation that marginalizes over the latent (i.e., unobserved) mean,
+\(\mathbf{w}\), and the fixed effects, \(\boldsymbol{\beta}\). The
+approach is quite flexible and accommodates any general response
+distribution and covariance structure. \pkg{spmodel}'s \code{spglm()}
+and \code{spgautor()} functions are similar in structure and syntax as
+base \proglang{R}'s \code{glm()} function, easing the transition for
+practitioners from GLMs to SPGLMs. These functions support six response
+distributions for binary, count, and skewed data and support 20 spatial
+covariance functions. \pkg{spmodel} provides several additional features
+that are not covered here, including fitting multiple models
+simultaneously, fixing spatial covariance parameters at known values,
+fitting models to large non-Gaussian data having thousands of
+observations via spatial indexing \citep{ver2023indexing}, incorporating
+spatial dependence in machine learning (e.g., random forests;
+\citet{breiman2001random}), simulating spatially dependent data (e.g.,
+\code{spbinom()}, \code{sprpois()}, etc.), and more. Further details are
+provided by \url{https://CRAN.R-project.org/package=spmodel} and links
+therein.
+
+\section*{Computational details}\label{computational-details}
+\addcontentsline{toc}{section}{Computational details}
+
+The results in this paper were obtained using {R} 4.4.0 with the
+\pkg{spmodel} 0.9.0 package. Figures were created using the {ggplot2}
+3.5.1 package \citep{wickham2016ggplot2} and base {R}.
+
+\section*{Data and code availability}\label{data-and-code-availability}
+\addcontentsline{toc}{section}{Data and code availability}
+
+All writing and code associated with this manuscript is available for
+viewing and download on GitHub at
+\url{https://github.com/USEPA/spmodel.glm.manuscript}. All data used are
+part of the \pkg{spmodel} {R} package available for download from CRAN
+at \url{https://CRAN.R-project.org/package=spmodel}.
+
+\section*{Acknowledgments}\label{acknowledgments}
+\addcontentsline{toc}{section}{Acknowledgments}
+
+We would like to thank initial reviewers and editors for feedback that
+has greatly improved the manuscript.
+
+The views expressed in this manuscript are those of the authors and do
+not necessarily represent the views or policies of the U.S.
+Environmental Protection Agency or the National Oceanic and Atmospheric
+Administration. Any mention of trade names, products, or services does
+not imply an endorsement by the U.S. government, the U.S. Environmental
+Protection Agency, or the National Oceanic and Atmospheric
+Administration. The U.S. Environmental Protection Agency and the
+National Oceanic and Atmospheric Administration do not endorse any
+commercial products, services or enterprises.
 
 \bibliography{references.bib}
 
