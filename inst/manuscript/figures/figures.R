@@ -17,6 +17,7 @@ dat2 <- data.frame(Distance = h, Correlation = exp(-h/range2), Range = "0.5")
 range3 <- 0.8
 dat3 <- data.frame(Distance = h, Correlation = exp(-h/range3), Range = "0.8")
 dat <- bind_rows(dat1, dat2, dat3)
+dat$Range <- factor(dat$Range, levels = c("0.8", "0.5", "0.2"))
 cor_range <- ggplot(dat, aes(x = Distance, y = Correlation, color = Range, linetype = Range)) +
   geom_line(linewidth = 1.2) +
   scale_color_viridis_d() +
@@ -86,10 +87,10 @@ ggsave(
 
 
 spbin <- spglm(
-  formula = presence ~ elev + strat + elev:strat,
+  formula = presence ~ elev + strat,
   family = binomial,
   data = moose,
-  spcov_type = "spherical"
+  spcov_type = "exponential"
 )
 spbin_aug <- augment(spbin)
 
@@ -210,10 +211,10 @@ ggsave(
 ########################
 
 spnbin <- spglm(
-  formula = count ~ elev + strat + elev:strat,
+  formula = count ~ elev + strat,
   family = nbinomial,
   data = moose,
-  spcov_type = "gaussian",
+  spcov_type = "spherical",
   anisotropy = TRUE
 )
 
@@ -257,32 +258,9 @@ ggsave(
 
 
 ########################
-####### Figure 9
-########################
-
-obs_prop <- ggplot(caribou, aes(x = x, y = y, color = z, shape = tarp, size = water)) +
-  geom_point() +
-  scale_color_viridis_c(option = "H") +
-  scale_size_discrete(range = c(2, 4)) +
-  theme_bw(base_size = 14) +
-  theme(
-    legend.title = element_text(size = 12),
-    legend.text = element_text(size = 12),
-    legend.key.height = unit(0.03, 'npc')
-  )
-
-ggsave(
-  filename = paste0(fig_path, "/figure-9.png"),
-  plot = obs_prop,
-  dpi = 300,
-  height = 5,
-  width = 7.68
-)
-
-
-########################
 ####### Figure 10
 ########################
+
 texas$samp <- factor(if_else(is.na(texas$turnout), "no", "yes"), levels = c("yes", "no"))
 obs_prop2 <- ggplot(texas, aes(color = turnout, shape = samp)) +
   geom_sf(size = 2) +
