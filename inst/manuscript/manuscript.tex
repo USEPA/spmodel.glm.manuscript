@@ -24,40 +24,40 @@ Higham~\orcidlink{0009-0006-4217-625X}\\St.~Lawrence University
 
 \Abstract{
 Non-Gaussian data are common in practice and include binary, count,
-skewed, and proprtion data types. Often, non-Gaussian data are modeled
+skewed, and proportion data types. Often, non-Gaussian data are modeled
 using a generalized linear model (GLM). GLMs typically assume that
 observations are independent of one another. This is an impractical
 assumption for spatial data, as nearby observations tend to be more
 similar than distant ones. The \pkg{spmodel} package in \proglang{R}
 provides a suite of tools for fitting spatial generalized linear models
 (SPGLMs) to non-Gaussian data and making spatial predictions (i.e.,
-Kriging). SPGLMs for point-referenced data (x- and y-coordinates) are
+Kriging). SPGLMs for point-referenced (x- and y-coordinates) support are
 fit using the \code{spglm()} function, while SPGLMs for areal (lattice,
-polygon) data are fit using the \code{spgautor()} function. Both
+polygon) support are fit using the \code{spgautor()} function. Both
 \code{spglm()} and \code{spgautor()} maximize a novel Laplace likelihood
 which marginalizes over the model's fixed effects and latent mean while
-formally incorporating spatial covariance. The inputs and outputs of
-\code{spglm()} and \code{spgautor()} closely resemble the \code{glm()}
-function from base \proglang{R}, easing the transition from GLMs to
-SPGLMs. \pkg{spmodel} provides and builds upon several commonly used
-helper functions for model building like \code{summary()},
-\code{plot()}, \code{fitted()}, and \code{tidy()}, among others. Spatial
-predictions of the latent mean at unobserved locations are obtained
-using \code{predict()} or \code{augment()}. \pkg{spmodel} accommodates
-myriad advanced modeling features like geometric anisotrpoy, nonspatial
-random effects, analysis of variance, and more. Throughout, we use
+formally incorporating spatial covariance among observations. The inputs
+and outputs of \code{spglm()} and \code{spgautor()} closely resemble the
+\code{glm()} function from base \proglang{R}, easing the transition from
+GLMs to SPGLMs. \pkg{spmodel} provides and builds upon several commonly
+used helper functions for model building like \code{summary()},
+\code{plot()}, and \code{fitted()}, among others. Spatial predictions of
+the latent mean at unobserved locations are obtained using
+\code{predict()} or \code{augment()}. \pkg{spmodel} accommodates myriad
+advanced modeling features like geometric anisotrpoy, nonspatial random
+effects, analysis of variance, and more. Throughout, we use
 \pkg{spmodel} to fit SPGLMs to moose presence and counts in Alaska,
 United States (US), skewed conductivity data in the Southwestern US,
 harbor seal abundance trends in Alaska, US, and voter turnout rates in
 Texas, US.
 }
 
-\Keywords{autoregressive model, geostatistical model, inverse link
-function, Poisson regression, link function, logistic
-regression, spatial covariance, spatial correlation}
-\Plainkeywords{autoregressive model, geostatistical model, inverse link
-function, Poisson regression, link function, logistic
-regression, spatial covariance, spatial correlation}
+\Keywords{autoregressive model, geostatistical model, Poisson
+regression, link function, logistic regression, overdispersion, spatial
+covariance, spatial dependence}
+\Plainkeywords{autoregressive model, geostatistical model, Poisson
+regression, link function, logistic regression, overdispersion, spatial
+covariance, spatial dependence}
 
 %% publication information
 %% \Volume{50}
@@ -108,7 +108,7 @@ exponential family can be naturally modeled using a generalized linear
 model (GLM) regression framework
 \citep{nelder1972generalized, mccullagh1989generalized}. In a GLM, an
 \(n \times 1\) response variable \(\mathbf{y}\) belongs to a statistical
-distribution (e.g., Binomial, Poisson) with some mean and variance.
+distribution (e.g., binomial, Poisson) with some mean and variance.
 Often, the analysis goal is to study the impact of a linear function of
 several explanatory variables on the mean of \(\mathbf{y}\) through a
 GLM. In this context, the latent (i.e., unobserved) mean of
@@ -133,7 +133,7 @@ The GLM fixed effects (\(\boldsymbol{\beta}\)) are typically estimated
 via maximum likelihood \citep{chambers1992S}. It is often convenient to
 compute the maximum likelihood estimates using the iteratively
 reweighted least squares (IRWLS) algorithm \citep{wood2017generalized},
-which is the approach used by the \code{glm()} function in the
+which is an approach used by the \code{glm()} function in the
 \proglang{R} programming language \citep{rcore2024}. GLMs add an
 additional layer of complexity compared to linear regression models, as
 the left-hand side of Equation\(~\)\ref{eq-glm} is a function of the
@@ -144,17 +144,18 @@ The standard GLM assumes the elements of \(\mathbf{y}\) are independent.
 This independence assumption is typically impractical for spatial data.
 For spatial data, nearby observations tend to be more similar than
 distant observations \citep{tobler1970computer}, which leads to positive
-spatial covariance. The consequences of ignoring spatial covariance in
-statistical models for spatial data can be severe and include imprecise
-parameter estimates as well as misleading standard errors that inflate
-Type-I error rates and decrease power \citep{zimmerman2024spatial}.
+spatial covariance among observations. The consequences of ignoring
+spatial covariance in statistical models for spatial data can be severe
+and include imprecise parameter estimates as well as misleading standard
+errors that inflate Type-I error rates and decrease power
+\citep{zimmerman2024spatial}.
 
 An approach for handling spatial data using a GLM is to assume the
-elements of \(\mathbf{w}\) exhibit covariance that varies spatially and
-nonspatially. This is achieved by adding to Equation\(~\)\ref{eq-glm}
-two random effects, \(\boldsymbol{\tau}\) and \(\boldsymbol{\epsilon}\).
-The random effect \(\boldsymbol{\tau}\) is an \(n \times 1\) column
-vector of spatially dependent random errors. We assume that
+elements of \(\mathbf{w}\) exhibit both spatial and nonspatial
+variability. This is achieved by adding to Equation\(~\)\ref{eq-glm} two
+random effects, \(\boldsymbol{\tau}\) and \(\boldsymbol{\epsilon}\). The
+random effect \(\boldsymbol{\tau}\) is an \(n \times 1\) column vector
+of spatially dependent random errors. We assume that
 \(\text{E}(\boldsymbol{\tau}) = \boldsymbol{0}\) and
 \(\text{Cov}(\boldsymbol{\tau}) = \sigma^2_\tau \mathbf{R}\), where
 \(\text{E}(\cdot)\) and \(\text{Cov}(\cdot)\) denote expectation and
@@ -215,7 +216,7 @@ have been numerous, significant advances in \proglang{R} software that
 have made these models more accessible to practitioners. The \pkg{brms}
 \citep{burkner2017brms}, \pkg{carBayes} \citep{lee2013carbayes},
 \pkg{ngspatial} \citep{hughes2020ngspatial}, \pkg{R-INLA}
-\citep{lindgren2015bayesian} and \pkg{inlabru} \citep{bachl2019inlabru},
+\citep{lindgren2015bayesian}, \pkg{inlabru} \citep{bachl2019inlabru},
 \pkg{spBayes} \citep{finley2007spbayes}, \pkg{spOccupancy}
 \citep{doser2022spoccupancy}, \pkg{spAbundance}
 \citep{doser2024spabundance}, and \pkg{spNNGP} \citep{finley2002spnngp}
@@ -225,72 +226,68 @@ approximating them. A benefit of Bayesian approaches is that prior
 information can be incorporated and uncertainty quantification of
 parameter estimates is straightforward. However, Bayesian approaches,
 especially those using MCMC, can be computationally expensive. In order
-to reduce computation time, many of these packages work with the
-precision matrix instead of the covariance matrix so that
-computationally expensive matrix inversion is not required. For example,
-\pkg{R-INLA} uses the precision matrix and tends to be very fast.
-Working with precision matrices, however, can be more restrictive and
-less intuitive than working directly with the covariance matrix. The
-\pkg{FRK} \citep{sainsbury2024modeling}, \pkg{glmmTMB}
-\citep{brooks2017glmmtmb}, \pkg{hglm} \citep{ronnegard2010hglm},
-\pkg{mgcv} \citep{wood2017generalized}, and \pkg{spaMM}
-\citep{rousset2014spamm} packages directly use Laplace,
-quasi-likelihood, or reduced-rank approaches to estimate parameters.
-These direct approaches tend to be computationally efficient, as they
-don't rely on MCMC sampling. In contrast to the Bayesian approach, a
-drawback of these direct approaches is that prior information cannot be
-formally incorporated and covariance parameter uncertainty is more
-challenging to quantify. The \pkg{sdmTMB} \citep{anderson2024sdmtmb}
-package combines elements of \pkg{R-INLA}, \pkg{glmmTMB}, and Gaussian
-Markov random fields to fit a wide variety of SPGLMs, while
-\pkg{tinyVAST} \citep{thorson2025tinyVAST} extends some of these models
-to multivariate or (dynamic) structural equation models.
+to reduce computation time, many of these packages (e.g., \pkg{R-INLA})
+work with the precision matrix instead of the covariance matrix so that
+computationally expensive matrix inversion is not required. Working with
+precision matrices, however, can be more restrictive and less intuitive
+than working with covariance matrices. The \pkg{FRK}
+\citep{sainsbury2024modeling}, \pkg{glmmTMB} \citep{brooks2017glmmtmb},
+\pkg{hglm} \citep{ronnegard2010hglm}, \pkg{mgcv}
+\citep{wood2017generalized}, and \pkg{spaMM} \citep{rousset2014spamm}
+packages directly use Laplace, quasi-likelihood, or reduced-rank
+approaches to estimate parameters. These direct approaches tend to be
+computationally efficient, as they don't rely on MCMC sampling. In
+contrast to the Bayesian approach, a drawback of these direct approaches
+is that prior information cannot be formally incorporated and covariance
+parameter uncertainty is more challenging to quantify. The \pkg{sdmTMB}
+\citep{anderson2024sdmtmb} package combines elements of \pkg{R-INLA},
+\pkg{glmmTMB}, and Gaussian Markov random fields to fit a wide variety
+of SPGLMs, while \pkg{tinyVAST} \citep{thorson2025tinyVAST} extends some
+of these models to multivariate or (dynamic) structural equation models.
 
 Building from \citet{evangelou2011estimation} and
 \citet{bonat2016practical}, \citet{ver2024marginal} proposed a novel
 approach for fitting SPGLMs that leverages the Laplace approximation
 while marginalizing over both the latent \(\mathbf{w}\) and the fixed
-effects (\(\boldsymbol{\beta}\)) and accommodating general covariance
-structures, including spatial ones. This approach performed efficiently
-in a variety of simulation settings, generally having appropriate
-confidence interval coverage for the fixed effects and prediction
-interval coverage for \(\mathbf{w}\) at new locations. The approach
-performed similarly to the Bayesian SPGLM approach in \pkg{spBayes} and
-the automatic differentiation SPGLM approach in \pkg{glmmTMB} but was
-much faster. At small sample sizes, the approach outperformed the
-approximate Bayesian SPGLM approach in \pkg{R-INLA} and had similar
-computational times. For moderate sample sizes, it performed similarly
-to \pkg{R-INLA}, though \pkg{R-INLA} was faster. The novel Laplace
-approach is particularly attractive for two reasons. First, it is
-general enough that it can be applied to any covariance structure (not
-just spatial). Second, after estimating the covariance parameters,
-analytical solutions exist for the fixed effects (and their standard
-errors) as well as predictions of the latent \(\mathbf{w}\) at new
-locations (and their standard errors).
+effects (\(\boldsymbol{\beta}\)). This approach performed well in a
+variety of simulation settings, generally having appropriate confidence
+interval coverage for the fixed effects and prediction interval coverage
+for \(\mathbf{w}\) at new locations. It also performed similarly to the
+Bayesian SPGLM approach in \pkg{spBayes} and the automatic
+differentiation SPGLM approach in \pkg{glmmTMB} but was much faster. At
+small sample sizes, the approach outperformed the approximate Bayesian
+SPGLM approach in \pkg{R-INLA} and had similar computational times. For
+moderate sample sizes, it performed similarly to \pkg{R-INLA}, though
+\pkg{R-INLA} was faster. The novel Laplace approach is particularly
+attractive for two reasons. First, it is general enough that it can be
+applied to any covariance structure (not just spatial). Second, after
+estimating the covariance parameters, analytical solutions exist for the
+fixed effects (and their standard errors) as well as predictions of the
+latent \(\mathbf{w}\) at new locations (and their standard errors).
 
 The \pkg{spmodel} \proglang{R} package \citep{dumelle2023spmodel}
-recently made public a full set of modeling tools for SPGLMs fit using
-the novel Laplace approach described by \citet{ver2024marginal}. These
+recently released a full set of modeling tools for SPGLMs fit using the
+novel Laplace approach described by \citet{ver2024marginal}. These
 modeling tools are approachable and mirror the familiar \code{glm()}
 syntax from base-\proglang{R}, making the transition from GLMs to SPGLMs
 relatively seamless. The \code{spglm()} function fits SPGLMs for
-point-referenced data (e.g., x- and y-coordinates representing point
+point-referenced support (e.g., x- and y-coordinates representing point
 locations in a field; these models are sometimes called
 ``geostatistical'' models), while the \code{spgautor()} function fits
-SPGLMs for areal data (e.g., polygon boundaries representing geographic
-subsets of a region; these models are sometimes called
-``autoregressive'' models). For both point-referenced data and areal
+SPGLMs for areal support (e.g., polygon boundaries representing
+geographic subsets of a region; these models are sometimes called
+``autoregressive'' models). For both point-referenced and areal
 supports, \pkg{spmodel} supports the binomial distribution for binary
 data, Poisson and negative binomial distributions for count data, Gamma
 and inverse Gaussian distributions for skewed data, and the beta
 distribution for proportion data. There are 20 different spatial
 covariance structures available including the exponential, Gaussian, and
-spherical for point-referenced data (Figure\(~\)\ref{fig-type}) and the
-conditional autoregressive, and simultaneous autoregressive structures
-for areal data. \pkg{spmodel} provides tools for commonly used model
-summaries, visualizations, and diagnostics (e.g., Cook's distance) using
-standard \proglang{R} helper functions like \code{summary()},
-\code{plot()}, \code{fitted()}, and \code{tidy()}, among others.
+spherical for point-referenced support (Figure\(~\)\ref{fig-type}) and
+the conditional autoregressive, and simultaneous autoregressive
+structures for areal support \pkg{spmodel} provides tools for commonly
+used model summaries, visualizations, and diagnostics (e.g., fitted
+values) using standard \proglang{R} helper functions like
+\code{summary()}, \code{plot()}, and \code{fitted()}, among others.
 \pkg{spmodel} also provides tools to predict \(\mathbf{w}\) at new
 locations and quantify uncertainty in those prediction using
 \code{predict()} and \code{augment()}. This core functionality, combined
@@ -306,7 +303,7 @@ previously missing from the existing \proglang{R} ecosystem.
 \end{figure}
 
 Of the existing \proglang{R} packages for SPGLMs, \pkg{spmodel} (version
-0.11.0) is arguably most similar to \pkg{sdmTMB} (version 0.7.4) in
+0.11.1) is arguably most similar to \pkg{sdmTMB} (version 0.7.4) in
 terms of scope and feel. Both packages use similar syntax as
 \code{glm()}, accommodate flexible \code{formula} arguments (e.g.,
 offsets, splines), handle spatial covariance that decays at different
@@ -351,8 +348,8 @@ United States (US). In Section\(~\)\ref{sec-applications2}, we model
 moose counts in Alaska, US; skewed lake conductivity in the Southwestern
 US; harbor seal abundance trend behavior in Alaska, US; and voter
 turnout rates in Texas, US. And in Section\(~\)\ref{sec-discussion}, we
-end with a discussion synthesizing \pkg{spmodel}'s contributions to the
-analysis of SPGLMs in \proglang{R}.
+end with a discussion synthesizing \pkg{spmodel}'s contributions to
+SPGLMs in \proglang{R}.
 
 \section{The spatial generalized linear model and
 marginalization}\label{sec-spglm}
@@ -370,10 +367,7 @@ approaches \citep{wolfinger1993generalized}, which only specify the
 first two moments of a distribution. Next, we describe a brief overview
 of the approach and how it can be used for several primary data analysis
 tasks \citep{tredennick2021practical} like model comparison, parameter
-estimation, inference, model diagnostics, and prediction. Then in
-Section\(~\)\ref{sec-applications} and
-Section\(~\)\ref{sec-applications2}, we show how to use \pkg{spmodel} to
-carry out these primary data analysis tasks with various data sets.
+estimation, inference, model diagnostics, and prediction.
 
 \subsection{Formulating the hierarchical
 likelihood}\label{formulating-the-hierarchical-likelihood}
@@ -429,44 +423,41 @@ Hessian, respectively, of \(\ell_\mathbf{w}\) with respect to
 solved by leveraging properties of the normalizing constant of a
 multivariate Gaussian distribution. Thus, rewriting
 \(\exp(\ell_{\mathbf{w}^{*}})\) yields \begin{align}\label{eq-marginal6}
-  [\mathbf{y}|\mathbf{X}, \varphi, \boldsymbol{\theta}] \approx [\mathbf{y} | f^{-1}(\mathbf{w}^{*}), \varphi] [\mathbf{w}^{*} | \mathbf{X}, \boldsymbol{\theta}] (2 \pi)^{n/2}|-\mathbf{G}_{\mathbf{w}^{*}}|^{-1/2}.
-\end{align}
-
-Maximizing the natural logarithm of Equation\(~\)\ref{eq-marginal6}
-requires a doubly iterative process over 1) \(\boldsymbol{\theta}\) and
+  [\mathbf{y}|\mathbf{X}, \varphi, \boldsymbol{\theta}] \approx [\mathbf{y} | f^{-1}(\mathbf{w}^{*}), \varphi] [\mathbf{w}^{*} | \mathbf{X}, \boldsymbol{\theta}] (2 \pi)^{n/2}|-\mathbf{G}_{\mathbf{w}^{*}}|^{-1/2},
+\end{align} which can be directly evaluated. This result suggests a
+doubly iterative optimization over 1) \(\boldsymbol{\theta}\) and
 \(\varphi\) and 2) the latent \(\mathbf{w}\) (to find each set of
-\(\mathbf{w}^{*}\)). This doubly iterative process eventually yields the
-marginal restricted maximum likelihood estimators \(\hat{\varphi}\) and
+\(\mathbf{w}^{*}\)), which ultimately yields the marginal restricted
+maximum likelihood estimators \(\hat{\varphi}\) and
 \(\hat{\boldsymbol{\theta}}\) and their respective values of
-\(\mathbf{w}^{*}\), which we call \(\hat{\mathbf{w}}\). Maximizing the
-marginal restricted likelihood requires repeatedly evaluating
-\(\boldsymbol{\Sigma}^{-1}\), \(\mathbf{g}\), and \(\mathbf{G}\); see
-\citet{ver2024marginal} for more details and comparisons to other
-approaches as well as forms of \(\mathbf{g}\) and \(\mathbf{G}\) for
-various response distributions.
+\(\mathbf{w}^{*}\), which we call \(\hat{\mathbf{w}}\).
+\citet{ver2024marginal} provide further details, which includes explicit
+forms of \(\mathbf{g}\) and \(\mathbf{G}\) for various response
+distributions.
 
-\subsection{Estimating fixed effects}\label{estimating-fixed-effects}
+\subsection{Estimating fixed effects}\label{sec:fixed}
 
-Though the fixed effects are integrated out of the likelihood, we can
-still estimate them using generalized least squares (GLS) principles, a
-common practice for linear models estimated using restricted maximum
-likelihood methods. Had we observed \(\mathbf{w}\), a GLS estimator for
-\(\boldsymbol{\beta}\) is given by \begin{align}\label{eq-gls1}
+We can estimate the fixed effects using generalized least squares (GLS)
+principles, a common practice for linear models estimated using
+restricted maximum likelihood methods. Had we observed \(\mathbf{w}\), a
+GLS estimator for \(\boldsymbol{\beta}\) is given by
+\begin{align}\label{eq-gls1}
   \hat{\boldsymbol{\beta}} = (\mathbf{X}^\top \boldsymbol{\Sigma}^{-1}\mathbf{X})^{-1}\mathbf{X}^\top \boldsymbol{\Sigma}^{-1}\mathbf{w} = \mathbf{B}\mathbf{w},
 \end{align} where
 \(\mathbf{B} = (\mathbf{X}^\top \boldsymbol{\Sigma}^{-1}\mathbf{X})^{-1}\mathbf{X}^\top \boldsymbol{\Sigma}^{-1}\).
-However, we do not observe \(\mathbf{w}\) and instead estimate
-\(\mathbf{w}\) via \(\hat{\mathbf{w}}\). Thus, it is reasonable to
-define \(\hat{\boldsymbol{\beta}} = \mathbf{B}\hat{\mathbf{w}}\). To
-derive properties of \(\hat{\boldsymbol{\beta}}\) like expectation and
-variance, we must derive these properties for \(\hat{\mathbf{w}}\). To
-do so, we must condition on \(\mathbf{w}\) as if it were observed and
-invoke properties of the laws of total expectation and variance. Because
-\(\hat{\mathbf{w}}\) was obtained by maximizing the likelihood, we may
-assume that given \(\mathbf{w}\), \(\hat{\mathbf{w}}\) has mean
-\(\mathbf{w}\) and variance approximately equal to \(-\mathbf{H}^{-1}\)
-(the inverse Hessian). It follows that \(\text{E}(\hat{\mathbf{w}})\) is
-given by \begin{align}
+While we do not \(\mathbf{w}\), we do estimate it via
+\(\hat{\mathbf{w}}\), and thus it is reasonable to define
+\(\hat{\boldsymbol{\beta}} = \mathbf{B}\hat{\mathbf{w}}\). To derive
+properties of \(\hat{\boldsymbol{\beta}}\) like expectation and
+variance, we must derive these properties for \(\hat{\mathbf{w}}\) by
+conditioning on \(\mathbf{w}\) as if it were observed and leveraging the
+laws of total expectation and variance. Based on asymptotic properties
+of (restricted) maximum likelihood estimators
+\citep{cressie1993asymptotic}, we may assume that given \(\mathbf{w}\),
+\(\hat{\mathbf{w}}\) has mean \(\mathbf{w}\) and variance equal to
+\(-\mathbf{H}^{-1}\), the negative inverse Hessian (i.e., the inverse
+observed information matrix). Thus it follows that
+\(\text{E}(\hat{\mathbf{w}})\) is given by \begin{align}
   \text{E}(\hat{\mathbf{w}}) = \text{E}(\text{E}(\hat{\mathbf{w}} | \mathbf{w}))
    = \text{E}(\mathbf{w}) 
    = \mathbf{X}\boldsymbol{\beta}
@@ -491,12 +482,12 @@ estimated by evaluating \(\boldsymbol{\Sigma}\) at
 \(\hat{\boldsymbol{\theta}}\), the estimated covariance parameter
 vector.
 
-These results are important because they justify closed-form solutions
-for \(\hat{\boldsymbol{\beta}}\) and its associated variance.
-Closed-form solutions are useful because they bypass the need for
-sampling-based strategies to evaluate the mean and variance of
-\(\hat{\boldsymbol{\beta}}\), a common technique for other approaches to
-SPGLMs like Bayesian MCMC.
+These results are important because they justify analytic (i.e.,
+closed-form) solutions for \(\hat{\boldsymbol{\beta}}\) and its
+associated variance. Analytic solutions are useful because they bypass
+the need for sampling-based strategies to evaluate the mean and variance
+of \(\hat{\boldsymbol{\beta}}\), a common technique for other approaches
+to SPGLMs like Bayesian MCMC that can be computationally intensive.
 
 \subsection{Inspecting model diagnostics}\label{sec:diagnostics}
 
@@ -521,16 +512,20 @@ The sum of the squared deviance residuals equals the sum of the elements
 of \(\mathbf{d}\), known as the deviance of the model fit. The deviance
 of the model fit quantifies twice the difference in log likelihoods
 between the a saturated model that fits every observation perfectly
-(i.e., \(\mathbf{y} = f^{-1}(\hat{\mathbf{w}}_i)\) for all \(i\)) and
-the fitted model \citep{myers2012generalized}. Deviance is often used as
-a fit statistic; lower values of deviance imply a better model fit
+(i.e., \(\text{y}_i = f^{-1}(\hat{\text{w}}_i)\) for all \(i\)) and the
+fitted model \citep{myers2012generalized}. Deviance is often used as a
+fit statistic; lower values of deviance imply a better model fit
 (compared to the observed data). Pearson and standardized residuals are
 other types of GLM residuals that involve a scaling of the response
-residuals; the Pearson residuals scale \(\mathbf{r}_{r}\) by the square
-root of \(\mathbf{V}\), while the standardized residuals scale the
-deviance residuals by \(\frac{1}{\sqrt{(1 - \mathbf{L}_{ii})}}\), where
-\(\mathbf{L}_{ii}\) is the \(i\)th diagonal element of the leverage
-matrix, which we discuss next.
+residuals. The Pearson residuals scale \(\mathbf{r}_{r}\) by the square
+root of \(\mathbf{V}\), a diagonal matrix with \(i\)th diagonal element
+equal to the variance of the response distribution evaluated at
+\(f^{-1}(\hat{\text{w}}_i)\) \citep{faraway2016extending};
+\(\mathbf{V}\) is sometimes called the GLM weight matrix. The
+standardized residuals scale the deviance residuals by
+\(\frac{1}{\sqrt{(1 - \mathbf{L}_{ii})}}\), where \(\mathbf{L}_{ii}\) is
+the \(i\)th diagonal element of the leverage matrix, which we discuss
+next.
 
 An observation has high leverage if its combination of explanatory
 variables is far away from other observations. In a linear model, the
@@ -538,13 +533,9 @@ leverage (i.e., hat) values are the diagonal of the leverage (i.e.,
 projection, hat) matrix,
 \(\mathbf{L} = \mathbf{X}(\mathbf{X}^\top \mathbf{X})^{-1}\mathbf{X}^\top\).
 In a GLM, the leverage matrix is given by \begin{align}
-  \mathbf{L} = \mathbf{V}^{1/2} \mathbf{X} (\mathbf{X}^\top \mathbf{V} \mathbf{X}) \mathbf{X}^\top \mathbf{V}^{1/2},
-\end{align} where \(\mathbf{V}\) is a diagonal matrix with \(i\)th
-diagonal element equal to the variance of the response distribution
-evaluated at \(f^{-1}(\mathbf{w}_i)\) \citep{faraway2016extending};
-\(\mathbf{V}\) is sometimes called the GLM weight matrix. The larger the
-value of \(\mathbf{L}_{ii}\), the more severe the leverage from the
-\(i\)th observation.
+  \mathbf{L} = \mathbf{V}^{1/2} \mathbf{X} (\mathbf{X}^\top \mathbf{V} \mathbf{X}) \mathbf{X}^\top \mathbf{V}^{1/2}.
+\end{align} The larger the value of \(\mathbf{L}_{ii}\), the more severe
+the leverage from the \(i\)th observation.
 
 An observation is influential if it has a sizable impact on model fit.
 Influence is measured using Cook's distance
@@ -553,7 +544,7 @@ by \begin{align}
   \mathbf{c} = \frac{\mathbf{r}^2_{s}}{\text{tr}(\mathbf{L})} \frac{diag(\mathbf{L})}{(\mathbf{1} - diag(\mathbf{L}))},
 \end{align} where \(\mathbf{r}^2_{s}\) are the standardized residuals
 and \(diag(\mathbf{L})\) indicates the diagonal elements of the leverage
-matrix. The larger the value of \(\mathbf{c}_i\), the more severe the
+matrix. The larger the value of \(\text{c}_i\), the more severe the
 influence from the \(i\)th observation.
 \citet{montgomery2021introduction} provide guidance for interpreting
 these types of statistics, including cutoffs to consider when
@@ -577,14 +568,13 @@ model (sometimes called the error or residual deviance) and
 \(\mathbf{X} \equiv \mathbf{1}\) (a column of all ones), given
 \(\hat{\boldsymbol{\theta}}\) and \(\hat{\varphi}\) from the fitted
 model. Like \(R^2\), \(PR^2\) can be adjusted to account for the numbers
-of parameters estimated in a model. Like \(R^2\), \(PR^2\) can be
-adjusted to account for the numbers of parameters estimated in a model.
-Because the \(deviance_{total}\) denominator changes across fitted
-models (as the values of \(\hat{\boldsymbol{\theta}}\) and
-\(\hat{\varphi}\) change), this statistic should not be used as a model
-comparison tool. Rather, it should be used as an informative diagnostic
-tool that is unique to each model fit and describes how much variability
-from that model is attributable to the explanatory variables.
+of parameters estimated in a model. Because the \(deviance_{total}\)
+denominator changes across fitted models (as the values of
+\(\hat{\boldsymbol{\theta}}\) and \(\hat{\varphi}\) change), this
+statistic should not be used as a model comparison tool. Rather, it
+should be used as an informative diagnostic tool that is unique to each
+model fit and describes how much variability from that model is
+attributable to the explanatory variables.
 
 \subsection{Predicting at new
 locations}\label{predicting-at-new-locations}
@@ -592,11 +582,11 @@ locations}\label{predicting-at-new-locations}
 We may also predict values of the latent mean (on the link scale) at new
 locations by leveraging the spatial covariance between observed
 locations and new locations (spatial prediction is also called Kriging;
-see \citet{cressie1990origins}). Again suppose that we observed
-\(\mathbf{w}\) and we want to make predictions at \(\mathbf{u}\), a
-vector of latent means at the new locations that follows the same SPGLM
-from Equation\(~\)\ref{eq-spglm} and has design matrix,
-\(\mathbf{X}_{\mathbf{u}}\). The vector
+see \citet{cressie1990origins}). Like in Section\(~\)\ref{sec:fixed},
+suppose first that we observed \(\mathbf{w}\) and we want to make
+predictions at \(\mathbf{u}\), a vector of latent means at the new
+locations that follows the same SPGLM from Equation\(~\)\ref{eq-spglm}
+and has design matrix, \(\mathbf{X}_{\mathbf{u}}\). The vector
 \((\mathbf{w}, \mathbf{u})^\top\) has expectation
 \((\mathbf{X}\boldsymbol{\beta}, \mathbf{X}_\mathbf{u}\boldsymbol{\beta})^\top\)
 and covariance matrix
@@ -606,16 +596,16 @@ where \(\boldsymbol{\Sigma} = \text{Var}(\mathbf{w}, \mathbf{w})\),
 \(\boldsymbol{\Sigma}_{\mathbf{u} \mathbf{w}} = \boldsymbol{\Sigma}_{\mathbf{w} \mathbf{u}}^\top\)
 and
 \(\boldsymbol{\Sigma}_{\mathbf{u}, \mathbf{u}} = \text{Var}(\mathbf{u}, \mathbf{u})\).
-By assumption, we have observed \(\mathbf{w}\), so we may derive the
-conditional distribution of \(\mathbf{u}|\mathbf{w}\), which has the
-following properties: \begin{align}
+Thus we may derive the conditional distribution of
+\(\mathbf{u}|\mathbf{w}\), which has the following properties:
+\begin{align}
   \text{E}(\mathbf{u} | \mathbf{w}) & = \mathbf{X}_{\mathbf{u}} \boldsymbol{\beta} + \boldsymbol{\Sigma}_{\mathbf{u}, \mathbf{w}}\boldsymbol{\Sigma}^{-1}(\mathbf{w} - \mathbf{X}\boldsymbol{\beta}) \\
   \text{Var}(\mathbf{u} | \mathbf{w}) & = \boldsymbol{\Sigma}_{\mathbf{u}, \mathbf{u}} - \boldsymbol{\Sigma}_{\mathbf{u}, \mathbf{w}} \boldsymbol{\Sigma}^{-1} \boldsymbol{\Sigma}_{\mathbf{w}, \mathbf{u}}
-\end{align} \citet{ver2024marginal} show how these equations are
-adjusted to reflect uncertainty in both \(\hat{\boldsymbol{\beta}}\) and
-\(\hat{\mathbf{w}}\) while leveraging the laws of total expectation and
-variance yet again. They derive the predictor of \(\mathbf{u}\),
-\(\hat{\mathbf{u}}\), and its associated variance, given by:
+\end{align} Recall, however, that we do not actually observe
+\(\mathbf{w}\) and instead compute \(\hat{\mathbf{w}}\); so, to predict
+\(\mathbf{u}\) and quantify its uncertainty, we must again leverage the
+laws of total expectation and variance. \citet{ver2024marginal} show
+that \(\hat{\mathbf{u}}\) and its associated variance are given by:
 \begin{align}
   \hat{\mathbf{u}} & = \mathbf{X}_{\mathbf{u}} \hat{\boldsymbol{\beta}} + \boldsymbol{\Sigma}_{\mathbf{u}, \mathbf{w}}\boldsymbol{\Sigma}^{-1}(\hat{\mathbf{w}} - \mathbf{X}\hat{\boldsymbol{\beta}}) \\
   \text{Var}(\hat{\mathbf{u}}) & = \boldsymbol{\Sigma}_{\mathbf{u}, \mathbf{u}} - \boldsymbol{\Sigma}_{\mathbf{u}, \mathbf{w}} \boldsymbol{\Sigma}^{-1} \boldsymbol{\Sigma}_{\mathbf{w}, \mathbf{u}} + \mathbf{K}(\mathbf{X}^\top \boldsymbol{\Sigma}^{-1}\mathbf{X})^{-1}\mathbf{K}^\top + \boldsymbol{\Lambda}(-\mathbf{H})^{-1}\boldsymbol{\Lambda}^\top,
@@ -624,8 +614,8 @@ variance yet again. They derive the predictor of \(\mathbf{u}\),
 and
 \(\boldsymbol{\Lambda} = \mathbf{X}_{\mathbf{u}}\mathbf{B} + \boldsymbol{\Sigma}_{\mathbf{u}, \mathbf{w}}\boldsymbol{\Sigma}^{-1}(\mathbf{1} - \mathbf{X}\mathbf{B})\)
 for a vector of ones, \(\mathbf{1}\). As with
-\(\hat{\boldsymbol{\beta}}\), in practice these covariance matrices are
-evaluated at \(\hat{\boldsymbol{\theta}}\).
+\(\hat{\boldsymbol{\beta}}\), these covariance matrices are evaluated at
+\(\hat{\boldsymbol{\theta}}\) in practice.
 
 \section{Modeling moose presence in Alaska, USA}\label{sec-applications}
 
@@ -1861,7 +1851,7 @@ therein.
 \addcontentsline{toc}{section}{Data and code availability}
 
 The results in this manuscript were obtained using {R} 4.4.0 with the
-\pkg{spmodel} 0.11.0 package. Figures were created using the {ggplot2}
+\pkg{spmodel} 0.11.1 package. Figures were created using the {ggplot2}
 3.5.1 package \citep{wickham2016ggplot2} and base {R}.
 
 All writing and code associated with this manuscript is available for
@@ -1869,7 +1859,7 @@ viewing and download on GitHub at
 \url{https://github.com/USEPA/spmodel.glm.manuscript}. All data used are
 part of the \pkg{spmodel} {R} package available for download from CRAN
 at \url{https://CRAN.R-project.org/package=spmodel}. Results were
-obtained using {R} 4.4.0 with the \pkg{spmodel} 0.11.0 package. Figures
+obtained using {R} 4.4.0 with the \pkg{spmodel} 0.11.1 package. Figures
 were created using the {ggplot2} 3.5.1 package
 \citep{wickham2016ggplot2} and base {R}.
 
