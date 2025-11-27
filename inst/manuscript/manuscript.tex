@@ -654,17 +654,17 @@ Projected CRS: NAD83 / Alaska Albers
 \end{CodeOutput}
 \end{CodeChunk}
 
-There are five columns: \code{elev}, the numeric site elevation
-(meters); \code{strat} a stratification variable for sampling with two
-levels, \code{"L"} and \code{"M"}, which are categorized by landscape
+There are five columns in \texttt{moose}: \code{elev}, the numeric site
+elevation (meters); \code{strat} a stratification variable for sampling
+with two levels (\code{"L"} and \code{"M"}) categorized by landscape
 metrics at each site; \code{count}, the number of moose at each site;
 \code{presence}, a factor that indicates whether at least one moose was
 observed at each site (\code{0} implies no moose; \code{1} implies at
 least one moose); and \code{geometry}, the NAD83/Alaska Albers (EPSG:
-3338) projected coordinate of each site. These data are point-referenced
-because each observation occurs at point coordinates and are represented
-by a \code{POINT} geometry. Moose are most prevalent in the southwestern
-and eastern parts of the Togiak region
+3338) projected coordinate of each site. These data have
+point-referenced support because each observation occurs at point
+coordinates represented by a \code{POINT} geometry. Moose are most
+prevalent in the southwestern and eastern parts of the Togiak region
 (Figure\(~\)\ref{fig-moose-data}).
 
 \begin{figure}
@@ -703,19 +703,20 @@ Projected CRS: NAD83 / Alaska Albers
 
 \subsection{Model Fitting}\label{model-fitting}
 
-SPGLMs in \pkg{spmodel} for point-referenced data are fit using the
+SPGLMs in \pkg{spmodel} for point-referenced support are fit using the
 \code{spglm()} function. The \code{spglm()} function requires four
 arguments: \code{formula}, the relationship between the response and
 explanatory variables; \code{family}, the response distribution assumed
 for the response variable; \code{data}, the data frame that contains the
 variables in \code{formula}, and \code{spcov_type}, the type of spatial
 covariance. The \code{formula}, \code{family}, and \code{data} arguments
-are the three required arguments to \code{glm()} for nonspatial GLMs.
-So, the transition from \code{glm()} to \code{spglm()} simply requires
-one additional argument: \code{spcov_type}. When \code{data} is not an
-\code{sf} object, \code{spglm()} also requires the \code{xcoord} and
-\code{ycoord} arguments, which indicate the columns in \code{data} that
-represent the projected x- and y-coordinates, respectively.
+are familiar because they are the three required arguments to
+\code{glm()} for nonspatial GLMs. So the transition from \code{glm()} to
+\code{spglm()} simply requires one additional argument:
+\code{spcov_type}. When \code{data} is not an \code{sf} object,
+\code{spglm()} also requires the \code{xcoord} and \code{ycoord}
+arguments, which indicate the columns in \code{data} that represent the
+projected x- and y-coordinates, respectively.
 
 We use \code{spglm()} to fit a SPGLM (i.e., here, a spatial logistic
 regression model) quantifying the effect of elevation and strata on
@@ -817,16 +818,7 @@ R> bin <- spglm(
 +   data = moose,
 +   spcov_type = "none"
 + )
-\end{CodeInput}
-\end{CodeChunk}
-
-While the \code{spglm()} approach evaluates the HGLMM likelihood with
-\(\sigma^2_{de} = 0\) and \(\sigma^2_{ie} \approx 0\) instead of just
-the GLM likelihood, the parameter estimates and their standard errors
-are the same:
-
-\begin{CodeChunk}
-\begin{CodeInput}
+R> 
 R> bin_glm <- glm(
 +   formula = presence ~ elev + strat,
 +   family = binomial,
@@ -861,9 +853,10 @@ R> round(sqrt(diag(vcov(bin_glm))), digits = 4)
 \end{CodeOutput}
 \end{CodeChunk}
 
-However, using \code{spglm()} instead of \code{glm()} ensures that
-\pkg{spmodel} helper functions are available and that each of the
-\code{spglm()} models uses the same likelihood:
+Using \code{spglm()} instead of \code{glm()} ensures that \pkg{spmodel}
+helper functions are available and that each of the \code{spglm()}
+models uses the same hierarchical likelihood
+(Equation\textasciitilde{}\ref{eq-marginal}):
 
 \begin{CodeChunk}
 \begin{CodeInput}
@@ -889,37 +882,17 @@ R> glance(bin)
 \end{CodeChunk}
 
 The likelihood-based statistics AIC, AICc, BIC, and deviance are much
-lower for the SPGLM, indicating a better fit relative to the GLM. We may
-also perform a likelihood ratio test (LRT) between the two models, as
-the GLM is a special case of the SPGLM (i.e., is nested within the
-SPGLM):
+lower for the SPGLM, indicating a better fit relative to the GLM.
 
-\begin{CodeChunk}
-\begin{CodeInput}
-R> anova(spbin, bin)
-\end{CodeInput}
-\begin{CodeOutput}
-Likelihood Ratio Test
-
-Response: presence
-             Df   Chi2 Pr(>Chi2)    
-spbin vs bin  3 31.546 6.525e-07 ***
----
-Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
-\end{CodeOutput}
-\end{CodeChunk}
-
-The LRT provides strong evidence that the SPGLM is preferred to the GLM
-(\(p~\)value \textless{} 0.001).
-
-An alternative approach to model comparison is to use a cross-validation
-procedure \citep{james2013introduction}. The \code{loocv()} function
-performs leave-one-out cross validation, comparing the predicted mean
-(on the response scale) to the observed response variable for each
-hold-out observation, recomputing estimates of \(\boldsymbol{\beta}\) in
-each iteration. Performing leave-one-out cross validation tends to be
-more computationally efficient than fitting the model, as leave-one-out
-cross validation requires only one set of products involving the inverse
+Instead of relying on likelihood-based statistics, models can be
+compared using a cross-validation procedure
+\citep{james2013introduction}. The \code{loocv()} function performs
+leave-one-out cross validation, comparing the predicted mean (on the
+response scale) to the observed response variable for each hold-out
+observation, recomputing estimates of \(\boldsymbol{\beta}\) in each
+iteration. Performing leave-one-out cross validation tends to be more
+computationally efficient than fitting the model, as leave-one-out cross
+validation requires only one set of products involving the inverse
 covariance matrix (a primary computational burden), while fitting
 traditional models requires these products for each optimization
 iteration. After performing leave-one-out cross validation, statistics
@@ -949,14 +922,13 @@ R> loocv(bin)
 
 Both models have negligible bias, but the SPGLM has much lower MSPE and
 RMSPE than the GLM, indicating the SPGLM predictions are far more
-efficient. Three separate metrics (likelihood-based statistics,
-likelihood-ratio test, and leave-one-out cross validation) prefer the
-SPGLM to the GLM.
+efficient. Both the liklelihood-based leave-one-out cross validation
+metrics prefer the SPGLM to the GLM.
 
-We can compare two SPGLMs with different spatial covariance functions
-using likelihood-based statistics and leave-one-out cross validation,
-but we can't use the LRT because generally, the spatial covariance
-functions are not nested:
+We may also want to compare the fit of two SPGLMs with different spatial
+covariance structures. For example, we may want to compare the fit of an
+SPGLM with the \texttt{"exponential"} spatial covariance to the fit of a
+SPGLM with the \texttt{"gaussian"} spatial covariance:
 
 \begin{CodeChunk}
 \begin{CodeInput}
@@ -991,13 +963,13 @@ R> loocv(spbin2)
 \end{CodeOutput}
 \end{CodeChunk}
 
-The \code{"exponential"} spatial covariance (\code{spbin}) has a
-slightly lower (better) deviance but slightly higher (worse) AIC, AICc,
-and BIC than the \code{"gaussian"} spatial covariance (\code{spbin2}).
-Both spatial covariance functions have similar leave-one-out cross
-validation metrics, though the \code{"gaussian"} spatial covariance
-RMSPE is slightly lower (better). For practical purposes, these models
-fit similarly.
+The SPGLM with the \code{"exponential"} spatial covariance
+(\code{spbin}) has a slightly lower (better) deviance but slightly
+higher (worse) AIC, AICc, and BIC than the SPGLM with the
+\code{"gaussian"} spatial covariance (\code{spbin2}). Both SPGLMs have
+similar leave-one-out cross validation metrics, though the SPGLM with
+the \code{"gaussian"} spatial covariance has slightly lower (better)
+RMSPE. For practical purposes, these models fit similarly.
 
 Frequently in spatial statistics, the difference in model fit between
 the best spatial model and worst spatial model is much smaller than the
