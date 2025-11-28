@@ -109,14 +109,13 @@
 \csxdef {autonum@sec:diagnosticsReferenced}{}
 \@writefile{lof}{\contentsline {figure}{\numberline {4}{\ignorespaces Moose presence model diagnostics, including leverage values (left) and standardized residuals (right).}}{17}{figure.caption.4}\protected@file@percent }
 \newlabel{fig-sp-diagnostic}{{4}{17}{Moose presence model diagnostics, including leverage values (left) and standardized residuals (right)}{figure.caption.4}{}}
-\csxdef {autonum@sec:diagnosticsReferenced}{}
 \csxdef {autonum@fig-sp-diagnosticReferenced}{}
 \csxdef {autonum@fig-sp-diagnostic2Referenced}{}
 \@writefile{lof}{\contentsline {figure}{\numberline {5}{\ignorespaces Moose presence model diagnostics, including Cook's distance (left) and the fitted spatial covariance as a function of distance (right).}}{18}{figure.caption.5}\protected@file@percent }
 \newlabel{fig-sp-diagnostic2}{{5}{18}{Moose presence model diagnostics, including Cook's distance (left) and the fitted spatial covariance as a function of distance (right)}{figure.caption.5}{}}
 \newlabel{prediction}{{3.4}{18}{}{subsection.3.4}{}}
-\@writefile{lof}{\contentsline {figure}{\numberline {6}{\ignorespaces Moose presence probability fitted values and predictions. Fitted values are represented by circles and predictions by triangles.}}{19}{figure.caption.6}\protected@file@percent }
-\newlabel{fig-moose-fit}{{6}{19}{Moose presence probability fitted values and predictions. Fitted values are represented by circles and predictions by triangles}{figure.caption.6}{}}
+\@writefile{lof}{\contentsline {figure}{\numberline {6}{\ignorespaces Moose presence probability fitted values ($f^{-1}(\hat  {\mathbf  {w}})$) and predictions. Fitted values are represented by circles and predictions by triangles.}}{19}{figure.caption.6}\protected@file@percent }
+\newlabel{fig-moose-fit}{{6}{19}{Moose presence probability fitted values ($f^{-1}(\hat {\mathbf {w}})$) and predictions. Fitted values are represented by circles and predictions by triangles}{figure.caption.6}{}}
 \csxdef {autonum@fig-moose-fitReferenced}{}
 \@writefile{lof}{\contentsline {figure}{\numberline {7}{\ignorespaces Moose presence 95\% prediction interval lower bounds (left) and upper bounds (right).}}{20}{figure.caption.7}\protected@file@percent }
 \newlabel{fig-moose-int}{{7}{20}{Moose presence 95\% prediction interval lower bounds (left) and upper bounds (right)}{figure.caption.7}{}}
@@ -139,8 +138,8 @@
 \csxdef {autonum@fig-tropyReferenced}{}
 \csxdef {autonum@fig-tropyReferenced}{}
 \csxdef {autonum@fig-moose-data-countReferenced}{}
-\@writefile{lof}{\contentsline {figure}{\numberline {9}{\ignorespaces Level curves of equal spatial covariance for the negative binomial moose count models. The ellipse is centered at zero distance in the x-direction and y-direction, and points along the ellipse have equal levels of spatial covariance. In the isotropic level curve (left), spatial covariance decays equally in all directions. In the anistropic level curve (right), spatial covariance decays fastest in the northeast-southwest direction and slowest in the northwest-southeast direction (this pattern can be seen in the observed counts).}}{23}{figure.caption.10}\protected@file@percent }
-\newlabel{fig-tropy}{{9}{23}{Level curves of equal spatial covariance for the negative binomial moose count models. The ellipse is centered at zero distance in the x-direction and y-direction, and points along the ellipse have equal levels of spatial covariance. In the isotropic level curve (left), spatial covariance decays equally in all directions. In the anistropic level curve (right), spatial covariance decays fastest in the northeast-southwest direction and slowest in the northwest-southeast direction (this pattern can be seen in the observed counts)}{figure.caption.10}{}}
+\@writefile{lof}{\contentsline {figure}{\numberline {9}{\ignorespaces Level curves of equal spatial covariance for the negative binomial moose count models. The ellipse is centered at zero distance in the x-direction and y-direction, and points along the ellipse have equal levels of spatial covariance. In the isotropic level curve (left), spatial covariance decays equally in all directions. In the anistropic level curve (right), spatial covariance decays fastest in the northeast-southwest direction (0.413 radians) and slowest in the northwest-southeast direction (2.729 radians).}}{23}{figure.caption.10}\protected@file@percent }
+\newlabel{fig-tropy}{{9}{23}{Level curves of equal spatial covariance for the negative binomial moose count models. The ellipse is centered at zero distance in the x-direction and y-direction, and points along the ellipse have equal levels of spatial covariance. In the isotropic level curve (left), spatial covariance decays equally in all directions. In the anistropic level curve (right), spatial covariance decays fastest in the northeast-southwest direction (0.413 radians) and slowest in the northwest-southeast direction (2.729 radians)}{figure.caption.10}{}}
 \newlabel{sec-lake}{{4.2}{23}{}{subsection.4.2}{}}
 \citation{fox1992generalized}
 \citation{ver2018spatial}
@@ -153,15 +152,16 @@
 \newlabel{fig-seal}{{10}{27}{Seal trend distribution in Alaska. Observed and missing seal polygons by stock (left) and observed log seal trends (right)}{figure.caption.11}{}}
 \citation{bivand2024spdata}
 \citation{ferrari2004beta,cribari2010beta}
+\newlabel{sec-texas}{{4.4}{28}{}{subsection.4.4}{}}
 \@writefile{lof}{\contentsline {figure}{\numberline {11}{\ignorespaces Proportion of voter turnout in Texas for the 1980 presidential election. Circles represent voter turnout (based on color) and triangles represent locations at which voter turnout predictions are desired.}}{29}{figure.caption.12}\protected@file@percent }
 \newlabel{fig-texas}{{11}{29}{Proportion of voter turnout in Texas for the 1980 presidential election. Circles represent voter turnout (based on color) and triangles represent locations at which voter turnout predictions are desired}{figure.caption.12}{}}
-\newlabel{sec-texas}{{4.4}{29}{}{subsection.4.4}{}}
 \csxdef {autonum@fig-texasReferenced}{}
 \citation{cressie1993asymptotic}
+\citation{wolfinger1993covariance}
+\citation{gurka2006selecting}
 \citation{ver2023indexing}
 \citation{breiman2001random}
 \newlabel{sec-discussion}{{5}{30}{}{section.5}{}}
-\citation{wickham2016ggplot2}
 \citation{wickham2016ggplot2}
 \bibdata{references.bib}
 \bibcite{akaike1974new}{{1}{1974}{{Akaike}}{{}}}
@@ -196,43 +196,45 @@
 \bibcite{finley2002spnngp}{{26}{2022}{{Finley \emph  {et~al.}}}{{Finley, Datta, and Banerjee}}}
 \bibcite{fox1992generalized}{{27}{1992}{{Fox and Monette}}{{}}}
 \bibcite{fox2019car}{{28}{2019}{{Fox and Weisberg}}{{}}}
-\bibcite{harville1974bayesian}{{29}{1974}{{Harville}}{{}}}
-\bibcite{hoeting2006model}{{30}{2006}{{Hoeting \emph  {et~al.}}}{{Hoeting, Davis, Merton, and Thompson}}}
-\bibcite{hughes2020ngspatial}{{31}{2020}{{Hughes and Cui}}{{}}}
-\bibcite{james2013introduction}{{32}{2013}{{James \emph  {et~al.}}}{{James, Witten, Hastie, and Tibshirani}}}
-\bibcite{kuhn2022tidy}{{33}{2022}{{Kuhn and Silge}}{{}}}
-\bibcite{lee2013carbayes}{{34}{2013}{{Lee}}{{}}}
-\bibcite{lee1996hierarchical}{{35}{1996}{{Lee and Nelder}}{{}}}
-\bibcite{lenth2024emmeans}{{36}{2024}{{Lenth}}{{}}}
-\bibcite{lindgren2015bayesian}{{37}{2015}{{Lindgren and Rue}}{{}}}
-\bibcite{mccullagh1989generalized}{{38}{1989}{{McCullagh and Nelder}}{{}}}
-\bibcite{montgomery2021introduction}{{39}{2021}{{Montgomery \emph  {et~al.}}}{{Montgomery, Peck, and Vining}}}
-\bibcite{myers2012generalized}{{40}{2012}{{Myers \emph  {et~al.}}}{{Myers, Montgomery, Vining, and Robinson}}}
-\bibcite{nelder1972generalized}{{41}{1972}{{Nelder and Wedderburn}}{{}}}
-\bibcite{oehlert1992note}{{42}{1992}{{Oehlert}}{{}}}
-\bibcite{patterson1971recovery}{{43}{1971}{{Patterson and Thompson}}{{}}}
-\bibcite{pebesma2018sf}{{44}{2018}{{Pebesma}}{{}}}
-\bibcite{pinheiro2006mixed}{{45}{2006}{{Pinheiro and Bates}}{{}}}
-\bibcite{rcore2024}{{46}{2024}{{R Core Team}}{{}}}
-\bibcite{rencher2008linear}{{47}{2008}{{Rencher and Schaalje}}{{}}}
-\bibcite{robinson2021broom}{{48}{2021}{{Robinson \emph  {et~al.}}}{{Robinson, Hayes, and Couch}}}
-\bibcite{ronnegard2010hglm}{{49}{2010}{{Ronnegard \emph  {et~al.}}}{{Ronnegard, Shen, and Alam}}}
-\bibcite{rousset2014spamm}{{50}{2014}{{Rousset and Ferdy}}{{}}}
-\bibcite{sainsbury2024modeling}{{51}{2024}{{Sainsbury-Dale \emph  {et~al.}}}{{Sainsbury-Dale, Zammit-Mangion, and Cressie}}}
-\bibcite{schwarz1978estimating}{{52}{1978}{{Schwarz}}{{}}}
-\bibcite{smith2013comparison}{{53}{2013}{{Smith and McKenna}}{{}}}
-\bibcite{stein1999interpolation}{{54}{1999}{{Stein}}{{}}}
-\bibcite{thorson2025tinyVAST}{{55}{2025}{{Thorson \emph  {et~al.}}}{{Thorson, Anderson, Goddard, and Rooper}}}
-\bibcite{tobler1970computer}{{56}{1970}{{Tobler}}{{}}}
-\bibcite{tredennick2021practical}{{57}{2021}{{Tredennick \emph  {et~al.}}}{{Tredennick, Hooker, Ellner, and Adler}}}
-\bibcite{ver2012invented}{{58}{2012}{{Ver~Hoef}}{{}}}
-\bibcite{ver2024marginal}{{59}{2024}{{Ver~Hoef \emph  {et~al.}}}{{Ver~Hoef, Blagg, Dumelle, Dixon, Zimmerman, and Conn}}}
-\bibcite{ver2023indexing}{{60}{2023}{{Ver~Hoef \emph  {et~al.}}}{{Ver~Hoef, Dumelle, Higham, Peterson, and Isaak}}}
-\bibcite{ver2018spatial}{{61}{2018}{{Ver~Hoef \emph  {et~al.}}}{{Ver~Hoef, Peterson, Hooten, Hanks, and Fortin}}}
-\bibcite{wedderburn1974quasi}{{62}{1974}{{Wedderburn}}{{}}}
-\bibcite{wickham2016ggplot2}{{63}{2016}{{Wickham}}{{}}}
-\bibcite{wolfinger1993generalized}{{64}{1993}{{Wolfinger and O'connell}}{{}}}
-\bibcite{wolfinger1994computing}{{65}{1994}{{Wolfinger \emph  {et~al.}}}{{Wolfinger, Tobias, and Sall}}}
-\bibcite{wood2017generalized}{{66}{2017}{{Wood}}{{}}}
-\bibcite{zimmerman2024spatial}{{67}{2024}{{Zimmerman and Ver~Hoef}}{{}}}
+\bibcite{gurka2006selecting}{{29}{2006}{{Gurka}}{{}}}
+\bibcite{harville1974bayesian}{{30}{1974}{{Harville}}{{}}}
+\bibcite{hoeting2006model}{{31}{2006}{{Hoeting \emph  {et~al.}}}{{Hoeting, Davis, Merton, and Thompson}}}
+\bibcite{hughes2020ngspatial}{{32}{2020}{{Hughes and Cui}}{{}}}
+\bibcite{james2013introduction}{{33}{2013}{{James \emph  {et~al.}}}{{James, Witten, Hastie, and Tibshirani}}}
+\bibcite{kuhn2022tidy}{{34}{2022}{{Kuhn and Silge}}{{}}}
+\bibcite{lee2013carbayes}{{35}{2013}{{Lee}}{{}}}
+\bibcite{lee1996hierarchical}{{36}{1996}{{Lee and Nelder}}{{}}}
+\bibcite{lenth2024emmeans}{{37}{2024}{{Lenth}}{{}}}
+\bibcite{lindgren2015bayesian}{{38}{2015}{{Lindgren and Rue}}{{}}}
+\bibcite{mccullagh1989generalized}{{39}{1989}{{McCullagh and Nelder}}{{}}}
+\bibcite{montgomery2021introduction}{{40}{2021}{{Montgomery \emph  {et~al.}}}{{Montgomery, Peck, and Vining}}}
+\bibcite{myers2012generalized}{{41}{2012}{{Myers \emph  {et~al.}}}{{Myers, Montgomery, Vining, and Robinson}}}
+\bibcite{nelder1972generalized}{{42}{1972}{{Nelder and Wedderburn}}{{}}}
+\bibcite{oehlert1992note}{{43}{1992}{{Oehlert}}{{}}}
+\bibcite{patterson1971recovery}{{44}{1971}{{Patterson and Thompson}}{{}}}
+\bibcite{pebesma2018sf}{{45}{2018}{{Pebesma}}{{}}}
+\bibcite{pinheiro2006mixed}{{46}{2006}{{Pinheiro and Bates}}{{}}}
+\bibcite{rcore2024}{{47}{2024}{{R Core Team}}{{}}}
+\bibcite{rencher2008linear}{{48}{2008}{{Rencher and Schaalje}}{{}}}
+\bibcite{robinson2021broom}{{49}{2021}{{Robinson \emph  {et~al.}}}{{Robinson, Hayes, and Couch}}}
+\bibcite{ronnegard2010hglm}{{50}{2010}{{Ronnegard \emph  {et~al.}}}{{Ronnegard, Shen, and Alam}}}
+\bibcite{rousset2014spamm}{{51}{2014}{{Rousset and Ferdy}}{{}}}
+\bibcite{sainsbury2024modeling}{{52}{2024}{{Sainsbury-Dale \emph  {et~al.}}}{{Sainsbury-Dale, Zammit-Mangion, and Cressie}}}
+\bibcite{schwarz1978estimating}{{53}{1978}{{Schwarz}}{{}}}
+\bibcite{smith2013comparison}{{54}{2013}{{Smith and McKenna}}{{}}}
+\bibcite{stein1999interpolation}{{55}{1999}{{Stein}}{{}}}
+\bibcite{thorson2025tinyVAST}{{56}{2025}{{Thorson \emph  {et~al.}}}{{Thorson, Anderson, Goddard, and Rooper}}}
+\bibcite{tobler1970computer}{{57}{1970}{{Tobler}}{{}}}
+\bibcite{tredennick2021practical}{{58}{2021}{{Tredennick \emph  {et~al.}}}{{Tredennick, Hooker, Ellner, and Adler}}}
+\bibcite{ver2012invented}{{59}{2012}{{Ver~Hoef}}{{}}}
+\bibcite{ver2024marginal}{{60}{2024}{{Ver~Hoef \emph  {et~al.}}}{{Ver~Hoef, Blagg, Dumelle, Dixon, Zimmerman, and Conn}}}
+\bibcite{ver2023indexing}{{61}{2023}{{Ver~Hoef \emph  {et~al.}}}{{Ver~Hoef, Dumelle, Higham, Peterson, and Isaak}}}
+\bibcite{ver2018spatial}{{62}{2018}{{Ver~Hoef \emph  {et~al.}}}{{Ver~Hoef, Peterson, Hooten, Hanks, and Fortin}}}
+\bibcite{wedderburn1974quasi}{{63}{1974}{{Wedderburn}}{{}}}
+\bibcite{wickham2016ggplot2}{{64}{2016}{{Wickham}}{{}}}
+\bibcite{wolfinger1993covariance}{{65}{1993}{{Wolfinger}}{{}}}
+\bibcite{wolfinger1993generalized}{{66}{1993}{{Wolfinger and O'connell}}{{}}}
+\bibcite{wolfinger1994computing}{{67}{1994}{{Wolfinger \emph  {et~al.}}}{{Wolfinger, Tobias, and Sall}}}
+\bibcite{wood2017generalized}{{68}{2017}{{Wood}}{{}}}
+\bibcite{zimmerman2024spatial}{{69}{2024}{{Zimmerman and Ver~Hoef}}{{}}}
 \gdef \@abspage@last{36}

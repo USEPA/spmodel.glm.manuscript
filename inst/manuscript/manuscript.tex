@@ -191,7 +191,7 @@ simplicity of notation moving forward.
 
 \begin{figure}
 \centering
-\includegraphics[width = 0.7\linewidth]{figures/figure-01.png}
+\includegraphics[width = 0.7\linewidth]{figures/figure-1.png}
 \caption{An exponential spatial correlation function with varying range parameters.}
 \label{fig-range}
 \end{figure}
@@ -297,7 +297,7 @@ previously missing from the existing \proglang{R} ecosystem.
 
 \begin{figure}
 \centering
-\includegraphics[width = 0.7\linewidth]{figures/figure-02.png}
+\includegraphics[width = 0.7\linewidth]{figures/figure-2.png}
 \caption{Exponential, Gaussian, and spherical spatial correlation functions all with range parameters equal to 0.5.}
 \label{fig-type}
 \end{figure}
@@ -361,13 +361,14 @@ likelihood-based statistics for model comparison like AIC
 \citep{akaike1974new}, AICc \citep{hoeting2006model}, BIC
 \citep{schwarz1978estimating}, deviance
 \citep{mccullagh1989generalized}, and likelihood ratio tests available.
-These types of statistics are not available for quasi-likelihood
-\citep{wedderburn1974quasi, breslow1993approximate} or pseudo-likelihood
-approaches \citep{wolfinger1993generalized}, which only specify the
-first two moments of a distribution. Next, we describe a brief overview
-of the approach and how it can be used for several primary data analysis
-tasks \citep{tredennick2021practical} like model comparison, parameter
-estimation, inference, model diagnostics, and prediction.
+These types of statistics are not directly available for
+quasi-likelihood \citep{wedderburn1974quasi, breslow1993approximate} or
+pseudo-likelihood approaches \citep{wolfinger1993generalized}, which
+only specify the first two moments of a distribution. Next, we describe
+a brief overview of the approach and how it can be used for several
+primary data analysis tasks \citep{tredennick2021practical} like model
+comparison, parameter estimation, inference, model diagnostics, and
+prediction.
 
 \subsection{Formulating the hierarchical
 likelihood}\label{formulating-the-hierarchical-likelihood}
@@ -669,7 +670,7 @@ prevalent in the southwestern and eastern parts of the Togiak region
 
 \begin{figure}
 \centering
-\includegraphics[width = 0.70\linewidth]{figures/figure-1.png}
+\includegraphics[width = 0.70\linewidth]{figures/figure-3.png}
 \caption{Moose presence in Alaska. Circles represent moose presence or absence (based on color) and triangles represent locations at which moose presence probability predictions are desired.}
 \label{fig-moose-data}
 \end{figure}
@@ -1021,18 +1022,17 @@ and the residuals (\code{.resid}) can be deviance, Pearson, or response
 residuals. The default fitted values are on the link scale and the
 default residuals are deviance residuals. Also returned by
 \code{augment()} are the leverage (\code{.hat}), Cook's distance
-(\code{.cooksd}), and standardized residuals (\code{.std.resid})
-described in Section\(~\)\ref{sec:diagnostics}. A benefit of using
-\code{augment()} when \code{data} is an \code{sf} object is that the
-output is also an \code{sf} object, which makes it straightforward to
-create spatial diagnostic plots (Figure\(~\)\ref{fig-sp-diagnostic}).
-Standard \proglang{R} helpers (e.g., \code{fitted()},
-\code{residuals()}) are also available to extract model diagnostics from
-the model object.
+(\code{.cooksd}), and standardized residuals (\code{.std.resid}). A
+benefit of using \code{augment()} when \code{data} is an \code{sf}
+object is that the output is also an \code{sf} object, which makes it
+straightforward to create spatial diagnostic plots
+(Figure\(~\)\ref{fig-sp-diagnostic}). Standard \proglang{R} helpers
+(e.g., \code{fitted()}, \code{residuals()}) are also available to
+extract model diagnostics from the model object.
 
 \begin{figure}
 \centering
-\includegraphics[width = 1\linewidth]{figures/figure-2.png}
+\includegraphics[width = 1\linewidth]{figures/figure-4.png}
 \caption{Moose presence model diagnostics, including leverage values (left) and standardized residuals (right).}
 \label{fig-sp-diagnostic}
 \end{figure}
@@ -1051,7 +1051,7 @@ R> plot(spbin, which = c(4, 7))
 
 \begin{figure}
 \centering
-\includegraphics[width = 1\linewidth]{figures/figure-3.png}
+\includegraphics[width = 1\linewidth]{figures/figure-5.png}
 \caption{Moose presence model diagnostics, including Cook's distance (left) and the fitted spatial covariance as a function of distance (right).}
 \label{fig-sp-diagnostic2}
 \end{figure}
@@ -1112,15 +1112,15 @@ R> predict(spbin, newdata = moose_preds, type = "response")[1:5]
 
 \begin{figure}
 \centering
-\includegraphics[width = 0.70\linewidth]{figures/figure-4.png}
-\caption{Moose presence probability fitted values and predictions. Fitted values are represented by circles and predictions by triangles.}
+\includegraphics[width = 0.70\linewidth]{figures/figure-6.png}
+\caption{Moose presence probability fitted values ($f^{-1}(\hat{\mathbf{w}})$) and predictions. Fitted values are represented by circles and predictions by triangles.}
 \label{fig-moose-fit}
 \end{figure}
 
-Predictions on the response scale are visualized alongside the fitted
-values (\(f^{-1}(\hat{\mathbf{w}})\)) in Figure\(~\)\ref{fig-moose-fit}.
-Prediction intervals for the probability of moose presence (on the link
-scale) are returned by supplying \code{interval}:
+Moose are far more common in the eastern and southwestern portion of the
+domain (Figure\(~\)\ref{fig-moose-fit}). Prediction intervals for the
+probability of moose presence (on the link scale) are returned by
+supplying \code{interval}:
 
 \begin{CodeChunk}
 \begin{CodeInput}
@@ -1173,7 +1173,7 @@ for spatial mapping (Figure\(~\)\ref{fig-moose-int}).
 
 \begin{figure}
 \centering
-\includegraphics[width = 1\linewidth]{figures/figure-5.png}
+\includegraphics[width = 1\linewidth]{figures/figure-7.png}
 \caption{Moose presence 95\% prediction interval lower bounds (left) and upper bounds (right).}
 \label{fig-moose-int}
 \end{figure}
@@ -1191,12 +1191,12 @@ and estimate contrasts for models with interactions. In
 Section\(~\)\ref{sec-seal}, we fit a binomial model to the areal harbor
 seal trend data with a nonspatial random effect. Finally in
 Section\(~\)\ref{sec-texas}, we fit beta models to Texas voter turnout
-data, which can be treated as point-referenced or areal, and use maximum
-likelihood to compare two models with different explanatory variables.
-Table\(~\)\ref{tab:additional} outlines, for each application, the
-section number, data set, family (i.e., response distribution), geometry
-type (point-referenced or areal), and additional \pkg{spmodel} features
-highlighted.
+data, which can be modeled using point-referenced or areal support, and
+use maximum likelihood to compare two models with different explanatory
+variables. Table\(~\)\ref{tab:additional} outlines, for each
+application, the section number, data set, family (i.e., response
+distribution), geometry type (point-referenced or areal support), and
+additional \pkg{spmodel} features highlighted.
 
 \begin{table}
     \centering
@@ -1247,7 +1247,7 @@ R> spnb <- update(sppois, family = nbinomial)
 
 \begin{figure}
 \centering
-\includegraphics[width = 0.70\linewidth]{figures/figure-6.png}
+\includegraphics[width = 0.70\linewidth]{figures/figure-8.png}
 \caption{Moose counts in Alaska. Circles represent moose counts (based on color) and triangles represent locations at which mean count predictions are desired.}
 \label{fig-moose-data-count}
 \end{figure}
@@ -1333,15 +1333,16 @@ R> plot(spnb_anis, which = 8)
 \end{CodeInput}
 \end{CodeChunk}
 
-The spatial covariance is strongest in a northwest-southeast direction
-and weakest in the northeast-southwest direction
-(Figure\(~\)\ref{fig-tropy}), which is intuitive given the similar
-patterns in moose counts from Figure\(~\)\ref{fig-moose-data-count}.
+From Figure\(~\)\ref{fig-tropy}, the spatial covariance is strongest in
+a northwest-southeast direction (2.729 radians) and weakest in the
+northeast-southwest direction (0.413 radians), which is intuitive given
+the similar patterns in moose counts from
+Figure\(~\)\ref{fig-moose-data-count}.
 
 \begin{figure}[h]
 \centering
-\includegraphics[width = 1\linewidth]{figures/figure-7.png}
-\caption{Level curves of equal spatial covariance for the negative binomial moose count models. The ellipse is centered at zero distance in the x-direction and y-direction, and points along the ellipse have equal levels of spatial covariance.  In the isotropic level curve (left), spatial covariance decays equally in all directions. In the anistropic level curve (right), spatial covariance decays fastest in the northeast-southwest direction and slowest in the northwest-southeast direction (this pattern can be seen in the observed counts).}
+\includegraphics[width = 1\linewidth]{figures/figure-9.png}
+\caption{Level curves of equal spatial covariance for the negative binomial moose count models. The ellipse is centered at zero distance in the x-direction and y-direction, and points along the ellipse have equal levels of spatial covariance.  In the isotropic level curve (left), spatial covariance decays equally in all directions. In the anistropic level curve (right), spatial covariance decays fastest in the northeast-southwest direction (0.413 radians) and slowest in the northwest-southeast direction (2.729 radians).}
 \label{fig-tropy}
 \end{figure}
 
@@ -1544,15 +1545,15 @@ Confidence level used: 0.95
 
 The \code{seal} data in \pkg{spmodel} contains harbor seal abundance
 trends for two different harbor seal stocks (genetically distinct
-populations). While the \code{moose} and \code{lake} data were
-point-referenced, the \code{seal} data are areal. Each polygon in the
-\code{seal} data represents a distinct harbor seal haulout region
-(Figure\(~\)\ref{fig-seal}). A haulout region is an area of coastal
-rocks that harbor seals go to rest, molt, and give birth.
+populations). While the \code{moose} and \code{lake} data have
+point-referenced support, the \code{seal} data have areal support. Each
+polygon in the \code{seal} data represents a distinct harbor seal
+haulout region (Figure\(~\)\ref{fig-seal}). A haulout region is an area
+of coastal rocks that harbor seals go to rest, molt, and give birth.
 
 \begin{figure}
 \centering
-\includegraphics[width = 1\linewidth]{figures/figure-8.png}
+\includegraphics[width = 1\linewidth]{figures/figure-10.png}
 \caption{Seal trend distribution in Alaska. Observed and missing seal polygons by stock (left) and observed log seal trends (right).}
 \label{fig-seal}
 \end{figure}
@@ -1682,27 +1683,25 @@ R> predict(spbin, type = "response", interval = "prediction")[1:5, ]
 We could have alternatively used a (geostatistical) SPGLM via
 \code{spglm()}. When areal data are used with \code{spglm()}, the
 centroids of each polygon are used as the point-referenced coordinates.
-We further explore comparisons between point-referenced and areal data
-in the next example.
 
 \subsection{Modeling voter turnout in Texas, USA}\label{sec-texas}
 
 \begin{figure}
 \centering
-\includegraphics[width = 0.70\linewidth]{figures/figure-10.png}
+\includegraphics[width = 0.70\linewidth]{figures/figure-11.png}
 \caption{Proportion of voter turnout in Texas for the 1980 presidential election. Circles represent voter turnout (based on color) and triangles represent locations at which voter turnout predictions are desired.}
 \label{fig-texas}
 \end{figure}
 
 The \code{texas} data in \pkg{spmodel} contains voter turnout data for
 Texas counties in the 1980 United States Presidential Election
-\citep{bivand2024spdata}. The data are point-referenced, with polygon
-centroids representing the spatial location of each county
+\citep{bivand2024spdata}. The data have point-referenced support, with
+polygon centroids representing the spatial location of each county
 (Figure\(~\)\ref{fig-texas}). Beta regression is a GLM used to model
 rate and proportion data in the (0, 1) interval
 \citep{ferrari2004beta, cribari2010beta}. We model voter turnout rates
-as a function of mean log income of county residents using an SPGLM
-assuming a beta distributed response variable:
+as a function of mean log income of county residents using a
+geostatistical SPGLM assuming a beta distributed response variable:
 
 \begin{CodeChunk}
 \begin{CodeInput}
@@ -1715,9 +1714,10 @@ R> spbeta_geo <- spglm(
 \end{CodeInput}
 \end{CodeChunk}
 
-Alternatively, we could use an autoregressive model to fit the model,
-constructing a neighborhood matrix by assuming centroids within
-\code{cutoff} of one another are neighbors:
+Alternatively, we could fit an autoregressive SPGLM by assuming the data
+have areal support and constructing a neighborhood matrix that treats
+counties as neighbors if the distance between their centroids is less
+than \code{cutoff}:
 
 \begin{CodeChunk}
 \begin{CodeInput}
@@ -1731,7 +1731,7 @@ R> spbeta_auto <- spgautor(
 \end{CodeInput}
 \end{CodeChunk}
 
-According to AIC, the SPGLM for point-referenced data is preferred:
+According to AIC, the geostatistical SPGLM:
 
 \begin{CodeChunk}
 \begin{CodeInput}
@@ -1747,30 +1747,30 @@ spbeta_auto  3 -22.46104
 The default estimation method in \pkg{spmodel} for SPGLMs is restricted
 maximum likelihood (REML), while maximum likelihood (ML) can also be
 used. A benefit of benefit of REML is that it can yield unbiased
-estimates of covariance parameters \citep{cressie1993asymptotic}, but a
-drawback is that likelihood-based statistics are only valid for model
-comparison when the models have the same explanatory variable and fixed
-effect structure (because the error contrasts used to construct the REML
-likelihood change based on \(\mathbf{X}\) and \(\boldsymbol{\beta}\)).
-In contrast, ML estimators are generally biased for covariance
-parameters, though in practice this bias tends to be small. Moreover,
-when using ML, likelihood-based comparisons are valid for models having
-different explanatory variable and fixed effect structures. Using ML, we
-can evaluate the significance of log income on voter turnout using a
-likelihood ratio test:
+estimates of covariance parameters \citep{cressie1993asymptotic}. A
+drawback of REML is that likelihood-based statistics are often
+considered invalid when the models have different explanatory variable
+or fixed effect structures \citep{wolfinger1993covariance}, though
+\citet{gurka2006selecting} provides some evidence to the contrary. In
+contrast to REML estimators, ML estimators are generally biased for
+covariance parameters, though in practice this bias tends to be small.
+Moreover, when using ML, likelihood-based comparisons are valid for
+models with different explanatory variable or fixed effect structures.
+Using ML, we can evaluate the significance of log income on voter
+turnout using a likelihood ratio test (for nested models):
 
 \begin{CodeChunk}
 \begin{CodeInput}
 R> spbeta_full_ml <- update(spbeta_geo, estmethod = "ml")
-R> spbeta_red_ml <- update(spbeta_geo, estmethod = "ml", formula = turnout ~ 1)
-R> anova(spbeta_full_ml, spbeta_red_ml)
+R> spbeta_reduced_ml <- update(spbeta_geo, estmethod = "ml", formula = turnout ~ 1)
+R> anova(spbeta_full_ml, spbeta_reduced_ml)
 \end{CodeInput}
 \begin{CodeOutput}
 Likelihood Ratio Test
 
 Response: turnout
-                                Df   Chi2 Pr(>Chi2)    
-spbeta_red_ml vs spbeta_full_ml  1 23.155 1.494e-06 ***
+                                    Df   Chi2 Pr(>Chi2)    
+spbeta_reduced_ml vs spbeta_full_ml  1 23.155 1.494e-06 ***
 ---
 Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
 \end{CodeOutput}
@@ -1783,12 +1783,12 @@ statistic like AIC:
 
 \begin{CodeChunk}
 \begin{CodeInput}
-R> AIC(spbeta_full_ml, spbeta_red_ml)
+R> AIC(spbeta_full_ml, spbeta_reduced_ml)
 \end{CodeInput}
 \begin{CodeOutput}
-               df       AIC
-spbeta_full_ml  7 -31.25900
-spbeta_red_ml   6 -10.10354
+                  df       AIC
+spbeta_full_ml     7 -31.25900
+spbeta_reduced_ml  6 -10.10354
 \end{CodeOutput}
 \end{CodeChunk}
 
@@ -1800,24 +1800,24 @@ important for predicting voter turnout.
 SPGLMs are fit in \pkg{spmodel} using a novel application of the Laplace
 approximation that simultaneously marginalizes over the latent (i.e.,
 unobserved) random effects and the fixed effects. \pkg{spmodel}'s
-\code{spglm()} (for point-referenced data) and \code{spgautor()} (for
-areal data) fit SPGLMs that are similar in structure and syntax as base
-\proglang{R}'s \code{glm()} function, easing the transition from GLMs to
-SPGLMs for practitioners. The \code{spglm()} and \code{spgautor()}
-functions support six response distributions for binary, count, and
-skewed data and 20 spatial covariance functions. \pkg{spmodel} has a
-suite of tools for data visualization, inference, model diagnostics, and
-prediction, providing a framework that can be used for all stages of a
-data analysis. There are many additional \pkg{spmodel} features that are
-not covered here, including fitting multiple models simultaneously,
-fixing spatial covariance and dispersion parameters at known values,
-fitting models to large non-Gaussian data having thousands of
-observations via spatial indexing \citep{ver2023indexing}, incorporating
-spatial dependence in machine learning (e.g., random forests;
-\citet{breiman2001random}), simulating spatially dependent data (e.g.,
-\code{spbinom()}, \code{sprpois()}, etc.), and more. Further details are
-provided by \url{https://CRAN.R-project.org/package=spmodel} and links
-therein.
+\code{spglm()} (for point-referenced support) and \code{spgautor()} (for
+areal support) fit SPGLMs that are similar in structure and syntax as
+base \proglang{R}'s \code{glm()} function, easing the transition for
+practitioners from GLMs to SPGLMs. The \code{spglm()} and
+\code{spgautor()} functions support six response distributions for
+binary, count, and skewed data and 20 spatial covariance functions.
+\pkg{spmodel} has a suite of tools for data visualization, inference,
+model diagnostics, and prediction, providing a framework that can be
+used for all stages of a data analysis. There are many additional
+\pkg{spmodel} features that are not covered here, including fitting
+multiple models simultaneously, fixing spatial covariance and dispersion
+parameters at known values, fitting models to large non-Gaussian data
+having thousands of observations via spatial indexing
+\citep{ver2023indexing}, incorporating spatial dependence in machine
+learning (e.g., random forests; \citet{breiman2001random}), simulating
+spatially dependent data (e.g., \code{spbinom()}, \code{sprpois()},
+etc.), and more. Further details are provided by
+\url{https://CRAN.R-project.org/package=spmodel} and links therein.
 
 \section*{Data and code availability}\label{data-and-code-availability}
 \addcontentsline{toc}{section}{Data and code availability}
@@ -1830,10 +1830,7 @@ All writing and code associated with this manuscript is available for
 viewing and download on GitHub at
 \url{https://github.com/USEPA/spmodel.glm.manuscript}. All data used are
 part of the \pkg{spmodel} {R} package available for download from CRAN
-at \url{https://CRAN.R-project.org/package=spmodel}. Results were
-obtained using {R} 4.4.0 with the \pkg{spmodel} 0.11.1 package. Figures
-were created using the {ggplot2} 3.5.1 package
-\citep{wickham2016ggplot2} and base {R}.
+at \url{https://CRAN.R-project.org/package=spmodel}.
 
 \section*{Acknowledgments}\label{acknowledgments}
 \addcontentsline{toc}{section}{Acknowledgments}

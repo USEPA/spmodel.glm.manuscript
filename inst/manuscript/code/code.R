@@ -1,16 +1,8 @@
 #=========================================================#
-# Load Software ####
-#=========================================================#
-
-library(spmodel)
-library(ggplot2, verbose = FALSE)
-library(dplyr, verbose = FALSE)
-library(emmeans, verbose = FALSE)
-library(car)
-
-#=========================================================#
 # Section 3: Modeling moose presence in Alaska, USA ####
 #=========================================================#
+
+library("spmodel")
 
 head(moose)
 
@@ -55,8 +47,6 @@ round(sqrt(diag(vcov(bin_glm))), digits = 4)
 glance(spbin)
 glance(bin)
 
-anova(spbin, bin)
-
 loocv(spbin)
 loocv(bin)
 
@@ -74,7 +64,7 @@ augment(spbin)
 varcomp(spbin)
 
 #==========================================#
-# Section 3.4: Model Diagnostics ####
+# Section 3.4: Prediction ####
 #==========================================#
 
 predict(spbin, newdata = moose_preds)[1:5]
@@ -124,7 +114,11 @@ summary(spgam)
 
 anova(spgam)
 
+library("car", verbose = FALSE)
+
 vif(spgam)
+
+library("emmeans", verbose = FALSE)
 
 pairs(emmeans(spgam, ~ state | temp))
 
@@ -173,16 +167,19 @@ spbeta_auto <- spgautor(
 AIC(spbeta_geo, spbeta_auto)
 
 spbeta_full_ml <- update(spbeta_geo, estmethod = "ml")
-spbeta_red_ml <- update(spbeta_geo, estmethod = "ml", formula = turnout ~ 1)
-anova(spbeta_full_ml, spbeta_red_ml)
+spbeta_reduced_ml <- update(spbeta_geo, estmethod = "ml", formula = turnout ~ 1)
+anova(spbeta_full_ml, spbeta_reduced_ml)
 
-AIC(spbeta_full_ml, spbeta_red_ml)
+AIC(spbeta_full_ml, spbeta_reduced_ml)
 
 #=========================================================#
 # Figures ####
 #=========================================================#
 
-library(patchwork)
+library("ggplot2", verbose = FALSE)
+library("dplyr", verbose = FALSE)
+library("patchwork")
+
 okabe <- c("#E69F00", "#56B4E9", "#009E73", "#F0E442", "#0072B2", "#D55E00", "#CC79A7")
 
 #==========================================#
@@ -353,20 +350,19 @@ plot(spnbin, which = 8)
 # Figure 10 ####
 #==========================================#
 
-seal$trend <- seal$log_trend
-seal$sampled <- factor(if_else(is.na(seal$trend), "no", "yes"), levels = c("yes", "no"))
+seal$sampled <- factor(if_else(is.na(seal$log_trend), "no", "yes"), levels = c("yes", "no"))
 p1 <- ggplot(seal, aes(fill = sampled, color = stock)) +
-  geom_sf(size = 2) +
+  geom_sf(size = 0.25) +
   theme_bw(base_size = 14) +
   scale_fill_manual(name = "sampled", values = okabe[1:2], breaks = c("yes", "no"), labels = c("yes", "no")) +
   scale_color_manual(name = "stock", values = c("grey40", "grey80"), breaks = c(8, 10), labels = c(8, 10)) +
   scale_y_continuous(breaks = seq(57, 59, length.out = 5)) +
   scale_x_continuous(breaks = seq(-139, -134, length.out = 3))
 
-p2 <- ggplot(seal, aes(fill = trend)) +
-  geom_sf(size = 2) +
+p2 <- ggplot(seal, aes(fill = log_trend)) +
+  geom_sf(size = 0.25) +
   theme_bw(base_size = 14) +
-  scale_fill_viridis_c(option = "D", begin = 0.5, limits = c(min(seal$trend), max(seal$trend))) +
+  scale_fill_viridis_c(name = "logtrend", option = "D", begin = 0.5, limits = c(min(seal$log_trend), max(seal$log_trend))) +
   scale_y_continuous(breaks = seq(57, 59, length.out = 5)) +
   scale_x_continuous(breaks = seq(-139, -134, length.out = 3))
 

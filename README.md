@@ -1,18 +1,18 @@
 # spmodel.glm. manuscript
 
-### Supplement to "Spatial generalized linear models in R using spmodel"
+### Supplement to "Spatial GeneralizedLinear Models in R using spmodel"
 
-##### Michael Dumelle<sup>1</sup>, Matt Higham<sup>2</sup>, Jay M. Ver Hoef<sup>3</sup>
+##### Michael Dumelle<sup>1</sup>, Jay M. Ver Hoef<sup>2</sup>, Matt Higham<sup>3</sup>
 
 ##### <sup>1</sup>United States Environmental Protection Agency, Corvallis, OR, USA
-##### <sup>2</sup>St. Lawrence University Department of Math, Computer Science, and Statistics, Canton, NY, USA
-##### <sup>3</sup>NOAA Fisheries (NMFS) Alaska Fisheries Science Center, Marine Mammal Laboratory, Seattle, WA, USA
+##### <sup>2</sup>NOAA Fisheries (NMFS) Alaska Fisheries Science Center, Marine Mammal Laboratory, Seattle, WA, USA
+##### <sup>3</sup>St. Lawrence University Department of Math, Computer Science, and Statistics, Canton, NY, USA
 
 ##### For correspondence, please email Michael Dumelle at Dumelle.Michael@epa.gov
 
 ### Abstract
 
-  Generalized linear models (GLMs) describe a non-normal response variable that may be binary, count, skewed, or a proportion. Typically, observations in a GLM are assumed independent of one another. For spatial data, this independence assumption is impractical, as nearby locations tend to be more similar than locations far apart. The **spmodel** **R** package provides tools to fit GLMs that incorporate spatial autocorrelation (i.e., spatial generalized linear models, or SPGLMs). SPGLMs are fit in **spmodel** using a novel application of the Laplace approximation via `spglm()` for point-referenced data or `spgautor()` for areal (i.e., lattice), data. `spglm()` and `spgautor()` closely resemble `glm()` from base **R** but include arguments that control the spatial autocorrelation structure. **spmodel** has many helper functions for model inspection and diagnostics, some of which leverage other **R** packages like **broom** and **emmeans**. It is also possible to use fitted models to make predictions of the latent spatial-mean process at unobserved locations. **spmodel** provides many additional features like accommodating geometric anisotropy and nonspatial random effects, simulating spatially autocorrelated data, and more. Here we use **spmodel** to illustrate the modeling of binary, count, skewed and proportion response variables from several point-referenced and areal data sets. 
+  Non-Gaussian data are common in practice and include binary, count, skewed, and proportion data types. Often, non-Gaussian data are modeled using a generalized linear model (GLM). GLMs typically assume that observations are independent of one another. This is an impractical assumption for spatial data, as nearby observations tend to be more similar than distant ones. The `spmodel` package in **R** provides a suite of tools for fitting spatial generalized linear models (SPGLMs) to non-Gaussian data and making spatial predictions (i.e., Kriging). SPGLMs for point-referenced (x- and y-coordinates) support are fit using the `spglm()` function, while SPGLMs for areal (lattice, polygon) support are fit using the `spgautor()` function. Both `spglm()` and `spgautor()` maximize a novel Laplace likelihood which marginalizes over the model's fixed effects and latent mean while formally incorporating spatial covariance among observations. The inputs and outputs of `spglm()` and `spgautor()` closely resemble the `glm()` function from base **R**, easing the transition from GLMs to SPGLMs. `spmodel` provides and builds upon several commonly used helper functions for model building like `summary()`, `plot()`, and `fitted()`, among others. Spatial predictions of the latent mean at unobserved locations are obtained using `predict()` or `augment()`. `spmodel` accommodates myriad advanced modeling features like geometric anisotrpoy, nonspatial random effects, analysis of variance, and more. Throughout, we use `spmodel` to fit SPGLMs to moose presence and counts in Alaska, United States (US), skewed conductivity data in the Southwestern US, harbor seal abundance trends in Alaska, US, and voter turnout rates in Texas, US.
 
 ### Package Overview
 
@@ -54,4 +54,4 @@ system.file("manuscript/code", package = "spmodel.glm.manuscript")
 
 ### Disclaimer
 
-The views expressed in this manuscript are those of the authors and do not necessarily represent the views or policies of the U.S. Environmental Protection Agency. Any mention of trade names, products, or services does not imply an endorsement by the U.S. government or the U.S. Environmental Protection Agency. The U.S. Environmental Protection Agency does not endorse any commercial products, services, or enterprises.
+The views expressed in this article are those of the author(s) and do not necessarily represent the views or policies of the U.S. government, U.S. Environmental Protection Agency or the National Oceanic and Atmospheric Administration. Mention of trade names or commercial products does not constitute endorsement or recommendation for use.

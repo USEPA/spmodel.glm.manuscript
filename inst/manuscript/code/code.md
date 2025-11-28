@@ -2,18 +2,10 @@
 
 ``` r
 #=========================================================#
-# Load Software ####
-#=========================================================#
-
-library(spmodel)
-library(ggplot2, verbose = FALSE)
-library(dplyr, verbose = FALSE)
-library(emmeans, verbose = FALSE)
-library(car)
-
-#=========================================================#
 # Section 3: Modeling moose presence in Alaska, USA ####
 #=========================================================#
+
+library("spmodel")
 
 head(moose)
 ```
@@ -188,20 +180,6 @@ glance(bin)
 ```
 
 ``` r
-anova(spbin, bin)
-```
-
-```
-## Likelihood Ratio Test
-## 
-## Response: presence
-##              Df   Chi2 Pr(>Chi2)    
-## spbin vs bin  3 31.546 6.525e-07 ***
-## ---
-## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
-```
-
-``` r
 loocv(spbin)
 ```
 
@@ -303,7 +281,7 @@ varcomp(spbin)
 
 ``` r
 #==========================================#
-# Section 3.4: Model Diagnostics ####
+# Section 3.4: Prediction ####
 #==========================================#
 
 predict(spbin, newdata = moose_preds)[1:5]
@@ -473,6 +451,8 @@ anova(spgam)
 ```
 
 ``` r
+library("car", verbose = FALSE)
+
 vif(spgam)
 ```
 
@@ -485,6 +465,8 @@ vif(spgam)
 ```
 
 ``` r
+library("emmeans", verbose = FALSE)
+
 pairs(emmeans(spgam, ~ state | temp))
 ```
 
@@ -628,28 +610,28 @@ AIC(spbeta_geo, spbeta_auto)
 
 ``` r
 spbeta_full_ml <- update(spbeta_geo, estmethod = "ml")
-spbeta_red_ml <- update(spbeta_geo, estmethod = "ml", formula = turnout ~ 1)
-anova(spbeta_full_ml, spbeta_red_ml)
+spbeta_reduced_ml <- update(spbeta_geo, estmethod = "ml", formula = turnout ~ 1)
+anova(spbeta_full_ml, spbeta_reduced_ml)
 ```
 
 ```
 ## Likelihood Ratio Test
 ## 
 ## Response: turnout
-##                                 Df   Chi2 Pr(>Chi2)    
-## spbeta_red_ml vs spbeta_full_ml  1 23.155 1.494e-06 ***
+##                                     Df   Chi2 Pr(>Chi2)    
+## spbeta_reduced_ml vs spbeta_full_ml  1 23.155 1.494e-06 ***
 ## ---
 ## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
 ```
 
 ``` r
-AIC(spbeta_full_ml, spbeta_red_ml)
+AIC(spbeta_full_ml, spbeta_reduced_ml)
 ```
 
 ```
-##                df       AIC
-## spbeta_full_ml  7 -31.25900
-## spbeta_red_ml   6 -10.10354
+##                   df       AIC
+## spbeta_full_ml     7 -31.25900
+## spbeta_reduced_ml  6 -10.10354
 ```
 
 ``` r
@@ -657,7 +639,10 @@ AIC(spbeta_full_ml, spbeta_red_ml)
 # Figures ####
 #=========================================================#
 
-library(patchwork)
+library("ggplot2", verbose = FALSE)
+library("dplyr", verbose = FALSE)
+library("patchwork")
+
 okabe <- c("#E69F00", "#56B4E9", "#009E73", "#F0E442", "#0072B2", "#D55E00", "#CC79A7")
 
 #==========================================#
@@ -873,20 +858,19 @@ plot(spnbin, which = 8)
 # Figure 10 ####
 #==========================================#
 
-seal$trend <- seal$log_trend
-seal$sampled <- factor(if_else(is.na(seal$trend), "no", "yes"), levels = c("yes", "no"))
+seal$sampled <- factor(if_else(is.na(seal$log_trend), "no", "yes"), levels = c("yes", "no"))
 p1 <- ggplot(seal, aes(fill = sampled, color = stock)) +
-  geom_sf(size = 2) +
+  geom_sf(size = 0.25) +
   theme_bw(base_size = 14) +
   scale_fill_manual(name = "sampled", values = okabe[1:2], breaks = c("yes", "no"), labels = c("yes", "no")) +
   scale_color_manual(name = "stock", values = c("grey40", "grey80"), breaks = c(8, 10), labels = c(8, 10)) +
   scale_y_continuous(breaks = seq(57, 59, length.out = 5)) +
   scale_x_continuous(breaks = seq(-139, -134, length.out = 3))
 
-p2 <- ggplot(seal, aes(fill = trend)) +
-  geom_sf(size = 2) +
+p2 <- ggplot(seal, aes(fill = log_trend)) +
+  geom_sf(size = 0.25) +
   theme_bw(base_size = 14) +
-  scale_fill_viridis_c(option = "D", begin = 0.5, limits = c(min(seal$trend), max(seal$trend))) +
+  scale_fill_viridis_c(name = "logtrend", option = "D", begin = 0.5, limits = c(min(seal$log_trend), max(seal$log_trend))) +
   scale_y_continuous(breaks = seq(57, 59, length.out = 5)) +
   scale_x_continuous(breaks = seq(-139, -134, length.out = 3))
 
@@ -940,18 +924,18 @@ sessionInfo()
 ## [1] stats     graphics  grDevices utils     datasets  methods   base     
 ## 
 ## other attached packages:
-##  [1] patchwork_1.2.0 car_3.1-3       carData_3.0-5   emmeans_1.10.3  spmodel_0.11.0  here_1.0.1      lubridate_1.9.3 forcats_1.0.0   stringr_1.5.1   dplyr_1.1.4    
-## [11] purrr_1.0.2     readr_2.1.5     tidyr_1.3.1     tibble_3.2.1    ggplot2_3.5.1   tidyverse_2.0.0
+##  [1] emmeans_1.10.3  car_3.1-3       carData_3.0-5   here_1.0.2      patchwork_1.2.0 lubridate_1.9.4 forcats_1.0.1   stringr_1.5.2   dplyr_1.1.4     purrr_1.1.0    
+## [11] readr_2.1.5     tidyr_1.3.1     tibble_3.3.0    ggplot2_4.0.0   tidyverse_2.0.0 spmodel_0.11.1 
 ## 
 ## loaded via a namespace (and not attached):
-##  [1] gtable_0.3.5       xfun_0.52          lattice_0.22-6     tzdb_0.4.0         vctrs_0.6.5        tools_4.4.1        generics_0.1.4     parallel_4.4.1    
-##  [9] proxy_0.4-27       highr_0.11         pkgconfig_2.0.3    Matrix_1.7-0       KernSmooth_2.23-24 lifecycle_1.0.4    compiler_4.4.1     farver_2.1.2      
-## [17] textshaping_0.4.0  munsell_0.5.1      litedown_0.7       class_7.3-22       Formula_1.2-5      pillar_1.11.0      classInt_0.4-11    abind_1.4-5       
-## [25] mime_0.12          commonmark_1.9.5   tidyselect_1.2.1   mvtnorm_1.2-5      stringi_1.8.4      sf_1.0-21          labeling_0.4.3     rprojroot_2.0.4   
-## [33] grid_4.4.1         colorspace_2.1-0   cli_3.6.3          magrittr_2.0.3     utf8_1.2.4         e1071_1.7-16       withr_3.0.2        scales_1.3.0      
-## [41] timechange_0.3.0   estimability_1.5.1 ragg_1.3.2         hms_1.1.3          coda_0.19-4.1      evaluate_0.24.0    knitr_1.48         viridisLite_0.4.2 
-## [49] markdown_2.0       rlang_1.1.4        Rcpp_1.0.12        xtable_1.8-4       glue_1.7.0         DBI_1.2.3          rstudioapi_0.16.0  R6_2.5.1          
-## [57] systemfonts_1.1.0  units_0.8-7
+##  [1] gtable_0.3.6       xfun_0.52          lattice_0.22-6     tzdb_0.4.0         vctrs_0.6.5        tools_4.4.1        generics_0.1.4     parallel_4.4.1    
+##  [9] proxy_0.4-27       pkgconfig_2.0.3    Matrix_1.7-0       KernSmooth_2.23-24 RColorBrewer_1.1-3 S7_0.2.0           lifecycle_1.0.4    compiler_4.4.1    
+## [17] farver_2.1.2       textshaping_0.4.0  litedown_0.7       htmltools_0.5.8.1  class_7.3-22       yaml_2.3.10        Formula_1.2-5      pillar_1.11.1     
+## [25] classInt_0.4-11    abind_1.4-5        mime_0.12          commonmark_1.9.5   tidyselect_1.2.1   digest_0.6.36      mvtnorm_1.2-5      stringi_1.8.4     
+## [33] sf_1.0-21          labeling_0.4.3     rprojroot_2.1.1    fastmap_1.2.0      grid_4.4.1         cli_3.6.3          magrittr_2.0.4     utf8_1.2.4        
+## [41] e1071_1.7-16       withr_3.0.2        scales_1.4.0       estimability_1.5.1 timechange_0.3.0   rmarkdown_2.28     ragg_1.5.0         hms_1.1.3         
+## [49] coda_0.19-4.1      evaluate_0.24.0    knitr_1.50         viridisLite_0.4.2  markdown_2.0       rticles_0.27       rlang_1.1.6        Rcpp_1.0.12       
+## [57] xtable_1.8-4       glue_1.7.0         DBI_1.2.3          rstudioapi_0.16.0  R6_2.5.1           systemfonts_1.1.0  units_0.8-7
 ```
 
 ``` r

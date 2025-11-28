@@ -1,11 +1,11 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.28 (TeX Live 2025) (preloaded format=pdflatex 2025.10.7)  26 NOV 2025 16:56
+This is pdfTeX, Version 3.141592653-2.6-1.40.28 (TeX Live 2025) (preloaded format=pdflatex 2025.11.28)  28 NOV 2025 10:24
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
 **manuscript.tex
 (./manuscript.tex
-LaTeX2e <2025-06-01> patch level 1
-L3 programming layer <2025-09-02>
+LaTeX2e <2025-11-01>
+L3 programming layer <2025-11-14>
 (./jss.cls
 Document Class: jss 2021/05/23 3.3 jss class by Achim Zeileis
 (c:/Users/MDUMELLE/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/base/article.cls
@@ -61,7 +61,7 @@ Package xcolor Info: Model `wave' substituted by `hsb' on input line 1372.
 ) (c:/Users/MDUMELLE/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/ae/ae.sty
 Package: ae 2001/02/12 1.3 Almost European Computer Modern
 (c:/Users/MDUMELLE/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/base/fontenc.sty
-Package: fontenc 2024/12/21 v2.1c Standard LaTeX package
+Package: fontenc 2025/07/18 v2.1d Standard LaTeX package
 )) (c:/Users/MDUMELLE/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/fancyvrb/fancyvrb.sty
 Package: fancyvrb 2025/07/28 4.6 verbatim text (tvz,hv)
 \FV@CodeLineNo=\count283
@@ -71,7 +71,7 @@ Package: fancyvrb 2025/07/28 4.6 verbatim text (tvz,hv)
 \FV@StepNumber=\count285
 \FV@OutFile=\write3
 ) (c:/Users/MDUMELLE/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/base/fontenc.sty
-Package: fontenc 2024/12/21 v2.1c Standard LaTeX package
+Package: fontenc 2025/07/18 v2.1d Standard LaTeX package
 LaTeX Font Info:    Trying to load font information for T1+aer on input line 116.
 (c:/Users/MDUMELLE/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/ae/t1aer.fd
 File: t1aer.fd 1997/11/16 Font definitions for T1/aer.
@@ -438,7 +438,7 @@ Package: inputenc 2024/02/08 v1.3d Input encoding file
 \inpenc@prehook=\toks30
 \inpenc@posthook=\toks31
 ) (c:/Users/MDUMELLE/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/amsmath/amsmath.sty
-Package: amsmath 2025/06/16 v2.17y AMS math features
+Package: amsmath 2025/07/09 v2.17z AMS math features
 \@mathmargin=\skip62
 For additional information on amsmath, use the `?' option.
 (c:/Users/MDUMELLE/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/amsmath/amstext.sty
@@ -498,8 +498,8 @@ LaTeX Info: Redefining \Relbar on input line 970.
 \multlinegap=\skip63
 \multlinetaggap=\skip64
 \mathdisplay@stack=\toks36
-LaTeX Info: Redefining \[ on input line 2949.
-LaTeX Info: Redefining \] on input line 2950.
+LaTeX Info: Redefining \[ on input line 2950.
+LaTeX Info: Redefining \] on input line 2951.
 ) (c:/Users/MDUMELLE/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/amsfonts/amsfonts.sty
 Package: amsfonts 2013/01/14 v3.01 Basic AMSFonts support
 \symAMSa=\mathgroup4
@@ -510,7 +510,7 @@ LaTeX Font Info:    Overwriting math alphabet `\mathfrak' in version `bold'
 ) (c:/Users/MDUMELLE/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/amsfonts/amssymb.sty
 Package: amssymb 2013/01/14 v3.01 AMS font symbols
 ) (c:/Users/MDUMELLE/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/tools/bm.sty
-Package: bm 2023/12/19 v1.2f Bold Symbol Support (DPC/FMi)
+Package: bm 2025/10/21 v1.2g Bold Symbol Support (DPC/FMi)
 \symboldoperators=\mathgroup6
 \symboldletters=\mathgroup7
 \symboldsymbols=\mathgroup8
@@ -602,10 +602,11 @@ TextBlockOrigin set to 0pt x 0pt
 ) (c:/Users/MDUMELLE/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/adjustbox/adjustbox.sty
 Package: adjustbox 2025/02/26 v1.3c Adjusting TeX boxes (trim, clip, ...)
 (c:/Users/MDUMELLE/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/xkeyval/xkeyval.sty
-Package: xkeyval 2022/06/16 v2.9 package option processing (HA)
+Package: xkeyval 2025/11/04 v2.10 package option processing (HA)
 (c:/Users/MDUMELLE/AppData/Roaming/TinyTeX/texmf-dist/tex/generic/xkeyval/xkeyval.tex (c:/Users/MDUMELLE/AppData/Roaming/TinyTeX/texmf-dist/tex/generic/xkeyval/xkvutils.tex
 \XKV@toks=\toks39
 \XKV@tempa@toks=\toks40
+\XKV@tempb@toks=\toks41
 )
 \XKV@depth=\count350
 File: xkeyval.tex 2014/12/03 v2.7a key=value parser (HA)
@@ -646,7 +647,7 @@ LaTeX Font Info:    Trying to load font information for T1+lmr on input line 95.
 (c:/Users/MDUMELLE/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/lm/t1lmr.fd
 File: t1lmr.fd 2015/05/01 v1.6.1 Font defs for Latin Modern
 ) (c:/Users/MDUMELLE/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/l3backend/l3backend-pdftex.def
-File: l3backend-pdftex.def 2025-06-09 L3 backend support: PDF output (pdfTeX)
+File: l3backend-pdftex.def 2025-10-09 L3 backend support: PDF output (pdfTeX)
 \l__color_backend_stack_int=\count352
 ) (./manuscript.aux)
 \openout1 = `manuscript.aux'.
@@ -732,8 +733,6 @@ File: t1lmtt.fd 2015/05/01 v1.6.1 Font defs for Latin Modern
 Package caption Info: Begin \AtBeginDocument code.
 Package caption Info: End \AtBeginDocument code.
 \autonum@environmentWidth=\skip65
-
-
 [1
 
 {c:/Users/MDUMELLE/AppData/Roaming/TinyTeX/texmf-var/fonts/map/pdftex/updmap/pdftex.map}{c:/Users/MDUMELLE/AppData/Roaming/TinyTeX/texmf-dist/fonts/enc/dvips/lm/lm-ec.enc}{c:/Users/MDUMELLE/AppData/Roaming/TinyTeX/texmf-dist/fonts/enc/dvips/base/8r.enc} <./jsslogo.jpg>]
@@ -742,29 +741,23 @@ pdfTeX warning (ext4): destination with the same identifier (name{equation.1}) h
                    \relax 
 l.118 \end{align}
                   where for a sample size \(n\), \(f(\cdot)\) is a link
-
-
 Overfull \hbox (5.47499pt too wide) has occurred while \output is active
 \T1/lmr/m/n/10.95 2 []
  []
 
 [2{c:/Users/MDUMELLE/AppData/Roaming/TinyTeX/texmf-dist/fonts/enc/dvips/lm/lm-mathit.enc}{c:/Users/MDUMELLE/AppData/Roaming/TinyTeX/texmf-dist/fonts/enc/dvips/lm/lm-mathsy.enc}{c:/Users/MDUMELLE/AppData/Roaming/TinyTeX/texmf-dist/fonts/enc/dvips/lm/lm-rm.enc}]
-<figures/figure-01.png, id=152, 469.0323pt x 438.6789pt>
-File: figures/figure-01.png Graphic file (type png)
-<use figures/figure-01.png>
-Package pdftex.def Info: figures/figure-01.png  used on input line 194.
+<figures/figure-1.png, id=152, 469.0323pt x 438.6789pt>
+File: figures/figure-1.png Graphic file (type png)
+<use figures/figure-1.png>
+Package pdftex.def Info: figures/figure-1.png  used on input line 194.
 (pdftex.def)             Requested size: 309.85626pt x 289.81679pt.
-
-
 
 Overfull \hbox (5.47499pt too wide) has occurred while \output is active
 [] \T1/lmr/m/n/10.95 3
  []
 
-[3 <./figures/figure-01.png>]
+[3 <./figures/figure-1.png>]
 Underfull \vbox (badness 10000) has occurred while \output is active []
-
-
 
 
 Overfull \hbox (5.47499pt too wide) has occurred while \output is active
@@ -772,284 +765,222 @@ Overfull \hbox (5.47499pt too wide) has occurred while \output is active
  []
 
 [4]
-<figures/figure-02.png, id=244, 469.0323pt x 438.6789pt>
-File: figures/figure-02.png Graphic file (type png)
-<use figures/figure-02.png>
-Package pdftex.def Info: figures/figure-02.png  used on input line 300.
+<figures/figure-2.png, id=244, 469.0323pt x 438.6789pt>
+File: figures/figure-2.png Graphic file (type png)
+<use figures/figure-2.png>
+Package pdftex.def Info: figures/figure-2.png  used on input line 300.
 (pdftex.def)             Requested size: 309.85626pt x 289.81679pt.
-
-
 
 Overfull \hbox (5.47499pt too wide) has occurred while \output is active
 [] \T1/lmr/m/n/10.95 5
  []
 
-[5 <./figures/figure-02.png>]
-
-
+[5 <./figures/figure-2.png>]
 Overfull \hbox (5.47499pt too wide) has occurred while \output is active
 \T1/lmr/m/n/10.95 6 []
  []
 
 [6{c:/Users/MDUMELLE/AppData/Roaming/TinyTeX/texmf-dist/fonts/enc/dvips/lm/lm-mathex.enc}]
-
-
 Overfull \hbox (5.47499pt too wide) has occurred while \output is active
 [] \T1/lmr/m/n/10.95 7
  []
 
 [7]
-
-
 Overfull \hbox (5.47499pt too wide) has occurred while \output is active
 \T1/lmr/m/n/10.95 8 []
  []
 
 [8]
-
-
 Overfull \hbox (5.47499pt too wide) has occurred while \output is active
 [] \T1/lmr/m/n/10.95 9
  []
 
 [9]
-
-
 Overfull \hbox (10.94998pt too wide) has occurred while \output is active
 \T1/lmr/m/n/10.95 10 []
  []
 
 [10]
-<figures/figure-1.png, id=396, 555.0336pt x 361.35pt>
-File: figures/figure-1.png Graphic file (type png)
-<use figures/figure-1.png>
-Package pdftex.def Info: figures/figure-1.png  used on input line 672.
+<figures/figure-3.png, id=394, 555.0336pt x 361.35pt>
+File: figures/figure-3.png Graphic file (type png)
+<use figures/figure-3.png>
+Package pdftex.def Info: figures/figure-3.png  used on input line 673.
 (pdftex.def)             Requested size: 309.85626pt x 201.72604pt.
-
-
 
 Overfull \hbox (10.94998pt too wide) has occurred while \output is active
 [] \T1/lmr/m/n/10.95 11
  []
 
 [11]
-
-
 Overfull \hbox (10.94998pt too wide) has occurred while \output is active
 \T1/lmr/m/n/10.95 12 []
  []
 
-[12 <./figures/figure-1.png>]
-LaTeX Font Info:    Trying to load font information for TS1+lmtt on input line 762.
+[12 <./figures/figure-3.png>]
+LaTeX Font Info:    Trying to load font information for TS1+lmtt on input line 763.
 (c:/Users/MDUMELLE/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/lm/ts1lmtt.fd
 File: ts1lmtt.fd 2015/05/01 v1.6.1 Font defs for Latin Modern
 )
-
-
 Overfull \hbox (10.94998pt too wide) has occurred while \output is active
 [] \T1/lmr/m/n/10.95 13
  []
 
 [13{c:/Users/MDUMELLE/AppData/Roaming/TinyTeX/texmf-dist/fonts/enc/dvips/lm/lm-ts1.enc}]
-
-
 Overfull \hbox (10.94998pt too wide) has occurred while \output is active
 \T1/lmr/m/n/10.95 14 []
  []
 
 [14]
-
-
 Overfull \hbox (10.94998pt too wide) has occurred while \output is active
 [] \T1/lmr/m/n/10.95 15
  []
 
 [15]
-
-
 Overfull \hbox (10.94998pt too wide) has occurred while \output is active
 \T1/lmr/m/n/10.95 16 []
  []
 
 [16]
-<figures/figure-2.png, id=439, 650.43pt x 216.81pt>
-File: figures/figure-2.png Graphic file (type png)
-<use figures/figure-2.png>
-Package pdftex.def Info: figures/figure-2.png  used on input line 1035.
+<figures/figure-4.png, id=436, 650.43pt x 216.81pt>
+File: figures/figure-4.png Graphic file (type png)
+<use figures/figure-4.png>
+Package pdftex.def Info: figures/figure-4.png  used on input line 1035.
 (pdftex.def)             Requested size: 442.65375pt x 147.55455pt.
-<figures/figure-3.png, id=441, 722.7pt x 361.35pt>
-File: figures/figure-3.png Graphic file (type png)
-<use figures/figure-3.png>
-Package pdftex.def Info: figures/figure-3.png  used on input line 1054.
+<figures/figure-5.png, id=438, 722.7pt x 361.35pt>
+File: figures/figure-5.png Graphic file (type png)
+<use figures/figure-5.png>
+Package pdftex.def Info: figures/figure-5.png  used on input line 1054.
 (pdftex.def)             Requested size: 442.65375pt x 221.32744pt.
-
-
 
 Overfull \hbox (10.94998pt too wide) has occurred while \output is active
 [] \T1/lmr/m/n/10.95 17
  []
 
-[17 <./figures/figure-2.png>]
-
-
+[17 <./figures/figure-4.png>]
 Overfull \hbox (10.94998pt too wide) has occurred while \output is active
 \T1/lmr/m/n/10.95 18 []
  []
 
-[18 <./figures/figure-3.png>]
-<figures/figure-4.png, id=455, 555.0336pt x 361.35pt>
-File: figures/figure-4.png Graphic file (type png)
-<use figures/figure-4.png>
-Package pdftex.def Info: figures/figure-4.png  used on input line 1115.
+[18 <./figures/figure-5.png>]
+<figures/figure-6.png, id=452, 555.0336pt x 361.35pt>
+File: figures/figure-6.png Graphic file (type png)
+<use figures/figure-6.png>
+Package pdftex.def Info: figures/figure-6.png  used on input line 1115.
 (pdftex.def)             Requested size: 309.85626pt x 201.72604pt.
-
-
 
 Overfull \hbox (10.94998pt too wide) has occurred while \output is active
 [] \T1/lmr/m/n/10.95 19
  []
 
-[19 <./figures/figure-4.png>]
-<figures/figure-5.png, id=464, 650.43pt x 216.81pt>
-File: figures/figure-5.png Graphic file (type png)
-<use figures/figure-5.png>
-Package pdftex.def Info: figures/figure-5.png  used on input line 1176.
+[19 <./figures/figure-6.png>]
+<figures/figure-7.png, id=461, 650.43pt x 216.81pt>
+File: figures/figure-7.png Graphic file (type png)
+<use figures/figure-7.png>
+Package pdftex.def Info: figures/figure-7.png  used on input line 1176.
 (pdftex.def)             Requested size: 442.65375pt x 147.55455pt.
-
-
 
 Overfull \hbox (10.94998pt too wide) has occurred while \output is active
 \T1/lmr/m/n/10.95 20 []
  []
 
-[20 <./figures/figure-5.png>]
-<figures/figure-6.png, id=481, 555.0336pt x 361.35pt>
-File: figures/figure-6.png Graphic file (type png)
-<use figures/figure-6.png>
-Package pdftex.def Info: figures/figure-6.png  used on input line 1250.
+[20 <./figures/figure-7.png>]
+<figures/figure-8.png, id=478, 555.0336pt x 361.35pt>
+File: figures/figure-8.png Graphic file (type png)
+<use figures/figure-8.png>
+Package pdftex.def Info: figures/figure-8.png  used on input line 1250.
 (pdftex.def)             Requested size: 309.85626pt x 201.72604pt.
-
-
 
 Overfull \hbox (10.94998pt too wide) has occurred while \output is active
 [] \T1/lmr/m/n/10.95 21
  []
 
 [21]
-
-
 Overfull \hbox (10.94998pt too wide) has occurred while \output is active
 \T1/lmr/m/n/10.95 22 []
  []
 
-[22 <./figures/figure-6.png>]
-<figures/figure-7.png, id=498, 722.7pt x 361.35pt>
-File: figures/figure-7.png Graphic file (type png)
-<use figures/figure-7.png>
-Package pdftex.def Info: figures/figure-7.png  used on input line 1343.
+[22 <./figures/figure-8.png>]
+<figures/figure-9.png, id=495, 722.7pt x 361.35pt>
+File: figures/figure-9.png Graphic file (type png)
+<use figures/figure-9.png>
+Package pdftex.def Info: figures/figure-9.png  used on input line 1344.
 (pdftex.def)             Requested size: 442.65375pt x 221.32744pt.
-
-
 
 Overfull \hbox (10.94998pt too wide) has occurred while \output is active
 [] \T1/lmr/m/n/10.95 23
  []
 
-[23 <./figures/figure-7.png>]
-
-
+[23 <./figures/figure-9.png>]
 Overfull \hbox (10.94998pt too wide) has occurred while \output is active
 \T1/lmr/m/n/10.95 24 []
  []
 
 [24]
-
-
 Overfull \hbox (10.94998pt too wide) has occurred while \output is active
 [] \T1/lmr/m/n/10.95 25
  []
 
 [25]
-<figures/figure-8.png, id=517, 650.43pt x 216.81pt>
-File: figures/figure-8.png Graphic file (type png)
-<use figures/figure-8.png>
-Package pdftex.def Info: figures/figure-8.png  used on input line 1555.
+<figures/figure-10.png, id=514, 650.43pt x 216.81pt>
+File: figures/figure-10.png Graphic file (type png)
+<use figures/figure-10.png>
+Package pdftex.def Info: figures/figure-10.png  used on input line 1556.
 (pdftex.def)             Requested size: 442.65375pt x 147.55455pt.
-
-
 
 Overfull \hbox (10.94998pt too wide) has occurred while \output is active
 \T1/lmr/m/n/10.95 26 []
  []
 
 [26]
-
-
 Overfull \hbox (10.94998pt too wide) has occurred while \output is active
 [] \T1/lmr/m/n/10.95 27
  []
 
-[27 <./figures/figure-8.png>]
-<figures/figure-10.png, id=542, 555.0336pt x 361.35pt>
-File: figures/figure-10.png Graphic file (type png)
-<use figures/figure-10.png>
-Package pdftex.def Info: figures/figure-10.png  used on input line 1692.
+[27 <./figures/figure-10.png>]
+<figures/figure-11.png, id=539, 555.0336pt x 361.35pt>
+File: figures/figure-11.png Graphic file (type png)
+<use figures/figure-11.png>
+Package pdftex.def Info: figures/figure-11.png  used on input line 1691.
 (pdftex.def)             Requested size: 309.85626pt x 201.72604pt.
-
-
 
 Overfull \hbox (10.94998pt too wide) has occurred while \output is active
 \T1/lmr/m/n/10.95 28 []
  []
 
 [28]
-
-
 Overfull \hbox (10.94998pt too wide) has occurred while \output is active
 [] \T1/lmr/m/n/10.95 29
  []
 
-[29 <./figures/figure-10.png>]
-
-
+[29 <./figures/figure-11.png>]
 Overfull \hbox (10.94998pt too wide) has occurred while \output is active
 \T1/lmr/m/n/10.95 30 []
  []
 
 [30] (./manuscript.bbl
-
-
 Overfull \hbox (10.94998pt too wide) has occurred while \output is active
 [] \T1/lmr/m/n/10.95 31
  []
 
 [31]
-
-
 Overfull \hbox (10.94998pt too wide) has occurred while \output is active
 \T1/lmr/m/n/10.95 32 []
  []
 
 [32]
-
-
 Overfull \hbox (10.94998pt too wide) has occurred while \output is active
 [] \T1/lmr/m/n/10.95 33
  []
 
 [33]
-
-
 Overfull \hbox (10.94998pt too wide) has occurred while \output is active
 \T1/lmr/m/n/10.95 34 []
  []
 
 [34])
-Underfull \hbox (badness 10000) in paragraph at lines 1856--1856
+Underfull \hbox (badness 10000) in paragraph at lines 1853--1853
 
  []
-
-
 
 
 Overfull \hbox (10.94998pt too wide) has occurred while \output is active
@@ -1058,9 +989,7 @@ Overfull \hbox (10.94998pt too wide) has occurred while \output is active
 
 [35]
 LaTeX Font Info:    Font shape `T1/pzc/m/n' in size <13> not available
-(Font)              Font shape `T1/pzc/m/it' tried instead on input line 1856.
-
-
+(Font)              Font shape `T1/pzc/m/it' tried instead on input line 1853.
 
 Overfull \hbox (10.94998pt too wide) has occurred while \output is active
 \T1/lmr/m/n/10.95 36 []
@@ -1068,25 +997,25 @@ Overfull \hbox (10.94998pt too wide) has occurred while \output is active
 
 [36] (./manuscript.aux)
  ***********
-LaTeX2e <2025-06-01> patch level 1
-L3 programming layer <2025-09-02>
+LaTeX2e <2025-11-01>
+L3 programming layer <2025-11-14>
  ***********
 Package rerunfilecheck Info: File `manuscript.out' has not changed.
 (rerunfilecheck)             Checksum: 8300323B95E4C397E2E60FCD194C8940;4728.
  ) 
 Here is how much of TeX's memory you used:
- 25951 strings out of 469668
- 490981 string characters out of 5473208
- 866855 words of memory out of 5000000
- 53756 multiletter control sequences out of 15000+600000
+ 25972 strings out of 469458
+ 491453 string characters out of 5465794
+ 870493 words of memory out of 5000000
+ 53984 multiletter control sequences out of 15000+600000
  730013 words of font info for 100 fonts, out of 8000000 for 9000
  36 hyphenation exceptions out of 8191
- 99i,14n,101p,692b,878s stack positions out of 10000i,1000n,20000p,200000b,200000s
+ 99i,14n,108p,674b,880s stack positions out of 10000i,1000n,20000p,200000b,200000s
 <c:/Users/MDUMELLE/AppData/Roaming/TinyTeX/texmf-dist/fonts/type1/public/lm/lmb10.pfb><c:/Users/MDUMELLE/AppData/Roaming/TinyTeX/texmf-dist/fonts/type1/public/lm/lmbo10.pfb><c:/Users/MDUMELLE/AppData/Roaming/TinyTeX/texmf-dist/fonts/type1/public/lm/lmbx10.pfb><c:/Users/MDUMELLE/AppData/Roaming/TinyTeX/texmf-dist/fonts/type1/public/lm/lmbx12.pfb><c:/Users/MDUMELLE/AppData/Roaming/TinyTeX/texmf-dist/fonts/type1/public/lm/lmbx8.pfb><c:/Users/MDUMELLE/AppData/Roaming/TinyTeX/texmf-dist/fonts/type1/public/lm/lmex10.pfb><c:/Users/MDUMELLE/AppData/Roaming/TinyTeX/texmf-dist/fonts/type1/public/lm/lmmi10.pfb><c:/Users/MDUMELLE/AppData/Roaming/TinyTeX/texmf-dist/fonts/type1/public/lm/lmmi6.pfb><c:/Users/MDUMELLE/AppData/Roaming/TinyTeX/texmf-dist/fonts/type1/public/lm/lmmi8.pfb><c:/Users/MDUMELLE/AppData/Roaming/TinyTeX/texmf-dist/fonts/type1/public/lm/lmmib10.pfb><c:/Users/MDUMELLE/AppData/Roaming/TinyTeX/texmf-dist/fonts/type1/public/lm/lmr10.pfb><c:/Users/MDUMELLE/AppData/Roaming/TinyTeX/texmf-dist/fonts/type1/public/lm/lmr8.pfb><c:/Users/MDUMELLE/AppData/Roaming/TinyTeX/texmf-dist/fonts/type1/public/lm/lmri10.pfb><c:/Users/MDUMELLE/AppData/Roaming/TinyTeX/texmf-dist/fonts/type1/public/lm/lmro10.pfb><c:/Users/MDUMELLE/AppData/Roaming/TinyTeX/texmf-dist/fonts/type1/public/lm/lmss10.pfb><c:/Users/MDUMELLE/AppData/Roaming/TinyTeX/texmf-dist/fonts/type1/public/lm/lmss8.pfb><c:/Users/MDUMELLE/AppData/Roaming/TinyTeX/texmf-dist/fonts/type1/public/lm/lmssbx10.pfb><c:/Users/MDUMELLE/AppData/Roaming/TinyTeX/texmf-dist/fonts/type1/public/lm/lmsso10.pfb><c:/Users/MDUMELLE/AppData/Roaming/TinyTeX/texmf-dist/fonts/type1/public/lm/lmsy10.pfb><c:/Users/MDUMELLE/AppData/Roaming/TinyTeX/texmf-dist/fonts/type1/public/lm/lmsy6.pfb><c:/Users/MDUMELLE/AppData/Roaming/TinyTeX/texmf-dist/fonts/type1/public/lm/lmsy8.pfb><c:/Users/MDUMELLE/AppData/Roaming/TinyTeX/texmf-dist/fonts/type1/public/lm/lmtt10.pfb><c:/Users/MDUMELLE/AppData/Roaming/TinyTeX/texmf-dist/fonts/type1/public/lm/lmtto10.pfb><c:/Users/MDUMELLE/AppData/Roaming/TinyTeX/texmf-dist/fonts/type1/urw/zapfchan/uzcmi8a.pfb>
-Output written on manuscript.pdf (36 pages, 2450181 bytes).
+Output written on manuscript.pdf (36 pages, 2449466 bytes).
 PDF statistics:
  798 PDF objects out of 1000 (max. 8388607)
  688 compressed objects within 7 object streams
- 156 named destinations out of 1000 (max. 500000)
+ 158 named destinations out of 1000 (max. 500000)
  225 words of extra memory for PDF output out of 10000 (max. 10000000)
 

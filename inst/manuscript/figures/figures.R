@@ -24,7 +24,7 @@ cor_range <- ggplot(dat, aes(x = Distance, y = Correlation, color = Range, linet
   theme_bw(base_size = 14)
 cor_range
 ggsave(
-  filename = paste0(fig_path, "/figure-01.png"),
+  filename = paste0(fig_path, "/figure-1.png"),
   plot = cor_range,
   dpi = 300,
   height = 6.07,
@@ -32,7 +32,7 @@ ggsave(
 )
 
 #######################
-######## Figure 1
+######## Figure 2
 #######################
 h <- seq(0, 1, length.out = 1000)
 range <- 0.5
@@ -46,7 +46,7 @@ cor_type <- ggplot(dat, aes(x = Distance, y = Correlation, color = Type, linetyp
   theme_bw(base_size = 14)
 cor_type
 ggsave(
-  filename = paste0(fig_path, "/figure-02.png"),
+  filename = paste0(fig_path, "/figure-2.png"),
   plot = cor_type,
   dpi = 300,
   height = 6.07,
@@ -55,7 +55,7 @@ ggsave(
 
 
 #######################
-######## Figure 1
+######## Figure 3
 #######################
 
 okabe <- c("#E69F00", "#56B4E9", "#009E73", "#F0E442", "#0072B2", "#D55E00", "#CC79A7")
@@ -74,7 +74,7 @@ obs_pred_presence <- ggplot(moose_comb, aes(color = presence, shape = samp)) +
   geom_sf(size = 2, data = moose_comb %>% filter(samp == "no"), color = "red", shape = 17)
 obs_pred_presence
 ggsave(
-  filename = paste0(fig_path, "/figure-1.png"),
+  filename = paste0(fig_path, "/figure-3.png"),
   plot = obs_pred_presence,
   dpi = 300,
   height = 5,
@@ -82,7 +82,7 @@ ggsave(
 )
 
 #######################
-######## Figure 2
+######## Figure 4
 #######################
 
 
@@ -110,7 +110,7 @@ p2 <- ggplot(spbin_aug, aes(color = .std.resid)) +
 
 p1 + p2
 ggsave(
-  filename = paste0(fig_path, "/figure-2.png"),
+  filename = paste0(fig_path, "/figure-4.png"),
   plot = p1 + p2,
   dpi = 300,
   height = 3,
@@ -118,11 +118,11 @@ ggsave(
 )
 
 ########################
-####### Figure 3
+####### Figure 5
 ########################
 
 
-png(paste0(fig_path, "/figure-3.png"), height = 5, width = 10, units = "in", res = 300)
+png(paste0(fig_path, "/figure-5.png"), height = 5, width = 10, units = "in", res = 300)
 par(mfrow = c(1, 2))
 plot(spbin, which = 4)
 plot(spbin, which = 7)
@@ -131,7 +131,7 @@ dev.off()
 
 
 ########################
-####### Figure 4
+####### Figure 6
 ########################
 
 preds_aug <- augment(
@@ -149,9 +149,9 @@ obs_pred_fitted <- ggplot(comb_aug, aes(color = .fitted, shape = Type)) +
   scale_y_continuous(breaks = seq(62.6, 63.6, length.out = 5)) +
   scale_x_continuous(breaks = seq(-148.5, -146, length.out = 3)) +
   theme_bw()
-
+obs_pred_fitted
 ggsave(
-  filename = paste0(fig_path, "/figure-4.png"),
+  filename = paste0(fig_path, "/figure-6.png"),
   plot = obs_pred_fitted,
   dpi = 300,
   height = 5,
@@ -159,7 +159,7 @@ ggsave(
 )
 
 ########################
-####### Figure 5
+####### Figure 7
 ########################
 
 p1 <- ggplot(preds_aug, aes(color = .lower)) +
@@ -178,7 +178,7 @@ p2 <- ggplot(preds_aug, aes(color = .upper)) +
 
 p1 + p2
 ggsave(
-  filename = paste0(fig_path, "/figure-5.png"),
+  filename = paste0(fig_path, "/figure-7.png"),
   plot = p1 + p2,
   dpi = 300,
   height = 3,
@@ -186,7 +186,7 @@ ggsave(
 )
 
 ########################
-####### Figure 6
+####### Figure 8
 ########################
 
 obs_pred_count <- ggplot(moose_comb, aes(color = count, shape = samp)) +
@@ -199,7 +199,7 @@ obs_pred_count <- ggplot(moose_comb, aes(color = count, shape = samp)) +
   geom_sf(size = 2, data = moose_comb %>% filter(samp == "no"), color = "red", shape = 17)
 obs_pred_count
 ggsave(
-  filename = paste0(fig_path, "/figure-6.png"),
+  filename = paste0(fig_path, "/figure-8.png"),
   plot = obs_pred_count,
   dpi = 300,
   height = 5,
@@ -207,7 +207,7 @@ ggsave(
 )
 
 ########################
-####### Figure 7
+####### Figure 9
 ########################
 
 spnbin <- spglm(
@@ -220,7 +220,7 @@ spnbin <- spglm(
 
 spnbin_iso <- update(spnbin, anisotropy = FALSE)
 
-png(paste0(fig_path, "/figure-7.png"), height = 5, width = 10, units = "in", res = 300)
+png(paste0(fig_path, "/figure-9.png"), height = 5, width = 10, units = "in", res = 300)
 par(mfrow = c(1, 2))
 plot(spnbin_iso, which = 8)
 plot(spnbin, which = 8)
@@ -228,28 +228,27 @@ par(mfrow = c(1, 1))
 dev.off()
 
 ########################
-####### Figure 8
+####### Figure 10
 ########################
-seal$trend <- seal$log_trend
-seal$sampled <- factor(if_else(is.na(seal$trend), "no", "yes"), levels = c("yes", "no"))
+seal$sampled <- factor(if_else(is.na(seal$log_trend), "no", "yes"), levels = c("yes", "no"))
 p1 <- ggplot(seal, aes(fill = sampled, color = stock)) +
-  geom_sf(size = 2) +
+  geom_sf(size = 0.25) +
   theme_bw(base_size = 14) +
   scale_fill_manual(name = "sampled", values = okabe[1:2], breaks = c("yes", "no"), labels = c("yes", "no")) +
   scale_color_manual(name = "stock", values = c("grey40", "grey80"), breaks = c(8, 10), labels = c(8, 10)) +
   scale_y_continuous(breaks = seq(57, 59, length.out = 5)) +
   scale_x_continuous(breaks = seq(-139, -134, length.out = 3))
 
-p2 <- ggplot(seal, aes(fill = trend)) +
-  geom_sf(size = 2) +
+p2 <- ggplot(seal, aes(fill = log_trend)) +
+  geom_sf(size = 0.25) +
   theme_bw(base_size = 14) +
-  scale_fill_viridis_c(option = "D", begin = 0.5, limits = c(min(seal$trend), max(seal$trend))) +
+  scale_fill_viridis_c(name = "logtrend", option = "D", begin = 0.5, limits = c(min(seal$log_trend), max(seal$log_trend))) +
   scale_y_continuous(breaks = seq(57, 59, length.out = 5)) +
   scale_x_continuous(breaks = seq(-139, -134, length.out = 3))
 
 p1 + p2
 ggsave(
-  filename = paste0(fig_path, "/figure-8.png"),
+  filename = paste0(fig_path, "/figure-10.png"),
   plot = p1 + p2,
   dpi = 300,
   height = 3,
@@ -258,7 +257,7 @@ ggsave(
 
 
 ########################
-####### Figure 10
+####### Figure 11
 ########################
 
 texas$samp <- factor(if_else(is.na(texas$turnout), "no", "yes"), levels = c("yes", "no"))
@@ -269,9 +268,9 @@ obs_prop2 <- ggplot(texas, aes(color = turnout, shape = samp)) +
   theme_bw(base_size = 14) +
   scale_x_continuous(breaks = seq(-94, -106, length.out = 3)) +
   geom_sf(size = 2, data = texas %>% filter(samp == "no"), color = "red", shape = 17)
-
+obs_prop2
 ggsave(
-  filename = paste0(fig_path, "/figure-10.png"),
+  filename = paste0(fig_path, "/figure-11.png"),
   plot = obs_prop2,
   dpi = 300,
   height = 5,
