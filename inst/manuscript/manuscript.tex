@@ -455,9 +455,9 @@ conditioning on \(\mathbf{w}\) as if it were observed and leveraging the
 laws of total expectation and variance. Based on asymptotic properties
 of (restricted) maximum likelihood estimators
 \citep{cressie1993asymptotic}, we may assume that given \(\mathbf{w}\),
-\(\hat{\mathbf{w}}\) has mean \(\mathbf{w}\) and variance equal to
-\(-\mathbf{H}^{-1}\), the negative inverse Hessian (i.e., the inverse
-observed information matrix). Thus it follows that
+\(\hat{\mathbf{w}}\) has mean \(\mathbf{w}\) and variance approximately
+equal to \(-\mathbf{H}^{-1}\), the negative inverse Hessian (i.e., the
+inverse observed information matrix). Thus it follows that
 \(\text{E}(\hat{\mathbf{w}})\) is given by \begin{align}
   \text{E}(\hat{\mathbf{w}}) = \text{E}(\text{E}(\hat{\mathbf{w}} | \mathbf{w}))
    = \text{E}(\mathbf{w}) 
@@ -465,7 +465,7 @@ observed information matrix). Thus it follows that
 \end{align} and \(\text{Var}(\hat{\mathbf{w}})\) is given by
 \begin{align}
   \text{Var}(\hat{\mathbf{w}}) & = \text{E}(\text{Var}(\hat{\mathbf{w}} | \mathbf{w})) + \text{Var}(\text{E}(\hat{\mathbf{w}} | \mathbf{w})) \\
-  & = \text{E}(-\mathbf{H}^{-1}) + \text{Var}(\mathbf{w})\\
+  & \approx \text{E}(-\mathbf{H}^{-1}) + \text{Var}(\mathbf{w})\\
   & = -\mathbf{H}^{-1} + \boldsymbol{\Sigma}
 \end{align} Putting this all together, it follows that
 \(\hat{\boldsymbol{\beta}}\) is unbiased for \(\boldsymbol{\beta}\):
