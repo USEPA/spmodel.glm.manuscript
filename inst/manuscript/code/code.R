@@ -167,7 +167,7 @@ spbeta_auto <- spgautor(
 AIC(spbeta_geo, spbeta_auto)
 
 spbeta_full_ml <- update(spbeta_geo, estmethod = "ml")
-spbeta_reduced_ml <- update(spbeta_geo, estmethod = "ml", formula = turnout ~ 1)
+spbeta_reduced_ml <- update(spbeta_full_ml, formula = turnout ~ 1)
 anova(spbeta_full_ml, spbeta_reduced_ml)
 
 AIC(spbeta_full_ml, spbeta_reduced_ml)
@@ -249,20 +249,21 @@ spbin <- spglm(
 spbin_aug <- augment(spbin)
 
 p1 <- ggplot(spbin_aug, aes(color = .hat)) +
-  geom_sf(size = 1) +
+  geom_sf(size = 2) +
   scale_color_viridis_c(option = "E", name = ".hat") +
   scale_y_continuous(breaks = seq(62.6, 63.6, length.out = 5)) +
   scale_x_continuous(breaks = seq(-148.5, -146, length.out = 3)) +
   theme_bw(base_size = 14)
 
 p2 <- ggplot(spbin_aug, aes(color = .std.resid)) +
-  geom_sf(size = 1) +
+  geom_sf(size = 2) +
   scale_color_viridis_c(option = "A", limits = c(-2, 2)) +
   scale_y_continuous(breaks = seq(62.6, 63.6, length.out = 5)) +
   scale_x_continuous(breaks = seq(-148.5, -146, length.out = 3)) +
   theme_bw(base_size = 14)
 
-p1 + p2
+p1
+p2
 
 #==========================================#
 # Figure 5 ####
@@ -299,20 +300,21 @@ figure6
 #==========================================#
 
 p1 <- ggplot(preds_aug, aes(color = .lower)) +
-  geom_sf(pch = 17) +
+  geom_sf(size = 2, pch = 17) +
   scale_color_viridis_c(option = "H", name = "Lower", limits = c(0, 1)) +
   scale_y_continuous(breaks = seq(62.6, 63.6, length.out = 5)) +
   scale_x_continuous(breaks = seq(-148.5, -146, length.out = 3)) +
   theme_bw(base_size = 14)
 
 p2 <- ggplot(preds_aug, aes(color = .upper)) +
-  geom_sf(pch = 17) +
+  geom_sf(size = 2, pch = 17) +
   scale_color_viridis_c(option = "H", name = "Upper", limits = c(0, 1)) +
   scale_y_continuous(breaks = seq(62.6, 63.6, length.out = 5)) +
   scale_x_continuous(breaks = seq(-148.5, -146, length.out = 3)) +
   theme_bw(base_size = 14)
 
-p1 + p2
+p1
+p2
 
 #==========================================#
 # Figure 8 ####
@@ -352,7 +354,7 @@ plot(spnbin, which = 8)
 
 seal$sampled <- factor(if_else(is.na(seal$log_trend), "no", "yes"), levels = c("yes", "no"))
 p1 <- ggplot(seal, aes(fill = sampled, color = stock)) +
-  geom_sf(size = 0.25) +
+  geom_sf(size = 1) +
   theme_bw(base_size = 14) +
   scale_fill_manual(name = "sampled", values = okabe[1:2], breaks = c("yes", "no"), labels = c("yes", "no")) +
   scale_color_manual(name = "stock", values = c("grey40", "grey80"), breaks = c(8, 10), labels = c(8, 10)) +
@@ -360,13 +362,14 @@ p1 <- ggplot(seal, aes(fill = sampled, color = stock)) +
   scale_x_continuous(breaks = seq(-139, -134, length.out = 3))
 
 p2 <- ggplot(seal, aes(fill = log_trend)) +
-  geom_sf(size = 0.25) +
+  geom_sf(size = 1) +
   theme_bw(base_size = 14) +
   scale_fill_viridis_c(name = "logtrend", option = "D", begin = 0.5, limits = c(min(seal$log_trend), max(seal$log_trend))) +
   scale_y_continuous(breaks = seq(57, 59, length.out = 5)) +
   scale_x_continuous(breaks = seq(-139, -134, length.out = 3))
 
-p1 + p2
+p1
+p2
 
 #==========================================#
 # Figure 11 ####

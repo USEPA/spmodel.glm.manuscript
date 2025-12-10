@@ -452,7 +452,21 @@ anova(spgam)
 
 ``` r
 library("car", verbose = FALSE)
+```
 
+```
+## Warning: package 'car' was built under R version 4.4.3
+```
+
+```
+## Loading required package: carData
+```
+
+```
+## Warning: package 'carData' was built under R version 4.4.3
+```
+
+``` r
 vif(spgam)
 ```
 
@@ -466,7 +480,15 @@ vif(spgam)
 
 ``` r
 library("emmeans", verbose = FALSE)
+```
 
+```
+## Welcome to emmeans.
+## Caution: You lose important information if you filter this package's results.
+## See '? untidy'
+```
+
+``` r
 pairs(emmeans(spgam, ~ state | temp))
 ```
 
@@ -545,24 +567,24 @@ seal
 ```
 
 ```
-## Simple feature collection with 149 features and 4 fields
+## Simple feature collection with 149 features and 2 fields
 ## Geometry type: POLYGON
 ## Dimension:     XY
 ## Bounding box:  xmin: 913618.8 ymin: 855730.2 xmax: 1221859 ymax: 1145054
 ## Projected CRS: NAD83 / Alaska Albers
-## # A tibble: 149 × 5
-##    log_trend stock                                                                                     geometry    trend sampled
-##  *     <dbl> <fct>                                                                                <POLYGON [m]>    <dbl> <fct>  
-##  1  NA       8     ((1035002 1054710, 1035002 1054542, 1035002 1053542, 1035002 1052542, 1035002 1051624, 10... NA       no     
-##  2  -0.282   8     ((1037002 1039492, 1037006 1039490, 1037017 1039492, 1037035 1039496, 1037045 1039499, 10... -0.282   yes    
-##  3  -0.00121 8     ((1070158 1030216, 1070185 1030207, 1070187 1030207, 1070211 1030207, 1070275 1030205, 10... -0.00121 yes    
-##  4   0.0354  8     ((1054906 1034826, 1054931 1034821, 1054936 1034822, 1055001 1034828, 1055002 1034828, 10...  0.0354  yes    
-##  5  -0.0160  8     ((1025142 1056940, 1025184 1056889, 1025222 1056836, 1025256 1056780, 1025275 1056747, 10... -0.0160  yes    
-##  6   0.0872  8     ((1026035 1044623, 1026037 1044605, 1026072 1044610, 1026083 1044612, 1026112 1044616, 10...  0.0872  yes    
-##  7  -0.266   8     ((1100345 1060709, 1100287 1060706, 1100228 1060706, 1100170 1060711, 1100112 1060718, 11... -0.266   yes    
-##  8   0.0743  8     ((1030247 1029637, 1030248 1029637, 1030265 1029642, 1030328 1029656, 1030393 1029667, 10...  0.0743  yes    
-##  9  NA       8     ((1043093 1020553, 1043097 1020550, 1043101 1020550, 1043166 1020557, 1043231 1020559, 10... NA       no     
-## 10  -0.00961 8     ((1116002 1024542, 1116002 1023542, 1116002 1022542, 1116002 1021554, 1115988 1021564, 11... -0.00961 yes    
+## # A tibble: 149 × 3
+##    log_trend stock                                                                                     geometry
+##  *     <dbl> <fct>                                                                                <POLYGON [m]>
+##  1  NA       8     ((1035002 1054710, 1035002 1054542, 1035002 1053542, 1035002 1052542, 1035002 1051624, 10...
+##  2  -0.282   8     ((1037002 1039492, 1037006 1039490, 1037017 1039492, 1037035 1039496, 1037045 1039499, 10...
+##  3  -0.00121 8     ((1070158 1030216, 1070185 1030207, 1070187 1030207, 1070211 1030207, 1070275 1030205, 10...
+##  4   0.0354  8     ((1054906 1034826, 1054931 1034821, 1054936 1034822, 1055001 1034828, 1055002 1034828, 10...
+##  5  -0.0160  8     ((1025142 1056940, 1025184 1056889, 1025222 1056836, 1025256 1056780, 1025275 1056747, 10...
+##  6   0.0872  8     ((1026035 1044623, 1026037 1044605, 1026072 1044610, 1026083 1044612, 1026112 1044616, 10...
+##  7  -0.266   8     ((1100345 1060709, 1100287 1060706, 1100228 1060706, 1100170 1060711, 1100112 1060718, 11...
+##  8   0.0743  8     ((1030247 1029637, 1030248 1029637, 1030265 1029642, 1030328 1029656, 1030393 1029667, 10...
+##  9  NA       8     ((1043093 1020553, 1043097 1020550, 1043101 1020550, 1043166 1020557, 1043231 1020559, 10...
+## 10  -0.00961 8     ((1116002 1024542, 1116002 1023542, 1116002 1022542, 1116002 1021554, 1115988 1021564, 11...
 ## # ℹ 139 more rows
 ```
 
@@ -610,7 +632,7 @@ AIC(spbeta_geo, spbeta_auto)
 
 ``` r
 spbeta_full_ml <- update(spbeta_geo, estmethod = "ml")
-spbeta_reduced_ml <- update(spbeta_geo, estmethod = "ml", formula = turnout ~ 1)
+spbeta_reduced_ml <- update(spbeta_full_ml, formula = turnout ~ 1)
 anova(spbeta_full_ml, spbeta_reduced_ml)
 ```
 
@@ -640,7 +662,40 @@ AIC(spbeta_full_ml, spbeta_reduced_ml)
 #=========================================================#
 
 library("ggplot2", verbose = FALSE)
+```
+
+```
+## Warning: package 'ggplot2' was built under R version 4.4.3
+```
+
+``` r
 library("dplyr", verbose = FALSE)
+```
+
+```
+## 
+## Attaching package: 'dplyr'
+```
+
+```
+## The following object is masked from 'package:car':
+## 
+##     recode
+```
+
+```
+## The following objects are masked from 'package:stats':
+## 
+##     filter, lag
+```
+
+```
+## The following objects are masked from 'package:base':
+## 
+##     intersect, setdiff, setequal, union
+```
+
+``` r
 library("patchwork")
 
 okabe <- c("#E69F00", "#56B4E9", "#009E73", "#F0E442", "#0072B2", "#D55E00", "#CC79A7")
@@ -724,23 +779,29 @@ spbin <- spglm(
 spbin_aug <- augment(spbin)
 
 p1 <- ggplot(spbin_aug, aes(color = .hat)) +
-  geom_sf(size = 1) +
+  geom_sf(size = 2) +
   scale_color_viridis_c(option = "E", name = ".hat") +
   scale_y_continuous(breaks = seq(62.6, 63.6, length.out = 5)) +
   scale_x_continuous(breaks = seq(-148.5, -146, length.out = 3)) +
   theme_bw(base_size = 14)
 
 p2 <- ggplot(spbin_aug, aes(color = .std.resid)) +
-  geom_sf(size = 1) +
+  geom_sf(size = 2) +
   scale_color_viridis_c(option = "A", limits = c(-2, 2)) +
   scale_y_continuous(breaks = seq(62.6, 63.6, length.out = 5)) +
   scale_x_continuous(breaks = seq(-148.5, -146, length.out = 3)) +
   theme_bw(base_size = 14)
 
-p1 + p2
+p1
 ```
 
 ![plot of chunk unnamed-chunk-1](figure/unnamed-chunk-1-4.png)
+
+``` r
+p2
+```
+
+![plot of chunk unnamed-chunk-1](figure/unnamed-chunk-1-5.png)
 
 ``` r
 #==========================================#
@@ -751,13 +812,13 @@ p1 + p2
 plot(spbin, which = 4)
 ```
 
-![plot of chunk unnamed-chunk-1](figure/unnamed-chunk-1-5.png)
+![plot of chunk unnamed-chunk-1](figure/unnamed-chunk-1-6.png)
 
 ``` r
 plot(spbin, which = 7)
 ```
 
-![plot of chunk unnamed-chunk-1](figure/unnamed-chunk-1-6.png)
+![plot of chunk unnamed-chunk-1](figure/unnamed-chunk-1-7.png)
 
 ``` r
 #==========================================#
@@ -782,7 +843,7 @@ figure6 <- ggplot(comb_aug, aes(color = .fitted, shape = Type)) +
 figure6
 ```
 
-![plot of chunk unnamed-chunk-1](figure/unnamed-chunk-1-7.png)
+![plot of chunk unnamed-chunk-1](figure/unnamed-chunk-1-8.png)
 
 ``` r
 #==========================================#
@@ -790,23 +851,29 @@ figure6
 #==========================================#
 
 p1 <- ggplot(preds_aug, aes(color = .lower)) +
-  geom_sf(pch = 17) +
+  geom_sf(size = 2, pch = 17) +
   scale_color_viridis_c(option = "H", name = "Lower", limits = c(0, 1)) +
   scale_y_continuous(breaks = seq(62.6, 63.6, length.out = 5)) +
   scale_x_continuous(breaks = seq(-148.5, -146, length.out = 3)) +
   theme_bw(base_size = 14)
 
 p2 <- ggplot(preds_aug, aes(color = .upper)) +
-  geom_sf(pch = 17) +
+  geom_sf(size = 2, pch = 17) +
   scale_color_viridis_c(option = "H", name = "Upper", limits = c(0, 1)) +
   scale_y_continuous(breaks = seq(62.6, 63.6, length.out = 5)) +
   scale_x_continuous(breaks = seq(-148.5, -146, length.out = 3)) +
   theme_bw(base_size = 14)
 
-p1 + p2
+p1
 ```
 
-![plot of chunk unnamed-chunk-1](figure/unnamed-chunk-1-8.png)
+![plot of chunk unnamed-chunk-1](figure/unnamed-chunk-1-9.png)
+
+``` r
+p2
+```
+
+![plot of chunk unnamed-chunk-1](figure/unnamed-chunk-1-10.png)
 
 ``` r
 #==========================================#
@@ -824,7 +891,7 @@ figure8 <- ggplot(moose_comb, aes(color = count, shape = samp)) +
 figure8
 ```
 
-![plot of chunk unnamed-chunk-1](figure/unnamed-chunk-1-9.png)
+![plot of chunk unnamed-chunk-1](figure/unnamed-chunk-1-11.png)
 
 ``` r
 #==========================================#
@@ -845,13 +912,13 @@ spnbin_iso <- update(spnbin, anisotropy = FALSE)
 plot(spnbin_iso, which = 8)
 ```
 
-![plot of chunk unnamed-chunk-1](figure/unnamed-chunk-1-10.png)
+![plot of chunk unnamed-chunk-1](figure/unnamed-chunk-1-12.png)
 
 ``` r
 plot(spnbin, which = 8)
 ```
 
-![plot of chunk unnamed-chunk-1](figure/unnamed-chunk-1-11.png)
+![plot of chunk unnamed-chunk-1](figure/unnamed-chunk-1-13.png)
 
 ``` r
 #==========================================#
@@ -860,7 +927,7 @@ plot(spnbin, which = 8)
 
 seal$sampled <- factor(if_else(is.na(seal$log_trend), "no", "yes"), levels = c("yes", "no"))
 p1 <- ggplot(seal, aes(fill = sampled, color = stock)) +
-  geom_sf(size = 0.25) +
+  geom_sf(size = 1) +
   theme_bw(base_size = 14) +
   scale_fill_manual(name = "sampled", values = okabe[1:2], breaks = c("yes", "no"), labels = c("yes", "no")) +
   scale_color_manual(name = "stock", values = c("grey40", "grey80"), breaks = c(8, 10), labels = c(8, 10)) +
@@ -868,16 +935,22 @@ p1 <- ggplot(seal, aes(fill = sampled, color = stock)) +
   scale_x_continuous(breaks = seq(-139, -134, length.out = 3))
 
 p2 <- ggplot(seal, aes(fill = log_trend)) +
-  geom_sf(size = 0.25) +
+  geom_sf(size = 1) +
   theme_bw(base_size = 14) +
   scale_fill_viridis_c(name = "logtrend", option = "D", begin = 0.5, limits = c(min(seal$log_trend), max(seal$log_trend))) +
   scale_y_continuous(breaks = seq(57, 59, length.out = 5)) +
   scale_x_continuous(breaks = seq(-139, -134, length.out = 3))
 
-p1 + p2
+p1
 ```
 
-![plot of chunk unnamed-chunk-1](figure/unnamed-chunk-1-12.png)
+![plot of chunk unnamed-chunk-1](figure/unnamed-chunk-1-14.png)
+
+``` r
+p2
+```
+
+![plot of chunk unnamed-chunk-1](figure/unnamed-chunk-1-15.png)
 
 ``` r
 #==========================================#
@@ -895,7 +968,7 @@ figure11 <- ggplot(texas, aes(color = turnout, shape = samp)) +
 figure11
 ```
 
-![plot of chunk unnamed-chunk-1](figure/unnamed-chunk-1-13.png)
+![plot of chunk unnamed-chunk-1](figure/unnamed-chunk-1-16.png)
 
 ``` r
 #=========================================================#
@@ -924,18 +997,15 @@ sessionInfo()
 ## [1] stats     graphics  grDevices utils     datasets  methods   base     
 ## 
 ## other attached packages:
-##  [1] emmeans_1.10.3  car_3.1-3       carData_3.0-5   here_1.0.2      patchwork_1.2.0 lubridate_1.9.4 forcats_1.0.1   stringr_1.5.2   dplyr_1.1.4     purrr_1.1.0    
-## [11] readr_2.1.5     tidyr_1.3.1     tibble_3.3.0    ggplot2_4.0.0   tidyverse_2.0.0 spmodel_0.11.1 
+## [1] patchwork_1.2.0 dplyr_1.1.4     ggplot2_4.0.0   emmeans_1.10.3  car_3.1-3       carData_3.0-5   spmodel_0.11.1 
 ## 
 ## loaded via a namespace (and not attached):
-##  [1] gtable_0.3.6       xfun_0.52          lattice_0.22-6     tzdb_0.4.0         vctrs_0.6.5        tools_4.4.1        generics_0.1.4     parallel_4.4.1    
-##  [9] proxy_0.4-27       pkgconfig_2.0.3    Matrix_1.7-0       KernSmooth_2.23-24 RColorBrewer_1.1-3 S7_0.2.0           lifecycle_1.0.4    compiler_4.4.1    
-## [17] farver_2.1.2       textshaping_0.4.0  litedown_0.7       htmltools_0.5.8.1  class_7.3-22       yaml_2.3.10        Formula_1.2-5      pillar_1.11.1     
-## [25] classInt_0.4-11    abind_1.4-5        mime_0.12          commonmark_1.9.5   tidyselect_1.2.1   digest_0.6.36      mvtnorm_1.2-5      stringi_1.8.4     
-## [33] sf_1.0-21          labeling_0.4.3     rprojroot_2.1.1    fastmap_1.2.0      grid_4.4.1         cli_3.6.3          magrittr_2.0.4     utf8_1.2.4        
-## [41] e1071_1.7-16       withr_3.0.2        scales_1.4.0       estimability_1.5.1 timechange_0.3.0   rmarkdown_2.28     ragg_1.5.0         hms_1.1.3         
-## [49] coda_0.19-4.1      evaluate_0.24.0    knitr_1.50         viridisLite_0.4.2  markdown_2.0       rticles_0.27       rlang_1.1.6        Rcpp_1.0.12       
-## [57] xtable_1.8-4       glue_1.7.0         DBI_1.2.3          rstudioapi_0.16.0  R6_2.5.1           systemfonts_1.1.0  units_0.8-7
+##  [1] utf8_1.2.4         generics_0.1.4     class_7.3-22       KernSmooth_2.23-24 lattice_0.22-6     magrittr_2.0.4     evaluate_0.24.0    grid_4.4.1        
+##  [9] estimability_1.5.1 RColorBrewer_1.1-3 mvtnorm_1.2-5      rprojroot_2.1.1    Matrix_1.7-0       e1071_1.7-16       DBI_1.2.3          Formula_1.2-5     
+## [17] viridisLite_0.4.2  scales_1.4.0       abind_1.4-5        cli_3.6.3          rlang_1.1.6        units_0.8-7        withr_3.0.2        tools_4.4.1       
+## [25] parallel_4.4.1     coda_0.19-4.1      here_1.0.2         vctrs_0.6.5        R6_2.5.1           proxy_0.4-27       lifecycle_1.0.4    classInt_0.4-11   
+## [33] pkgconfig_2.0.3    pillar_1.11.1      gtable_0.3.6       glue_1.7.0         Rcpp_1.0.12        sf_1.0-21          xfun_0.52          tibble_3.3.0      
+## [41] tidyselect_1.2.1   rstudioapi_0.16.0  knitr_1.50         farver_2.1.2       xtable_1.8-4       labeling_0.4.3     compiler_4.4.1     S7_0.2.0
 ```
 
 ``` r

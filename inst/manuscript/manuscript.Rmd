@@ -10,6 +10,7 @@ author:
       | United States
       | Environmental Protection Agency
     address: |
+      | Office of Research and Development
       | 200 SW 35th St
       | Corvallis, OR, 97330
     email: \email{Dumelle.Michael@epa.gov}
@@ -29,7 +30,7 @@ title:
   plain:     "Spatial Generalized Linear Models in R Using spmodel"
   short:     "Spatial Generalized Linear Models in \\proglang{R} Using \\pkg{spmodel}"
 abstract: |
-  Non-Gaussian data are common in practice and include binary, count, skewed, and proportion data types. Often, non-Gaussian data are modeled using a generalized linear model (GLM). GLMs typically assume that observations are independent of one another. This is an impractical assumption for spatial data, as nearby observations tend to be more similar than distant ones. The \pkg{spmodel} package in \proglang{R} provides a suite of tools for fitting spatial generalized linear models (SPGLMs) to non-Gaussian data and making spatial predictions (i.e., Kriging). SPGLMs for point-referenced (x- and y-coordinates) support are fit using the \code{spglm()} function, while SPGLMs for areal (lattice, polygon) support are fit using the \code{spgautor()} function. Both \code{spglm()} and \code{spgautor()} maximize a novel Laplace likelihood which marginalizes over the model's fixed effects and latent mean while formally incorporating spatial covariance among observations. The inputs and outputs of \code{spglm()} and \code{spgautor()} closely resemble the \code{glm()} function from base \proglang{R}, easing the transition from GLMs to SPGLMs. \pkg{spmodel} provides and builds upon several commonly used helper functions for model building like \code{summary()}, \code{plot()}, and \code{fitted()}, among others. Spatial predictions of the latent mean at unobserved locations are obtained using \code{predict()} or \code{augment()}. \pkg{spmodel} accommodates myriad advanced modeling features like geometric anisotrpoy, nonspatial random effects, analysis of variance, and more. Throughout, we use \pkg{spmodel} to fit SPGLMs to moose presence and counts in Alaska, United States (US), skewed conductivity data in the Southwestern US, harbor seal abundance trends in Alaska, US, and voter turnout rates in Texas, US.
+  Non-Gaussian data are common in practice and include binary, count, skewed, and proportion structures. Often, non-Gaussian data are modeled using a generalized linear model (GLM). GLMs typically assume that observations are independent of one another. This is an impractical assumption for spatial data, as nearby observations tend to be more similar than distant ones. The \pkg{spmodel} package in \proglang{R} provides a suite of tools for fitting spatial generalized linear models (SPGLMs) to non-Gaussian data and making spatial predictions (i.e., Kriging). SPGLMs for point-referenced (x- and y-coordinates) support are fit using the \code{spglm()} function, while SPGLMs for areal (lattice, polygon) support are fit using the \code{spgautor()} function. Both \code{spglm()} and \code{spgautor()} maximize a novel Laplace likelihood which marginalizes over the model's fixed effects and latent mean while formally incorporating spatial covariance among observations. The inputs and outputs of \code{spglm()} and \code{spgautor()} closely resemble the \code{glm()} function from base \proglang{R}, easing the transition from GLMs to SPGLMs. \pkg{spmodel} provides and builds upon several commonly used helper functions for model building like \code{summary()}, \code{plot()}, and \code{fitted()}, among others. Spatial predictions of the latent mean at unobserved locations are obtained using \code{predict()} or \code{augment()}. \pkg{spmodel} accommodates myriad advanced modeling features like geometric anisotrpoy, nonspatial random effects, analysis of variance, and more. Throughout, we use \pkg{spmodel} to fit SPGLMs to moose presence and counts in Alaska, United States (US), skewed conductivity data in the Southwestern US, harbor seal abundance trends in Alaska, US, and voter turnout rates in Texas, US.
 keywords:
   # at least one keyword must be supplied
   formatted: [autoregressive model, geostatistical model, Poisson regression, link function, logistic regression, overdispersion, spatial covariance, spatial dependence]
@@ -57,7 +58,7 @@ library(here)
 fig_path <- here("inst", "manuscript", "figures")
 ```
 
-\linenumbers
+<!-- \linenumbers -->
 
 
 \newpage
@@ -75,7 +76,7 @@ where for a sample size $n$, $f(\cdot)$ is a link function that connects $\bolds
 
 The GLM fixed effects ($\boldsymbol{\beta}$) are typically estimated via maximum likelihood [@chambers1992S]. It is often convenient to compute the maximum likelihood estimates using the iteratively reweighted least squares (IRWLS) algorithm [@wood2017generalized], which is an approach used by the  \code{glm()} function in the \proglang{R} programming language [@rcore2024]. GLMs add an additional layer of complexity compared to linear regression models, as the left-hand side of Equation$~$\ref{eq-glm} is a function of the mean of $\mathbf{y}$ rather than $\mathbf{y}$ itself (as in linear regression models).
 
-The standard GLM assumes the elements of $\mathbf{y}$ are independent. This independence assumption is typically impractical for spatial data. For spatial data, nearby observations tend to be more similar than distant observations [@tobler1970computer], which leads to positive spatial covariance among observations. The consequences of ignoring spatial covariance in statistical models for spatial data can be severe and include imprecise parameter estimates as well as misleading standard errors that inflate Type-I error rates and decrease power [@zimmerman2024spatial].
+The standard GLM assumes the elements of $\mathbf{y}$ are independent. This independence assumption is typically impractical for spatial data. For spatial data, nearby observations tend to be more similar than distant observations [@tobler1970computer], which leads to positive spatial covariance among observations. The consequences of ignoring spatial covariance in statistical models for spatial data can be severe and include imprecise parameter estimates as well as misleading standard errors that inflate Type-I error rates and decrease power [@legendre1993spatial; @zimmerman2024spatial].
 
 An approach for handling spatial data using a GLM is to assume the elements of $\mathbf{w}$ exhibit both spatial and nonspatial variability. This is achieved by adding to Equation$~$\ref{eq-glm} two random effects, $\boldsymbol{\tau}$ and $\boldsymbol{\epsilon}$. The random effect $\boldsymbol{\tau}$ is an $n \times 1$ column vector of spatially dependent random errors. We assume that $\text{E}(\boldsymbol{\tau}) = \boldsymbol{0}$ and $\text{Cov}(\boldsymbol{\tau}) = \sigma^2_\tau \mathbf{R}$, where $\text{E}(\cdot)$ and $\text{Cov}(\cdot)$ denote expectation and covariance, respectively. The variance parameter $\sigma^2_\tau$ controls the magnitude of spatial covariance and is often called a partial sill. The matrix $\mathbf{R}$ is an $n \times n$ spatial correlation matrix that depends on a range parameter controlling the distance-decay rate of the spatial correlation. One example of a spatial covariance matrix is the "exponential," which is given by
 \begin{align}\label{eq-spcov-exp}
@@ -94,7 +95,7 @@ Through inclusion of $\boldsymbol{\tau}$ and $\boldsymbol{\epsilon}$, the spatia
 \begin{align}\label{eq-spglm}
 f(\boldsymbol{\mu}|\mathbf{X}, \boldsymbol{\beta}, \boldsymbol{\tau}, \boldsymbol{\epsilon}) \equiv \mathbf{w} = \mathbf{X} \boldsymbol{\beta} + \boldsymbol{\tau} + \boldsymbol{\epsilon}.
 \end{align}
-Assuming independence among $\boldsymbol{\tau}$ and $\boldsymbol{\epsilon}$, it follows that 
+Assuming independence between $\boldsymbol{\tau}$ and $\boldsymbol{\epsilon}$, it follows that 
 \begin{align}\label{eq-spcov}
  \text{Cov}(\boldsymbol{\tau} + \boldsymbol{\epsilon}) = \text{Cov}(\boldsymbol{\tau}) + \text{Cov}(\boldsymbol{\epsilon}) = \sigma^2_{\tau}\mathbf{R} + \sigma^2_{\epsilon} \mathbf{I}.
 \end{align}
@@ -104,7 +105,7 @@ Fitting and using SPGLMs is challenging both conceptually and computationally [@
 
 Building from @evangelou2011estimation and @bonat2016practical, @ver2024marginal proposed a novel approach for fitting SPGLMs that leverages the Laplace approximation while marginalizing over both the latent $\mathbf{w}$ and the fixed effects ($\boldsymbol{\beta}$). This approach performed well in a variety of simulation settings, generally having appropriate confidence interval coverage for the fixed effects and prediction interval coverage for $\mathbf{w}$ at new locations. It also performed similarly to the Bayesian SPGLM approach in \pkg{spBayes} and the automatic differentiation SPGLM approach in \pkg{glmmTMB} but was much faster. At small sample sizes, the approach outperformed the approximate Bayesian SPGLM approach in \pkg{R-INLA} and had similar computational times. For moderate sample sizes, it performed similarly to \pkg{R-INLA}, though \pkg{R-INLA} was faster. The novel Laplace approach is particularly attractive for two reasons. First, it is general enough that it can be applied to any covariance structure (not just spatial). Second, after estimating the covariance parameters, analytical solutions exist for the fixed effects (and their standard errors) as well as predictions of the latent $\mathbf{w}$ at new locations (and their standard errors). 
 
-The \pkg{spmodel} \proglang{R} package [@dumelle2023spmodel] recently released a full set of modeling tools for SPGLMs fit using the novel Laplace approach described by @ver2024marginal. These modeling tools are approachable and mirror the familiar \code{glm()} syntax from base-\proglang{R}, making the transition from GLMs to SPGLMs relatively seamless. The \code{spglm()} function fits SPGLMs for point-referenced support (e.g., x- and y-coordinates representing point locations in a field; these models are sometimes called "geostatistical" models), while the \code{spgautor()} function fits SPGLMs for areal support (e.g., polygon boundaries representing geographic subsets of a region; these models are sometimes called "autoregressive" models). For both point-referenced and areal supports, \pkg{spmodel} supports the binomial distribution for binary data, Poisson and negative binomial distributions for count data, Gamma and inverse Gaussian distributions for skewed data, and the beta distribution for proportion data. There are 20 different spatial covariance structures available including the exponential, Gaussian, and spherical for point-referenced support (Figure$~$\ref{fig-type}) and the conditional autoregressive, and simultaneous autoregressive structures for areal support \pkg{spmodel} provides tools for commonly used model summaries, visualizations, and diagnostics (e.g., fitted values) using standard \proglang{R} helper functions like \code{summary()}, \code{plot()}, and \code{fitted()}, among others. \pkg{spmodel} also provides tools to predict $\mathbf{w}$ at new locations and quantify uncertainty in those prediction using \code{predict()} and \code{augment()}. This core functionality, combined with several advanced features we describe throughout the manuscript, enables \pkg{spmodel} to introduce novel, important SPGLM modeling tools previously missing from the existing \proglang{R} ecosystem.
+The \pkg{spmodel} \proglang{R} package [@dumelle2023spmodel] recently released a full set of modeling tools for SPGLMs fit using the novel Laplace approach described by @ver2024marginal. These modeling tools are approachable and mirror the familiar \code{glm()} syntax from base-\proglang{R}, making the transition from GLMs to SPGLMs relatively seamless. The \code{spglm()} function fits SPGLMs for point-referenced support (e.g., x- and y-coordinates representing point locations in a field; these models are sometimes called "geostatistical" models), while the \code{spgautor()} function fits SPGLMs for areal support (e.g., polygon boundaries representing geographic subsets of a region; these models are sometimes called "autoregressive" models). For both point-referenced and areal supports, \pkg{spmodel} supports the binomial distribution for binary data, Poisson and negative binomial distributions for count data, Gamma and inverse Gaussian distributions for skewed data, and the beta distribution for proportion data. There are 20 different spatial covariance structures available including the exponential, Gaussian, and spherical for point-referenced support (Figure$~$\ref{fig-type}) and the conditional autoregressive and simultaneous autoregressive structures for areal support. \pkg{spmodel} provides commonly used model summaries, visualizations, and diagnostics (e.g., fitted values) using standard \proglang{R} helper functions like \code{summary()}, \code{plot()}, and \code{fitted()}, among others. \pkg{spmodel} also has tools to predict $\mathbf{w}$ at new locations and quantify uncertainty in those prediction using \code{predict()} and \code{augment()}. This core functionality, combined with several advanced features we describe throughout the manuscript, enables \pkg{spmodel} to introduce novel, important SPGLM modeling tools previously missing from the existing \proglang{R} ecosystem.
 
 \begin{figure}
 \centering
@@ -113,7 +114,7 @@ The \pkg{spmodel} \proglang{R} package [@dumelle2023spmodel] recently released a
 \label{fig-type}
 \end{figure}
 
-Of the existing \proglang{R} packages for SPGLMs, \pkg{spmodel} (version 0.11.1) is arguably most similar to \pkg{sdmTMB} (version 0.7.4) in terms of scope and feel. Both packages use similar syntax as \code{glm()}, accommodate flexible \code{formula} arguments (e.g., offsets, splines), handle spatial covariance that decays at different rates in different directions (i.e., geometric anisotropy), incorporate nonspatial random effects, support other \proglang{R} packages for modeling like \pkg{broom} [@robinson2021broom; @kuhn2022tidy], \pkg{emmeans} [@lenth2024emmeans], and \pkg{car} [@fox2019car], and have tools for model summaries, prediction, and simulating data. There are some notable differences between the two packages, however. \pkg{sdmTMB} supports several additional GLM distributions like the Tweedie, supports Hurdle models, and can incorporate prior information through Bayesian applications. \pkg{sdmTMB} also provides tools for working with temporal data and spatiotemporal data and provides enhanced visualizations of the model's marginal effects. \pkg{sdmTMB} does require a preprocessing step of constructing a mesh prior to model fitting (using the stochastic partial differential equation approach), and the density of the mesh can affect model results and computational complexity. On the other hand, \pkg{spmodel} does not require the construction of a mesh prior to model fitting. \pkg{spmodel} supports 20 different spatial covariances and models them directly, rather than using a precision matrix approximation to the Matérn spatial covariance as in \pkg{sdmTMB}. \pkg{spmodel} can model data directly using neighborhood distance and autoregressive models, rather than relying on the polygon centroid (as in \pkg{sdmTMB}), which may not be within the polygon's boundaries. \pkg{spmodel} provides experimental design tools (e.g., analysis of variance, contrasts), supports \pkg{sf} objects in modeling and prediction functions [@pebesma2018sf], has several specialized model diagnostics like leverage values and Cook's distances, and has analytic solutions for fixed effect and prediction standard errors. Other similarities and differences do exist between \pkg{sdmTMB} and \pkg{spmodel}, and both packages continue to evolve. Overall, we believe that these packages are complementary and enhance the suite of SPGLM tools accessible to practitioners.
+Of the existing \proglang{R} packages for SPGLMs, \pkg{spmodel} (version 0.11.1) is arguably most similar to \pkg{sdmTMB} (version 0.7.4) in terms of scope and feel. Both packages use similar syntax to \code{glm()}, accommodate flexible \code{formula} arguments (e.g., transformations, splines), handle spatial covariance that decays at different rates in different directions (i.e., geometric anisotropy), incorporate nonspatial random effects, support other \proglang{R} packages for modeling like \pkg{broom} [@robinson2021broom; @kuhn2022tidy], \pkg{emmeans} [@lenth2024emmeans], and \pkg{car} [@fox2019car], and have tools for model summaries, prediction, and simulating data. There are some notable differences between the two packages, however. \pkg{sdmTMB} supports several additional GLM distributions like the Tweedie, supports Hurdle models, and can incorporate prior information through Bayesian applications. \pkg{sdmTMB} also provides tools for working with temporal data and spatiotemporal data and provides enhanced visualizations of the model's marginal effects. \pkg{sdmTMB} does require a preprocessing step of constructing a mesh prior to model fitting (using the stochastic partial differential equation approach), and the density of the mesh can affect model results and computational complexity. On the other hand, \pkg{spmodel} does not require the construction of a mesh prior to model fitting. \pkg{spmodel} supports 20 different spatial covariances and models them directly, rather than using a precision matrix approximation to the Matérn spatial covariance as in \pkg{sdmTMB}. \pkg{spmodel} can model data using neighborhood distance and autoregressive models, rather than relying on the polygon centroid (as in \pkg{sdmTMB}), which may not be within the polygon's boundaries. \pkg{spmodel} provides experimental design tools (e.g., analysis of variance, contrasts), supports \pkg{sf} objects in modeling and prediction functions [@pebesma2018sf], has several specialized model diagnostics like leverage values and Cook's distances, and has analytic solutions for fixed effect and prediction standard errors. Other similarities and differences do exist between \pkg{sdmTMB} and \pkg{spmodel}, and both packages continue to evolve. Overall, we believe that these packages are complementary and enhance the suite of SPGLM tools accessible to practitioners.
 
 The rest of this article is organized as follows. In Section$~$\ref{sec-spglm}, we provide some background for the SPGLM fitting and prediction routines in \pkg{spmodel}. In Section$~$\ref{sec-applications}, we provide an overview of core SPGLM functionality in \pkg{spmodel} by modeling moose presence in Alaska, United States (US). In Section$~$\ref{sec-applications2}, we model moose counts in Alaska, US; skewed lake conductivity in the Southwestern US; harbor seal abundance trend behavior in Alaska, US; and voter turnout rates in Texas, US. And in Section$~$\ref{sec-discussion}, we end with a discussion synthesizing \pkg{spmodel}'s contributions to SPGLMs in \proglang{R}.
 
@@ -164,7 +165,7 @@ We can estimate the fixed effects using generalized least squares (GLS) principl
 \begin{align}\label{eq-gls1}
   \hat{\boldsymbol{\beta}} = (\mathbf{X}^\top \boldsymbol{\Sigma}^{-1}\mathbf{X})^{-1}\mathbf{X}^\top \boldsymbol{\Sigma}^{-1}\mathbf{w} = \mathbf{B}\mathbf{w},
 \end{align}
-where $\mathbf{B} = (\mathbf{X}^\top \boldsymbol{\Sigma}^{-1}\mathbf{X})^{-1}\mathbf{X}^\top \boldsymbol{\Sigma}^{-1}$. While we do not $\mathbf{w}$, we do estimate it via $\hat{\mathbf{w}}$, and thus it is reasonable to define $\hat{\boldsymbol{\beta}} = \mathbf{B}\hat{\mathbf{w}}$. To derive properties of $\hat{\boldsymbol{\beta}}$ like expectation and variance, we must derive these properties for $\hat{\mathbf{w}}$ by conditioning on $\mathbf{w}$ as if it were observed and leveraging the laws of total expectation and variance. Based on asymptotic properties of (restricted) maximum likelihood estimators [@cressie1993asymptotic], we may assume that given $\mathbf{w}$, $\hat{\mathbf{w}}$ has mean $\mathbf{w}$ and variance approximately equal to $-\mathbf{H}^{-1}$, the negative inverse Hessian (i.e., the inverse observed information matrix). Thus it follows that $\text{E}(\hat{\mathbf{w}})$ is given by
+where $\mathbf{B} = (\mathbf{X}^\top \boldsymbol{\Sigma}^{-1}\mathbf{X})^{-1}\mathbf{X}^\top \boldsymbol{\Sigma}^{-1}$. While we do not know $\mathbf{w}$, we do estimate it via $\hat{\mathbf{w}}$, and thus it is reasonable to define $\hat{\boldsymbol{\beta}} = \mathbf{B}\hat{\mathbf{w}}$. To derive properties of $\hat{\boldsymbol{\beta}}$ like expectation and variance, we must derive these properties for $\hat{\mathbf{w}}$ by conditioning on $\mathbf{w}$ as if it were observed and leveraging the laws of total expectation and variance. Based on asymptotic properties of (restricted) maximum likelihood estimators [@cressie1993asymptotic], we may assume that given $\mathbf{w}$, $\hat{\mathbf{w}}$ has mean $\mathbf{w}$ and variance approximately equal to $-\mathbf{H}^{-1}$, the negative inverse Hessian (i.e., the inverse observed information matrix). Thus it follows that $\text{E}(\hat{\mathbf{w}})$ is given by
 \begin{align}
   \text{E}(\hat{\mathbf{w}}) = \text{E}(\text{E}(\hat{\mathbf{w}} | \mathbf{w}))
    = \text{E}(\mathbf{w}) 
@@ -199,17 +200,17 @@ Inspecting model diagnostics is an important step of the modeling process that c
 \begin{align}
   \mathbf{r}_{r} = \mathbf{y} - f^{-1}(\hat{\mathbf{w}})
 \end{align}
-Because observations often have a unique support in a GLM (e.g., only two possible response values for binary data) and the variance of an observation generally depends on its mean, response residuals lack some utility. Deviance residuals are a function of response residuals that are appropriately scaled to behave more like response residuals in a standard linear model. Deviance residuals are given by
+Because observations often have a unique support in a GLM (e.g., only two possible response values for binary data) and the variance of an observation generally depends on its mean, response residuals lack some utility. Deviance, Pearson, and standardized residuals are all different function of responses residuals that are appropriately scaled to behave more like response residuals from a standard linear model. For example, deviance residuals are given by
 \begin{align}
   \mathbf{r}_{d} = sign(\mathbf{r}_{r})\sqrt{\mathbf{d}},
 \end{align}
-where $\mathbf{d}$ is a vector of individual deviances. The sum of the squared deviance residuals equals the sum of the elements of $\mathbf{d}$, known as the deviance of the model fit. The deviance of the model fit quantifies twice the difference in log likelihoods between the a saturated model that fits every observation perfectly (i.e., $\text{y}_i = f^{-1}(\hat{\text{w}}_i)$ for all $i$) and the fitted model [@myers2012generalized]. Deviance is often used as a fit statistic; lower values of deviance imply a better model fit (compared to the observed data). Pearson and standardized residuals are other types of GLM residuals that involve a scaling of the response residuals. The Pearson residuals scale $\mathbf{r}_{r}$ by the square root of $\mathbf{V}$, a diagonal matrix with $i$th diagonal element equal to the variance of the response distribution evaluated at $f^{-1}(\hat{\text{w}}_i)$ [@faraway2016extending]; $\mathbf{V}$ is sometimes called the GLM weight matrix. The standardized residuals scale the deviance residuals by $\frac{1}{\sqrt{(1 - \mathbf{L}_{ii})}}$, where $\mathbf{L}_{ii}$ is the $i$th diagonal element of the leverage matrix, which we discuss next.
+where $\mathbf{d}$ is a vector of individual deviances. The sum of the squared deviance residuals equals the sum of the elements of $\mathbf{d}$, known as the deviance of the model fit. The deviance of the model fit quantifies twice the difference in log likelihoods between the a saturated model that fits every observation perfectly (i.e., $\text{y}_i = f^{-1}(\hat{\text{w}}_i)$ for all $i$) and the fitted model [@myers2012generalized]. Deviance is often used as a fit statistic, whereby lower values of deviance imply a better model fit (given the observed data). Scaling the response residuals by the reciprocal square root of the variance function (for the appropriate response distribution) yields the Pearson residuals, and scaling the Pearson residuals by the reciprocal square root of one minus the leverage value (which we discuss next) yields the standardized residuals [@faraway2016extending].
 
 An observation has high leverage if its combination of explanatory variables is far away from other observations. In a linear model, the leverage (i.e., hat) values are the diagonal of the leverage (i.e., projection, hat) matrix, $\mathbf{L} = \mathbf{X}(\mathbf{X}^\top \mathbf{X})^{-1}\mathbf{X}^\top$. In a GLM, the leverage matrix is given by
 \begin{align}
   \mathbf{L} = \mathbf{V}^{1/2} \mathbf{X} (\mathbf{X}^\top \mathbf{V} \mathbf{X}) \mathbf{X}^\top \mathbf{V}^{1/2}.
 \end{align}
-The larger the value of $\mathbf{L}_{ii}$, the more severe the leverage from the $i$th observation.
+where $\mathbf{V}$ is a diagonal matrix with $i$th diagonal element equal to the variance function evaluated at $f^{-1}(\hat{\text{w}}_i)$. The larger the value of $\mathbf{L}_{ii}$, the more severe the leverage from the $i$th observation.
 
 An observation is influential if it has a sizable impact on model fit. Influence is measured using Cook's distance [@cook1979influential; @cook1982residuals], which is given for a GLM by
 \begin{align}
@@ -240,7 +241,7 @@ where $\mathbf{K} = \mathbf{X}_{\mathbf{u}} - \boldsymbol{\Sigma}_{\mathbf{u}, \
 
 # Modeling moose presence in Alaska, USA {#sec-applications}
 
-The \code{moose} data in \pkg{spmodel} contain information on moose (Alces Alces) presence in the Togiak region of Alaska, USA.   \code{moose} is an \code{sf} object, a special data frame that is supplemented with spatial information using the \pkg{sf} package in \proglang{R} [@pebesma2018sf]. After loading \pkg{spmodel}, the first few rows of \code{moose} look like:
+The \code{moose} data in \pkg{spmodel} contain information on moose (Alces alces) presence in the Togiak region of Alaska, USA.   \code{moose} is an \code{sf} object, a special data frame that is supplemented with spatial information using the \pkg{sf} package in \proglang{R} [@pebesma2018sf]. After loading \pkg{spmodel}, the first few rows of \code{moose} look like:
 
 ```{r, eval = FALSE}
 library("spmodel")
@@ -315,7 +316,7 @@ round(sqrt(diag(vcov(bin))), digits = 4)
 round(sqrt(diag(vcov(bin_glm))), digits = 4)
 ```
 
-Using \code{spglm()} instead of \code{glm()} ensures that \pkg{spmodel} helper functions are available and that each of the \code{spglm()} models uses the same hierarchical likelihood (Equation~\ref{eq-marginal}):
+Using \code{spglm()} instead of \code{glm()} ensures that \pkg{spmodel} helper functions are available and that each of the \code{spglm()} models uses the same hierarchical likelihood (Equation$~$\ref{eq-marginal}):
 ```{r}
 glance(spbin)
 glance(bin)
@@ -330,7 +331,7 @@ loocv(spbin)
 loocv(bin)
 ```
 
-Both models have negligible bias, but the SPGLM has much lower MSPE and RMSPE than the GLM, indicating the SPGLM predictions are far more efficient. Both the liklelihood-based leave-one-out cross validation metrics prefer the SPGLM to the GLM.
+Both models have negligible bias, but the SPGLM has much lower MSPE and RMSPE than the GLM, indicating the SPGLM predictions are far more efficient. Both the likelihood-based leave-one-out cross validation metrics prefer the SPGLM to the GLM.
 
 We may also want to compare the fit of two SPGLMs with different spatial covariance structures. For example, we may want to compare the fit of an SPGLM with the `"exponential"` spatial covariance to the fit of a SPGLM with the `"gaussian"` spatial covariance:
 ```{r}
@@ -360,7 +361,7 @@ The fitted values (\code{.fitted}) can be returned on either the link ($\hat{\ma
 \label{fig-sp-diagnostic}
 \end{figure}
 
-The \code{plot()} function can also be used to return similar diagnostics as from \code{lm()} and \code{glm()}, with additional tools for diagnosing spatial covariance. For example, we can inspect Cook's distance values and the empirical spatial covariance as a function of distance with (Figure$~$\ref{fig-sp-diagnostic2}):
+The \code{plot()} function can also be used to return similar diagnostics as from \code{lm()} and \code{glm()}, with additional tools for diagnosing spatial covariance. For example, we can inspect Cook's distance values and the fitted spatial covariance as a function of distance with (Figure$~$\ref{fig-sp-diagnostic2}):
 ```{r, eval = FALSE}
 plot(spbin, which = c(4, 7))
 ```
@@ -448,7 +449,7 @@ Throughout the remainder of this section, we briefly highlight some additional \
 
 ## Modeling moose counts in Alaska, USA {#sec-moose-count}
 
-In addition to moose presence, moose counts are also recorded in \code{moose} (Figure$~$\ref{fig-moose-data-count}).  The Poisson and negative binomial response distributions can be used to model SPGLMs for count data. The Poisson distribution mean is equal to its variance, while the negative binomial has an extra parameter to accommodate overdispersion (where the variance is larger than the mean). Using a spherical spatial covariance function, we may fit both a Poisson and negative binomial SPGLM changing the \code{family} argument:
+In addition to moose presence, moose counts are also recorded in \code{moose} (Figure$~$\ref{fig-moose-data-count}).  The Poisson and negative binomial response distributions can be used to model SPGLMs for count data. The Poisson distribution mean is equal to its variance, while the negative binomial has an extra parameter to accommodate overdispersion (where the variance is larger than the mean). Using a spherical spatial covariance function, we may fit both a Poisson and negative binomial SPGLM by changing the \code{family} argument:
 
 ```{r}
 sppois <- spglm(
@@ -530,7 +531,7 @@ spgam <- spglm(
 )
 ```
 
-We model conductivity as a function of temperature, state, and lake origin, and we allow the effect of temperature to vary by state (\code{temp:state} interaction). The \code{year} partition factor (specified via \code{partition_factor}) restricts spatial covariance to be nonzero only for observations sampled during the same year. Data were collected in 2012 and 2017, so this partition factor assumes independence between observations in 2012 and 2017. While we used the partition factor here illustratively, more generally, the utility of partition factors can be highly context dependent.
+We model conductivity as a function of temperature, state, and lake origin, and we allow the effect of temperature to vary by state (\code{temp:state} interaction). The \code{year} partition factor (specified via \code{partition_factor}) restricts spatial covariance to be nonzero only for observations sampled during the same year. Data were collected in 2012 and 2017, so this partition factor assumes observations in 2012 are independent of observations in 2017. While we used the partition factor here illustratively, more generally, the utility of partition factors can be highly context dependent.
 
 When categorical variables have more than two levels, the default reference group contrasts are not well-suited to assess the variable's overall significance:
 ```{r}
@@ -593,7 +594,7 @@ spbin <- spgautor(
 )
 ```
 
-To model spatial dependence, we used a conditional autoregressive function. Conditional and simultaneous autoregressive functions characterize spatial distance through neighborhood relationships (rather than Euclidean distance) and have \code{spcov_type} values of \code{"car"} and \code{"sar"}, respectively. By default, Queen's distance is used to determine whether two sites are neighbors, though custom neighborhood matrices can be passed via \code{W}. Row standardization is also assumed by default; this can be changed via \code{row_st}. Using \code{random}, we also specified a nonspatial random effect for seal stock, which implies seals belonging to the same stock share extra covariance. The \code{random} argument uses similar syntax as \pkg{lme4} [@bates2015lme4] and \pkg{nlme} [@pinheiro2006mixed] to specify nonspatial random effects.
+To model spatial dependence, we used a conditional autoregressive function. Conditional and simultaneous autoregressive functions characterize spatial distance through neighborhood relationships (rather than Euclidean distance) and have \code{spcov_type} values of \code{"car"} and \code{"sar"}, respectively. By default, Queen's distance is used to determine whether two sites are neighbors, though custom neighborhood matrices can be passed via the \code{W} argument. Row standardization is also assumed by default; this can be changed via the \code{row_st} argument. Using the \code{random} argument, we also specified a nonspatial random effect for seal stock, which implies seals belonging to the same stock share extra covariance. The \code{random} argument uses similar syntax as \pkg{lme4} [@bates2015lme4] and \pkg{nlme} [@pinheiro2006mixed] to specify nonspatial random effects.
 
 Tidying the model reveals the estimates and confidence intervals on the log odds scale:
 ```{r}
@@ -650,15 +651,15 @@ spbeta_auto <- spgautor(
 )
 ```
 
-According to AIC, the geostatistical SPGLM:
+According to AIC, the geostatistical SPGLM is preferred:
 ```{r}
 AIC(spbeta_geo, spbeta_auto)
 ```
 
-The default estimation method in \pkg{spmodel} for SPGLMs is restricted maximum likelihood (REML), while maximum likelihood (ML) can also be used. A benefit of benefit of REML is that it can yield unbiased estimates of covariance parameters [@cressie1993asymptotic]. A drawback of REML is that likelihood-based statistics are often considered invalid when the models have different explanatory variable or fixed effect structures [@wolfinger1993covariance], though @gurka2006selecting provides some evidence to the contrary. In contrast to REML estimators, ML estimators are generally biased for covariance parameters, though in practice this bias tends to be small. Moreover, when using ML, likelihood-based comparisons are valid for models with different explanatory variable or fixed effect structures. Using ML, we can evaluate the significance of log income on voter turnout using a likelihood ratio test (for nested models):
+The default estimation method in \pkg{spmodel} for SPGLMs is restricted maximum likelihood (REML), while maximum likelihood (ML) can also be used. A benefit of REML is that it can yield unbiased estimates of covariance parameters [@cressie1993asymptotic]. A drawback of REML is that likelihood-based statistics are often considered invalid when the models have different explanatory variable or fixed effect structures [@wolfinger1993covariance], though @gurka2006selecting provides some evidence to the contrary. In contrast to REML estimators, ML estimators are generally biased for covariance parameters, though in practice this bias tends to be small. Moreover, when using ML, likelihood-based comparisons are valid for models with different explanatory variable or fixed effect structures. Using ML, we can evaluate the significance of log income on voter turnout using a likelihood ratio test (for nested models):
 ```{r}
 spbeta_full_ml <- update(spbeta_geo, estmethod = "ml")
-spbeta_reduced_ml <- update(spbeta_geo, estmethod = "ml", formula = turnout ~ 1)
+spbeta_reduced_ml <- update(spbeta_full_ml, formula = turnout ~ 1)
 anova(spbeta_full_ml, spbeta_reduced_ml)
 ```
 
@@ -675,8 +676,8 @@ SPGLMs are fit in \pkg{spmodel} using a novel application of the Laplace approxi
 
 # Data and code availability {.unnumbered}
 
-The results in this manuscript were obtained using [R]{.proglang} 4.4.0 with the
-\pkg{spmodel} 0.11.1 package. Figures were created using the [ggplot2]{.pkg} 3.5.1 package [@wickham2016ggplot2] and base [R]{.proglang}.
+The results in this manuscript were obtained using [R]{.proglang} 4.4.1 with the
+\pkg{spmodel} 0.11.1 package. Figures were created using the [ggplot2]{.pkg} 4.0.0 package [@wickham2016ggplot2] and base [R]{.proglang}.
 
 All writing and code associated with this manuscript is available for viewing and download on GitHub at [https://github.com/USEPA/spmodel.glm.manuscript](https://github.com/USEPA/spmodel.glm.manuscript). All data used are part of the \pkg{spmodel} [R]{.proglang} package available for download from CRAN at [https://CRAN.R-project.org/package=spmodel](https://CRAN.R-project.org/package=spmodel). 
 
