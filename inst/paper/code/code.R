@@ -33,22 +33,26 @@ bin <- spglm(
   data = moose,
   spcov_type = "none"
 )
+tidy(bin)
 
 bin_glm <- glm(
   formula = presence ~ elev + strat,
   family = binomial,
   data = moose,
 )
-round(coef(bin), digits = 4)
-round(coef(bin_glm), digits = 4)
-round(sqrt(diag(vcov(bin))), digits = 4)
-round(sqrt(diag(vcov(bin_glm))), digits = 4)
+broom::tidy(bin_glm)
+
+bin_ml <- update(bin, estmethod = "ml")
+glance(bin_ml)[, c("logLik", "AIC", "BIC", "deviance")]
+broom::glance(bin_glm)[, c("logLik", "AIC", "BIC", "deviance")]
 
 glance(spbin)
 glance(bin)
 
 loocv(spbin)
 loocv(bin)
+kcv(spbin)
+kcv(bin)
 
 spbin2 <- update(spbin, spcov_type = "gaussian")
 glances(spbin, spbin2)
@@ -103,7 +107,7 @@ BIC(sppois, spnb, sppois_anis, spnb_anis)
 #==========================================#
 
 spgam <- spglm(
-  formula = exp(log_cond) ~ temp * state + origin,
+  formula = cond ~ temp * state + origin,
   family = "Gamma",
   data = lake,
   spcov_type = "cauchy",
@@ -114,21 +118,17 @@ summary(spgam)
 
 anova(spgam)
 
-library("car", verbose = FALSE)
+car::vif(spgam)
 
-vif(spgam)
+pairs(emmeans::emmeans(spgam, ~ state | temp))
 
-library("emmeans", verbose = FALSE)
-
-pairs(emmeans(spgam, ~ state | temp))
-
-emtrends(spgam, ~ state, var = "temp")
+emmeans::emtrends(spgam, ~ state, var = "temp")
 
 #==========================================#
 # Section 4.3: Modeling harbor seal trends in Alaska, USA ####
 #==========================================#
 
-is_decreasing <- seal$log_trend < 0
+seal$is_decreasing <- seal$trend < 1
 spbin <- spgautor(
   formula = is_decreasing ~ 1,
   family = binomial,

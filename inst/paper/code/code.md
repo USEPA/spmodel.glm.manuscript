@@ -71,21 +71,21 @@ summary(spbin)
 ## 
 ## Deviance Residuals:
 ##     Min      1Q  Median      3Q     Max 
-## -1.7535 -0.8005  0.3484  0.7893  1.5797 
+## -1.7537 -0.7985  0.3467  0.7873  1.5767 
 ## 
 ## Coefficients (fixed):
 ##              Estimate Std. Error z value Pr(>|z|)    
-## (Intercept) -2.465713   1.486212  -1.659 0.097104 .  
-## elev         0.006036   0.003525   1.712 0.086861 .  
-## stratM       1.439273   0.420591   3.422 0.000622 ***
+## (Intercept) -2.474023   1.498874  -1.651 0.098823 .  
+## elev         0.006062   0.003540   1.712 0.086862 .  
+## stratM       1.441894   0.421669   3.419 0.000627 ***
 ## ---
 ## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
 ## 
-## Pseudo R-squared: 0.06275
+## Pseudo R-squared: 0.06276
 ## 
 ## Coefficients (exponential spatial covariance):
 ##        de        ie     range 
-## 5.145e+00 1.294e-03 4.199e+04 
+## 5.244e+00 5.244e-04 4.214e+04 
 ## 
 ## Coefficients (Dispersion for binomial family):
 ## dispersion 
@@ -98,11 +98,11 @@ tidy(spbin, conf.int = TRUE)
 
 ```
 ## # A tibble: 3 × 7
-##   term        estimate std.error statistic  p.value  conf.low conf.high
-##   <chr>          <dbl>     <dbl>     <dbl>    <dbl>     <dbl>     <dbl>
-## 1 (Intercept) -2.47      1.49        -1.66 0.0971   -5.38        0.447 
-## 2 elev         0.00604   0.00353      1.71 0.0869   -0.000873    0.0129
-## 3 stratM       1.44      0.421        3.42 0.000622  0.615       2.26
+##   term        estimate std.error statistic  p.value conf.low conf.high
+##   <chr>          <dbl>     <dbl>     <dbl>    <dbl>    <dbl>     <dbl>
+## 1 (Intercept) -2.47      1.50        -1.65 0.0988   -5.41e+0    0.464 
+## 2 elev         0.00606   0.00354      1.71 0.0869   -8.77e-4    0.0130
+## 3 stratM       1.44      0.422        3.42 0.000627  6.15e-1    2.27
 ```
 
 ``` r
@@ -116,45 +116,57 @@ bin <- spglm(
   data = moose,
   spcov_type = "none"
 )
+tidy(bin)
+```
 
+```
+## # A tibble: 3 × 5
+##   term         estimate std.error statistic p.value
+##   <chr>           <dbl>     <dbl>     <dbl>   <dbl>
+## 1 (Intercept) -0.425      0.421      -1.01  0.313  
+## 2 elev        -0.000317   0.00186    -0.171 0.865  
+## 3 stratM       0.807      0.291       2.78  0.00549
+```
+
+``` r
 bin_glm <- glm(
   formula = presence ~ elev + strat,
   family = binomial,
   data = moose,
 )
-round(coef(bin), digits = 4)
+broom::tidy(bin_glm)
 ```
 
 ```
-## (Intercept)        elev      stratM 
-##     -0.4247     -0.0003      0.8070
-```
-
-``` r
-round(coef(bin_glm), digits = 4)
-```
-
-```
-## (Intercept)        elev      stratM 
-##     -0.4247     -0.0003      0.8070
+## # A tibble: 3 × 5
+##   term         estimate std.error statistic p.value
+##   <chr>           <dbl>     <dbl>     <dbl>   <dbl>
+## 1 (Intercept) -0.425      0.421      -1.01  0.313  
+## 2 elev        -0.000317   0.00186    -0.171 0.865  
+## 3 stratM       0.807      0.291       2.78  0.00549
 ```
 
 ``` r
-round(sqrt(diag(vcov(bin))), digits = 4)
+bin_ml <- update(bin, estmethod = "ml")
+glance(bin_ml)[, c("logLik", "AIC", "BIC", "deviance")]
 ```
 
 ```
-## (Intercept)        elev      stratM 
-##      0.4208      0.0019      0.2906
+## # A tibble: 1 × 4
+##   logLik   AIC   BIC deviance
+##    <dbl> <dbl> <dbl>    <dbl>
+## 1  -147.  300.  310.     294.
 ```
 
 ``` r
-round(sqrt(diag(vcov(bin_glm))), digits = 4)
+broom::glance(bin_glm)[, c("logLik", "AIC", "BIC", "deviance")]
 ```
 
 ```
-## (Intercept)        elev      stratM 
-##      0.4208      0.0019      0.2906
+## # A tibble: 1 × 4
+##   logLik   AIC   BIC deviance
+##    <dbl> <dbl> <dbl>    <dbl>
+## 1  -147.  300.  310.     294.
 ```
 
 ``` r
@@ -163,9 +175,10 @@ glance(spbin)
 
 ```
 ## # A tibble: 1 × 10
-##       n     p  npar value   AIC  AICc   BIC logLik deviance pseudo.r.squared
-##   <int> <dbl> <int> <dbl> <dbl> <dbl> <dbl>  <dbl>    <dbl>            <dbl>
-## 1   218     3     3  676.  682.  683.  693.  -338.     176.           0.0627
+##       n     p  npar value   AIC  AICc   BIC logLik deviance
+##   <int> <dbl> <int> <dbl> <dbl> <dbl> <dbl>  <dbl>    <dbl>
+## 1   218     3     3  276.  282.  282.  292.  -138.     175.
+## # ℹ 1 more variable: pseudo.r.squared <dbl>
 ```
 
 ``` r
@@ -174,9 +187,10 @@ glance(bin)
 
 ```
 ## # A tibble: 1 × 10
-##       n     p  npar value   AIC  AICc   BIC logLik deviance pseudo.r.squared
-##   <int> <dbl> <int> <dbl> <dbl> <dbl> <dbl>  <dbl>    <dbl>            <dbl>
-## 1   218     3     0  708.  708.  708.  708.  -354.     294.           0.0280
+##       n     p  npar value   AIC  AICc   BIC logLik deviance
+##   <int> <dbl> <int> <dbl> <dbl> <dbl> <dbl>  <dbl>    <dbl>
+## 1   218     3     0  307.  307.  307.  307.  -154.     294.
+## # ℹ 1 more variable: pseudo.r.squared <dbl>
 ```
 
 ``` r
@@ -187,7 +201,7 @@ loocv(spbin)
 ## # A tibble: 1 × 3
 ##        bias  MSPE RMSPE
 ##       <dbl> <dbl> <dbl>
-## 1 0.0000206 0.156 0.394
+## 1 0.0000406 0.155 0.394
 ```
 
 ``` r
@@ -202,16 +216,39 @@ loocv(bin)
 ```
 
 ``` r
+kcv(spbin)
+```
+
+```
+## # A tibble: 1 × 3
+##       bias  MSPE RMSPE
+##      <dbl> <dbl> <dbl>
+## 1 -0.00322 0.157 0.396
+```
+
+``` r
+kcv(bin)
+```
+
+```
+## # A tibble: 1 × 3
+##           bias  MSPE RMSPE
+##          <dbl> <dbl> <dbl>
+## 1 0.0000000226 0.240 0.490
+```
+
+``` r
 spbin2 <- update(spbin, spcov_type = "gaussian")
 glances(spbin, spbin2)
 ```
 
 ```
 ## # A tibble: 2 × 11
-##   model      n     p  npar value   AIC  AICc   BIC logLik deviance pseudo.r.squared
-##   <chr>  <int> <dbl> <int> <dbl> <dbl> <dbl> <dbl>  <dbl>    <dbl>            <dbl>
-## 1 spbin2   218     3     3  674.  680.  680.  690.  -337.     198.           0.0698
-## 2 spbin    218     3     3  676.  682.  683.  693.  -338.     176.           0.0627
+##   model      n     p  npar value   AIC  AICc   BIC logLik deviance
+##   <chr>  <int> <dbl> <int> <dbl> <dbl> <dbl> <dbl>  <dbl>    <dbl>
+## 1 spbin2   218     3     3  273.  279.  279.  289.  -136.     198.
+## 2 spbin    218     3     3  276.  282.  282.  292.  -138.     175.
+## # ℹ 1 more variable: pseudo.r.squared <dbl>
 ```
 
 ``` r
@@ -222,7 +259,7 @@ loocv(spbin)
 ## # A tibble: 1 × 3
 ##        bias  MSPE RMSPE
 ##       <dbl> <dbl> <dbl>
-## 1 0.0000206 0.156 0.394
+## 1 0.0000406 0.155 0.394
 ```
 
 ``` r
@@ -233,7 +270,7 @@ loocv(spbin2)
 ## # A tibble: 1 × 3
 ##        bias  MSPE RMSPE
 ##       <dbl> <dbl> <dbl>
-## 1 -0.000261 0.146 0.382
+## 1 -0.000237 0.146 0.382
 ```
 
 ``` r
@@ -251,19 +288,20 @@ augment(spbin)
 ## Bounding box:  xmin: 269085 ymin: 1416151 xmax: 419057.4 ymax: 1541016
 ## Projected CRS: NAD83 / Alaska Albers
 ## # A tibble: 218 × 9
-##    presence  elev strat .fitted .resid    .hat  .cooksd .std.resid           geometry
-##  * <fct>    <dbl> <chr>   <dbl>  <dbl>   <dbl>    <dbl>      <dbl>        <POINT [m]>
-##  1 0         469. L       -1.95 -0.516 0.0476  0.00465      -0.528 (293542.6 1541016)
-##  2 0         362. L       -2.70 -0.361 0.0123  0.000548     -0.363 (298313.1 1533972)
-##  3 0         173. M       -1.96 -0.514 0.00455 0.000405     -0.516 (281896.4 1532516)
-##  4 0         280. L       -3.15 -0.290 0.00413 0.000117     -0.291 (298651.3 1530264)
-##  5 0         620. L       -1.19 -0.728 0.168   0.0427       -0.798 (311325.3 1527705)
-##  6 0         164. M       -1.71 -0.576 0.00534 0.000598     -0.578 (291421.5 1518398)
-##  7 0         164. M       -1.60 -0.606 0.00576 0.000714     -0.608 (287298.3 1518035)
-##  8 0         186. L       -2.50 -0.397 0.00439 0.000233     -0.398 (279050.9 1517324)
-##  9 0         362. L       -1.88 -0.532 0.0239  0.00237      -0.539 (346145.9 1512479)
-## 10 0         430. L       -1.54 -0.623 0.0497  0.00713      -0.639 (321354.6 1509966)
+##    presence  elev strat .fitted .resid    .hat  .cooksd .std.resid
+##  * <fct>    <dbl> <chr>   <dbl>  <dbl>   <dbl>    <dbl>      <dbl>
+##  1 0         469. L       -1.96 -0.513 0.0473  0.00457      -0.525
+##  2 0         362. L       -2.71 -0.358 0.0122  0.000535     -0.360
+##  3 0         173. M       -1.97 -0.511 0.00451 0.000397     -0.512
+##  4 0         280. L       -3.16 -0.288 0.00408 0.000114     -0.289
+##  5 0         620. L       -1.20 -0.725 0.167   0.0422       -0.794
+##  6 0         164. M       -1.72 -0.574 0.00532 0.000591     -0.576
+##  7 0         164. M       -1.61 -0.604 0.00574 0.000707     -0.606
+##  8 0         186. L       -2.51 -0.396 0.00438 0.000230     -0.396
+##  9 0         362. L       -1.89 -0.529 0.0238  0.00233      -0.536
+## 10 0         430. L       -1.55 -0.621 0.0497  0.00706      -0.637
 ## # ℹ 208 more rows
+## # ℹ 1 more variable: geometry <POINT [m]>
 ```
 
 ``` r
@@ -274,9 +312,9 @@ varcomp(spbin)
 ## # A tibble: 3 × 2
 ##   varcomp            proportion
 ##   <chr>                   <dbl>
-## 1 Covariates (PR-sq)   0.0627  
-## 2 de                   0.937   
-## 3 ie                   0.000236
+## 1 Covariates (PR-sq)  0.0628   
+## 2 de                  0.937    
+## 3 ie                  0.0000937
 ```
 
 ``` r
@@ -289,7 +327,7 @@ predict(spbin, newdata = moose_preds)[1:5]
 
 ```
 ##           1           2           3           4           5 
-##  0.06664165 -0.79069107 -1.60387940 -0.83159357  1.38183928
+##  0.06989524 -0.79411725 -1.61106131 -0.83935088  1.39081663
 ```
 
 ``` r
@@ -298,7 +336,7 @@ predict(spbin, newdata = moose_preds, type = "response")[1:5]
 
 ```
 ##         1         2         3         4         5 
-## 0.5166542 0.3120203 0.1674401 0.3033082 0.7992862
+## 0.5174667 0.3112853 0.1664413 0.3016715 0.8007226
 ```
 
 ``` r
@@ -307,11 +345,11 @@ predict(spbin, newdata = moose_preds, interval = "prediction")[1:5, ]
 
 ```
 ##           fit        lwr       upr
-## 1  0.06664165 -2.0374370 2.1707203
-## 2 -0.79069107 -3.4758514 1.8944692
-## 3 -1.60387940 -4.0953329 0.8875741
-## 4 -0.83159357 -3.0704818 1.4072947
-## 5  1.38183928 -0.7692107 3.5328893
+## 1  0.06989524 -2.0456011 2.1853915
+## 2 -0.79411725 -3.4952212 1.9069867
+## 3 -1.61106131 -4.1166330 0.8945103
+## 4 -0.83935088 -3.0915348 1.4128330
+## 5  1.39081663 -0.7720673 3.5537005
 ```
 
 ``` r
@@ -327,16 +365,16 @@ augment(spbin, newdata = moose_preds, interval = "prediction")
 ## # A tibble: 100 × 6
 ##     elev strat .fitted .lower  .upper           geometry
 ##  * <dbl> <chr>   <dbl>  <dbl>   <dbl>        <POINT [m]>
-##  1  143. L      0.0666 -2.04   2.17   (401239.6 1436192)
-##  2  324. L     -0.791  -3.48   1.89   (352640.6 1490695)
-##  3  158. L     -1.60   -4.10   0.888  (360954.9 1491590)
-##  4  221. M     -0.832  -3.07   1.41   (291839.8 1466091)
-##  5  209. M      1.38   -0.769  3.53   (310991.9 1441630)
-##  6  218. L     -2.59   -5.20   0.0177 (304473.8 1512103)
-##  7  127. L     -2.73   -5.24  -0.220  (339011.1 1459318)
-##  8  122. L     -2.32   -4.74   0.0920 (342827.3 1463452)
-##  9  191  L     -1.17   -4.01   1.66   (284453.8 1502837)
-## 10  105. L     -0.905  -3.05   1.24   (391343.9 1483791)
+##  1  143. L      0.0699 -2.05   2.19   (401239.6 1436192)
+##  2  324. L     -0.794  -3.50   1.91   (352640.6 1490695)
+##  3  158. L     -1.61   -4.12   0.895  (360954.9 1491590)
+##  4  221. M     -0.839  -3.09   1.41   (291839.8 1466091)
+##  5  209. M      1.39   -0.772  3.55   (310991.9 1441630)
+##  6  218. L     -2.60   -5.22   0.0234 (304473.8 1512103)
+##  7  127. L     -2.74   -5.26  -0.216  (339011.1 1459318)
+##  8  122. L     -2.33   -4.77   0.0978 (342827.3 1463452)
+##  9  191  L     -1.17   -4.02   1.68   (284453.8 1502837)
+## 10  105. L     -0.907  -3.06   1.25   (391343.9 1483791)
 ## # ℹ 90 more rows
 ```
 
@@ -362,8 +400,8 @@ BIC(sppois, spnb)
 
 ```
 ##        df      BIC
-## sppois  3 1344.574
-## spnb    4 1343.105
+## sppois  3 943.7197
+## spnb    4 941.8881
 ```
 
 ``` r
@@ -375,10 +413,10 @@ BIC(sppois, spnb, sppois_anis, spnb_anis)
 
 ```
 ##             df      BIC
-## sppois       3 1344.574
-## spnb         4 1343.105
-## sppois_anis  5 1341.143
-## spnb_anis    6 1339.714
+## sppois       3 943.7197
+## spnb         4 941.8881
+## sppois_anis  5 940.4199
+## spnb_anis    6 938.9993
 ```
 
 ``` r
@@ -387,7 +425,7 @@ BIC(sppois, spnb, sppois_anis, spnb_anis)
 #==========================================#
 
 spgam <- spglm(
-  formula = exp(log_cond) ~ temp * state + origin,
+  formula = cond ~ temp * state + origin,
   family = "Gamma",
   data = lake,
   spcov_type = "cauchy",
@@ -400,36 +438,36 @@ summary(spgam)
 ```
 ## 
 ## Call:
-## spglm(formula = exp(log_cond) ~ temp * state + origin, family = "Gamma", 
+## spglm(formula = cond ~ temp * state + origin, family = "Gamma", 
 ##     data = lake, spcov_type = "cauchy", partition_factor = ~year)
 ## 
 ## Deviance Residuals:
 ##      Min       1Q   Median       3Q      Max 
-## -1.35762 -0.20796 -0.03706  0.17869  1.10616 
+## -1.25870 -0.18421 -0.03273  0.16951  1.00464 
 ## 
 ## Coefficients (fixed):
 ##               Estimate Std. Error z value Pr(>|z|)    
-## (Intercept)    3.59325    0.50058   7.178 7.06e-13 ***
-## temp           0.15182    0.03006   5.051 4.39e-07 ***
-## stateCO       -0.03214    0.56098  -0.057  0.95432    
-## stateNV        0.75664    0.66851   1.132  0.25771    
-## stateUT       -0.19696    0.55916  -0.352  0.72466    
-## originNATURAL  0.08313    0.21988   0.378  0.70538    
-## temp:stateCO   0.13679    0.04808   2.845  0.00444 ** 
-## temp:stateNV   0.01882    0.05820   0.323  0.74645    
-## temp:stateUT   0.20015    0.04846   4.131 3.62e-05 ***
+## (Intercept)    3.56516    0.50509   7.058 1.68e-12 ***
+## temp           0.15281    0.03015   5.068 4.02e-07 ***
+## stateCO       -0.01340    0.56220  -0.024  0.98098    
+## stateNV        0.77487    0.66791   1.160  0.24600    
+## stateUT       -0.17698    0.55945  -0.316  0.75174    
+## originNATURAL  0.08565    0.22142   0.387  0.69890    
+## temp:stateCO   0.13488    0.04817   2.800  0.00511 ** 
+## temp:stateNV   0.01781    0.05808   0.307  0.75911    
+## temp:stateUT   0.19723    0.04833   4.081 4.49e-05 ***
 ## ---
 ## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
 ## 
-## Pseudo R-squared: 0.7061
+## Pseudo R-squared: 0.7093
 ## 
 ## Coefficients (cauchy spatial covariance):
 ##        de        ie     range     extra 
-## 2.069e-02 2.952e-01 4.119e+06 5.645e-01 
+## 2.722e-02 3.218e-01 6.062e+06 2.663e-01 
 ## 
 ## Coefficients (Dispersion for Gamma family):
 ## dispersion 
-##      3.761
+##      4.095
 ```
 
 ``` r
@@ -439,68 +477,42 @@ anova(spgam)
 ```
 ## Analysis of Variance Table
 ## 
-## Response: exp(log_cond)
+## Response: cond
 ##             Df    Chi2 Pr(>Chi2)    
-## (Intercept)  1 51.5270 7.062e-13 ***
-## temp         1 25.5146 4.390e-07 ***
-## state        3  3.0747 0.3802528    
-## origin       1  0.1429 0.7053819    
-## temp:state   3 19.7668 0.0001897 ***
+## (Intercept)  1 49.8221 1.683e-12 ***
+## temp         1 25.6843 4.021e-07 ***
+## state        3  3.0926 0.3775687    
+## origin       1  0.1496 0.6989043    
+## temp:state   3 19.3168 0.0002351 ***
 ## ---
 ## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
 ```
 
 ``` r
-library("car", verbose = FALSE)
-```
-
-```
-## Warning: package 'car' was built under R version 4.4.3
-```
-
-```
-## Loading required package: carData
-```
-
-```
-## Warning: package 'carData' was built under R version 4.4.3
-```
-
-``` r
-vif(spgam)
+car::vif(spgam)
 ```
 
 ```
 ##                  GVIF Df GVIF^(1/(2*Df))
-## temp         4.691914  1        2.166083
-## state      127.082397  3        2.242234
-## origin       1.264940  1        1.124695
-## temp:state  76.387383  3        2.059856
+## temp         4.725774  1        2.173885
+## state      126.219690  3        2.239690
+## origin       1.270228  1        1.127044
+## temp:state  75.860886  3        2.057483
 ```
 
 ``` r
-library("emmeans", verbose = FALSE)
-```
-
-```
-## Welcome to emmeans.
-## Caution: You lose important information if you filter this package's results.
-## See '? untidy'
-```
-
-``` r
-pairs(emmeans(spgam, ~ state | temp))
+pairs(emmeans::emmeans(spgam, ~ state | temp))
 ```
 
 ```
 ## temp = 7.63:
 ##  contrast estimate    SE  df z.ratio p.value
-##  AZ - CO    -1.012 0.337 Inf  -3.004  0.0142
-##  AZ - NV    -0.900 0.348 Inf  -2.584  0.0480
-##  AZ - UT    -1.331 0.326 Inf  -4.082  0.0003
-##  CO - NV     0.112 0.258 Inf   0.434  0.9727
-##  CO - UT    -0.319 0.223 Inf  -1.427  0.4822
-##  NV - UT    -0.431 0.244 Inf  -1.763  0.2915
+##  AZ - CO    -1.016 0.337 Inf  -3.015  0.0137
+##  AZ - NV    -0.911 0.348 Inf  -2.614  0.0443
+##  AZ - UT    -1.329 0.327 Inf  -4.068  0.0003
+##  CO - NV     0.106 0.258 Inf   0.410  0.9768
+##  CO - UT    -0.312 0.224 Inf  -1.395  0.5022
+##  NV - UT    -0.418 0.245 Inf  -1.705  0.3210
 ## 
 ## Results are averaged over the levels of: origin 
 ## Degrees-of-freedom method: asymptotic 
@@ -509,19 +521,18 @@ pairs(emmeans(spgam, ~ state | temp))
 ```
 
 ``` r
-emtrends(spgam, ~ state, var = "temp")
+emmeans::emtrends(spgam, ~ state, var = "temp")
 ```
 
 ```
 ##  state temp.trend     SE  df asymp.LCL asymp.UCL
-##  AZ         0.152 0.0301 Inf    0.0929     0.211
-##  CO         0.289 0.0370 Inf    0.2161     0.361
-##  NV         0.171 0.0504 Inf    0.0718     0.270
-##  UT         0.352 0.0372 Inf    0.2791     0.425
+##  AZ         0.153 0.0302 Inf    0.0937     0.212
+##  CO         0.288 0.0370 Inf    0.2151     0.360
+##  NV         0.171 0.0502 Inf    0.0722     0.269
+##  UT         0.350 0.0369 Inf    0.2777     0.422
 ## 
 ## Results are averaged over the levels of: origin 
 ## Degrees-of-freedom method: asymptotic 
-## Results are given on the exp (not the response) scale. 
 ## Confidence level used: 0.95
 ```
 
@@ -530,7 +541,7 @@ emtrends(spgam, ~ state, var = "temp")
 # Section 4.3: Modeling harbor seal trends in Alaska, USA ####
 #==========================================#
 
-is_decreasing <- seal$log_trend < 0
+seal$is_decreasing <- seal$trend < 1
 spbin <- spgautor(
   formula = is_decreasing ~ 1,
   family = binomial,
@@ -546,7 +557,7 @@ tidy(spbin, conf.int = TRUE)
 ## # A tibble: 1 × 7
 ##   term        estimate std.error statistic p.value conf.low conf.high
 ##   <chr>          <dbl>     <dbl>     <dbl>   <dbl>    <dbl>     <dbl>
-## 1 (Intercept)    0.340     0.673     0.506   0.613   -0.979      1.66
+## 1 (Intercept)    0.335     0.626     0.534   0.593   -0.893      1.56
 ```
 
 ``` r
@@ -555,7 +566,7 @@ emmeans(spbin, ~ 1, type = "response")
 
 ```
 ##  1        prob    SE  df asymp.LCL asymp.UCL
-##  overall 0.584 0.164 Inf     0.273      0.84
+##  overall 0.583 0.152 Inf     0.291     0.827
 ## 
 ## Degrees-of-freedom method: asymptotic 
 ## Confidence level used: 0.95 
@@ -567,25 +578,26 @@ seal
 ```
 
 ```
-## Simple feature collection with 149 features and 2 fields
+## Simple feature collection with 149 features and 5 fields
 ## Geometry type: POLYGON
 ## Dimension:     XY
 ## Bounding box:  xmin: 913618.8 ymin: 855730.2 xmax: 1221859 ymax: 1145054
 ## Projected CRS: NAD83 / Alaska Albers
-## # A tibble: 149 × 3
-##    log_trend stock                                                                                     geometry
-##  *     <dbl> <fct>                                                                                <POLYGON [m]>
-##  1  NA       8     ((1035002 1054710, 1035002 1054542, 1035002 1053542, 1035002 1052542, 1035002 1051624, 10...
-##  2  -0.282   8     ((1037002 1039492, 1037006 1039490, 1037017 1039492, 1037035 1039496, 1037045 1039499, 10...
-##  3  -0.00121 8     ((1070158 1030216, 1070185 1030207, 1070187 1030207, 1070211 1030207, 1070275 1030205, 10...
-##  4   0.0354  8     ((1054906 1034826, 1054931 1034821, 1054936 1034822, 1055001 1034828, 1055002 1034828, 10...
-##  5  -0.0160  8     ((1025142 1056940, 1025184 1056889, 1025222 1056836, 1025256 1056780, 1025275 1056747, 10...
-##  6   0.0872  8     ((1026035 1044623, 1026037 1044605, 1026072 1044610, 1026083 1044612, 1026112 1044616, 10...
-##  7  -0.266   8     ((1100345 1060709, 1100287 1060706, 1100228 1060706, 1100170 1060711, 1100112 1060718, 11...
-##  8   0.0743  8     ((1030247 1029637, 1030248 1029637, 1030265 1029642, 1030328 1029656, 1030393 1029667, 10...
-##  9  NA       8     ((1043093 1020553, 1043097 1020550, 1043101 1020550, 1043166 1020557, 1043231 1020559, 10...
-## 10  -0.00961 8     ((1116002 1024542, 1116002 1023542, 1116002 1022542, 1116002 1021554, 1115988 1021564, 11...
+## # A tibble: 149 × 6
+##    log_trend  trend stock                       geometry is_decreasing
+##  *     <dbl>  <dbl> <fct>                  <POLYGON [m]> <lgl>        
+##  1  NA       NA     8     ((1035002 1054710, 1035002 10… NA           
+##  2  -0.282    0.754 8     ((1037002 1039492, 1037006 10… TRUE         
+##  3  -0.00121  0.999 8     ((1070158 1030216, 1070185 10… TRUE         
+##  4   0.0354   1.04  8     ((1054906 1034826, 1054931 10… FALSE        
+##  5  -0.0160   0.984 8     ((1025142 1056940, 1025184 10… TRUE         
+##  6   0.0872   1.09  8     ((1026035 1044623, 1026037 10… FALSE        
+##  7  -0.266    0.767 8     ((1100345 1060709, 1100287 10… TRUE         
+##  8   0.0743   1.08  8     ((1030247 1029637, 1030248 10… FALSE        
+##  9  NA       NA     8     ((1043093 1020553, 1043097 10… NA           
+## 10  -0.00961  0.990 8     ((1116002 1024542, 1116002 10… TRUE         
 ## # ℹ 139 more rows
+## # ℹ 1 more variable: sampled <fct>
 ```
 
 ``` r
@@ -594,11 +606,11 @@ predict(spbin, type = "response", interval = "prediction")[1:5, ]
 
 ```
 ##          fit       lwr       upr
-## 1  0.6807677 0.3863736 0.8783808
-## 9  0.5945680 0.2467634 0.8678078
-## 13 0.6189055 0.2974432 0.8616799
-## 15 0.6040102 0.2921802 0.8493132
-## 18 0.6375700 0.3356282 0.8596641
+## 1  0.6790592 0.3810180 0.8791211
+## 9  0.5859764 0.2358680 0.8664793
+## 13 0.6136317 0.2888352 0.8613150
+## 15 0.5976789 0.2831359 0.8482017
+## 18 0.6334075 0.3281146 0.8594164
 ```
 
 ``` r
@@ -626,8 +638,8 @@ AIC(spbeta_geo, spbeta_auto)
 
 ```
 ##             df       AIC
-## spbeta_geo   5 -44.53113
-## spbeta_auto  3 -22.46104
+## spbeta_geo   5 -465.8884
+## spbeta_auto  3 -443.4700
 ```
 
 ``` r
@@ -640,8 +652,8 @@ anova(spbeta_full_ml, spbeta_reduced_ml)
 ## Likelihood Ratio Test
 ## 
 ## Response: turnout
-##                                     Df   Chi2 Pr(>Chi2)    
-## spbeta_reduced_ml vs spbeta_full_ml  1 23.155 1.494e-06 ***
+##                                     Df  Chi2 Pr(>Chi2)    
+## spbeta_reduced_ml vs spbeta_full_ml  1 19.17 1.196e-05 ***
 ## ---
 ## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
 ```
@@ -652,8 +664,8 @@ AIC(spbeta_full_ml, spbeta_reduced_ml)
 
 ```
 ##                   df       AIC
-## spbeta_full_ml     7 -31.25900
-## spbeta_reduced_ml  6 -10.10354
+## spbeta_full_ml     7 -467.6174
+## spbeta_reduced_ml  6 -450.4478
 ```
 
 ``` r
@@ -662,40 +674,7 @@ AIC(spbeta_full_ml, spbeta_reduced_ml)
 #=========================================================#
 
 library("ggplot2", verbose = FALSE)
-```
-
-```
-## Warning: package 'ggplot2' was built under R version 4.4.3
-```
-
-``` r
 library("dplyr", verbose = FALSE)
-```
-
-```
-## 
-## Attaching package: 'dplyr'
-```
-
-```
-## The following object is masked from 'package:car':
-## 
-##     recode
-```
-
-```
-## The following objects are masked from 'package:stats':
-## 
-##     filter, lag
-```
-
-```
-## The following objects are masked from 'package:base':
-## 
-##     intersect, setdiff, setequal, union
-```
-
-``` r
 library("patchwork")
 
 okabe <- c("#E69F00", "#56B4E9", "#009E73", "#F0E442", "#0072B2", "#D55E00", "#CC79A7")
@@ -832,6 +811,17 @@ preds_aug <- augment(
   interval = "prediction"
 )
 spbin_aug <- augment(spbin, type.predict = "response", interval = "prediction")
+```
+
+```
+## Warning: interval = "prediction" is ignored when newdata is not
+## supplied, because a prediction interval requires a location that has
+## not been observed. Supply newdata for prediction intervals, or use
+## interval = "confidence" for an interval around the fitted mean at the
+## observed locations.
+```
+
+``` r
 comb_aug <- bind_rows(spbin_aug %>% mutate(Type = "Fitted"), preds_aug %>% mutate(Type = "Pred"))
 
 figure6 <- ggplot(comb_aug, aes(color = .fitted, shape = Type)) +
@@ -981,31 +971,57 @@ sessionInfo()
 ```
 ## R version 4.4.1 (2024-06-14 ucrt)
 ## Platform: x86_64-w64-mingw32/x64
-## Running under: Windows 11 x64 (build 22631)
+## Running under: Windows 11 x64 (build 26200)
 ## 
 ## Matrix products: default
 ## 
 ## 
 ## locale:
-## [1] LC_COLLATE=English_United States.utf8  LC_CTYPE=English_United States.utf8    LC_MONETARY=English_United States.utf8 LC_NUMERIC=C                          
+## [1] LC_COLLATE=English_United States.utf8 
+## [2] LC_CTYPE=English_United States.utf8   
+## [3] LC_MONETARY=English_United States.utf8
+## [4] LC_NUMERIC=C                          
 ## [5] LC_TIME=English_United States.utf8    
 ## 
 ## time zone: America/Los_Angeles
 ## tzcode source: internal
 ## 
 ## attached base packages:
-## [1] stats     graphics  grDevices utils     datasets  methods   base     
+## [1] stats     graphics  grDevices utils     datasets  methods  
+## [7] base     
 ## 
 ## other attached packages:
-## [1] patchwork_1.2.0 dplyr_1.1.4     ggplot2_4.0.0   emmeans_1.10.3  car_3.1-3       carData_3.0-5   spmodel_0.11.1 
+## [1] patchwork_1.3.2 here_1.0.2      car_3.1-3       carData_3.0-5  
+## [5] emmeans_1.10.3  dplyr_1.2.0     ggplot2_4.0.2   spmodel_0.15.0 
 ## 
 ## loaded via a namespace (and not attached):
-##  [1] utf8_1.2.4         generics_0.1.4     class_7.3-22       KernSmooth_2.23-24 lattice_0.22-6     magrittr_2.0.4     evaluate_0.24.0    grid_4.4.1        
-##  [9] estimability_1.5.1 RColorBrewer_1.1-3 mvtnorm_1.2-5      rprojroot_2.1.1    Matrix_1.7-0       e1071_1.7-16       DBI_1.2.3          Formula_1.2-5     
-## [17] viridisLite_0.4.2  scales_1.4.0       abind_1.4-5        cli_3.6.3          rlang_1.1.6        units_0.8-7        withr_3.0.2        tools_4.4.1       
-## [25] parallel_4.4.1     coda_0.19-4.1      here_1.0.2         vctrs_0.6.5        R6_2.5.1           proxy_0.4-27       lifecycle_1.0.4    classInt_0.4-11   
-## [33] pkgconfig_2.0.3    pillar_1.11.1      gtable_0.3.6       glue_1.7.0         Rcpp_1.0.12        sf_1.0-21          xfun_0.52          tibble_3.3.0      
-## [41] tidyselect_1.2.1   rstudioapi_0.16.0  knitr_1.50         farver_2.1.2       xtable_1.8-4       labeling_0.4.3     compiler_4.4.1     S7_0.2.0
+##  [1] gtable_0.3.6       xfun_0.52          processx_3.8.4    
+##  [4] lattice_0.22-6     callr_3.7.6        vctrs_0.7.1       
+##  [7] tools_4.4.1        pak_0.9.0          ps_1.7.6          
+## [10] generics_0.1.4     parallel_4.4.1     tibble_3.3.0      
+## [13] proxy_0.4-27       pkgconfig_2.0.3    pdftools_3.8.0    
+## [16] Matrix_1.7-0       KernSmooth_2.23-24 RColorBrewer_1.1-3
+## [19] S7_0.2.0           lifecycle_1.0.5    compiler_4.4.1    
+## [22] farver_2.1.2       stringr_1.5.2      textshaping_0.4.0 
+## [25] tinytex_0.57       litedown_0.7       htmltools_0.5.8.1 
+## [28] class_7.3-22       yaml_2.3.10        Formula_1.2-5     
+## [31] pillar_1.11.1      tidyr_1.3.1        classInt_0.4-11   
+## [34] abind_1.4-5        mime_0.12          commonmark_1.9.5  
+## [37] digest_0.6.36      tidyselect_1.2.1   mvtnorm_1.2-5     
+## [40] stringi_1.8.4      sf_1.0-21          purrr_1.1.0       
+## [43] labeling_0.4.3     fastmap_1.2.0      rprojroot_2.1.1   
+## [46] grid_4.4.1         cli_3.6.3          magrittr_2.0.4    
+## [49] utf8_1.2.4         broom_1.0.10       e1071_1.7-16      
+## [52] withr_3.0.2        scales_1.4.0       backports_1.5.0   
+## [55] estimability_1.5.1 rmarkdown_2.31     qpdf_1.4.1        
+## [58] ragg_1.5.0         askpass_1.2.0      spelling_2.3.1    
+## [61] coda_0.19-4.1      evaluate_0.24.0    knitr_1.50        
+## [64] rbibutils_2.3      viridisLite_0.4.2  markdown_2.0      
+## [67] rticles_0.27       rlang_1.1.7        Rcpp_1.0.12       
+## [70] xtable_1.8-4       glue_1.7.0         DBI_1.2.3         
+## [73] xml2_1.4.0         renv_1.0.7         hunspell_3.0.5    
+## [76] pkgload_1.5.3      R6_2.5.1           systemfonts_1.3.1 
+## [79] units_0.8-7
 ```
 
 ``` r
