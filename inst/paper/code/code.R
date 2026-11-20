@@ -183,7 +183,7 @@ library("patchwork")
 okabe <- c("#E69F00", "#56B4E9", "#009E73", "#F0E442", "#0072B2", "#D55E00", "#CC79A7")
 
 #==========================================#
-# Figure 1 ####
+# Figure 1a: Correlation by range ####
 #==========================================#
 
 h <- seq(0, 1, length.out = 1000)
@@ -199,10 +199,8 @@ figure1 <- ggplot(dat, aes(x = Distance, y = Correlation, color = Range, linetyp
   geom_line(linewidth = 1.2) +
   scale_color_viridis_d() +
   theme_bw(base_size = 14)
-figure1
-
 #==========================================#
-# Figure 2 ####
+# Figure 1b: Correlation types ####
 #==========================================#
 
 h <- seq(0, 1, length.out = 1000)
@@ -215,10 +213,16 @@ figure2 <- ggplot(dat, aes(x = Distance, y = Correlation, color = Type, linetype
   geom_line(linewidth = 1.2) +
   scale_color_viridis_d() +
   theme_bw(base_size = 14)
-figure2
+correlations <- (figure1 | figure2) +
+  plot_annotation(
+    tag_levels = "a",
+    tag_prefix = "(",
+    tag_suffix = ")"
+  )
+correlations
 
 #==========================================#
-# Figure 3 ####
+# Figure 2 ####
 #==========================================#
 
 moose_comb <- bind_rows(moose |> mutate(samp = "yes"), moose_preds |> mutate(samp = "no"))
@@ -237,7 +241,7 @@ figure3 <- ggplot(moose_comb, aes(color = presence, shape = samp)) +
 figure3
 
 #==========================================#
-# Figure 4 ####
+# Figure 3 ####
 #==========================================#
 
 spbin <- spglm(
@@ -266,7 +270,7 @@ p1
 p2
 
 #==========================================#
-# Figure 5 ####
+# Figure 4 ####
 #==========================================#
 
 
@@ -275,7 +279,7 @@ plot(spbin, which = 7)
 
 
 #==========================================#
-# Figure 6 ####
+# Figure 5 ####
 #==========================================#
 
 preds_aug <- augment(
@@ -296,7 +300,7 @@ figure6 <- ggplot(comb_aug, aes(color = .fitted, shape = Type)) +
 figure6
 
 #==========================================#
-# Figure 7 ####
+# Figure 6 ####
 #==========================================#
 
 p1 <- ggplot(preds_aug, aes(color = .lower)) +
@@ -317,7 +321,7 @@ p1
 p2
 
 #==========================================#
-# Figure 8 ####
+# Figure 7 ####
 #==========================================#
 
 figure8 <- ggplot(moose_comb, aes(color = count, shape = samp)) +
@@ -331,7 +335,7 @@ figure8 <- ggplot(moose_comb, aes(color = count, shape = samp)) +
 figure8
 
 #==========================================#
-# Figure 9 ####
+# Figure 8 ####
 #==========================================#
 
 spnbin <- spglm(
@@ -349,7 +353,7 @@ plot(spnbin_iso, which = 8)
 plot(spnbin, which = 8)
 
 #==========================================#
-# Figure 10 ####
+# Figure 9 ####
 #==========================================#
 
 seal$sampled <- factor(if_else(is.na(seal$log_trend), "no", "yes"), levels = c("yes", "no"))
@@ -372,7 +376,7 @@ p1
 p2
 
 #==========================================#
-# Figure 11 ####
+# Figure 10 ####
 #==========================================#
 
 texas$samp <- factor(if_else(is.na(texas$turnout), "no", "yes"), levels = c("yes", "no"))

@@ -7,7 +7,7 @@ fig_path <- here("inst", "paper", "figures")
 
 
 #######################
-######## Figure 1
+######## Figure 1a: Correlation by range
 #######################
 h <- seq(0, 1, length.out = 1000)
 range1 <- 0.2
@@ -22,17 +22,9 @@ cor_range <- ggplot(dat, aes(x = Distance, y = Correlation, color = Range, linet
   geom_line(linewidth = 1.2) +
   scale_color_viridis_d() +
   theme_bw(base_size = 14)
-cor_range
-ggsave(
-  filename = paste0(fig_path, "/figure-1.png"),
-  plot = cor_range,
-  dpi = 300,
-  height = 6.07,
-  width = 6.49
-)
 
 #######################
-######## Figure 2
+######## Figure 1b: Correlation types
 #######################
 h <- seq(0, 1, length.out = 1000)
 range <- 0.5
@@ -44,18 +36,23 @@ cor_type <- ggplot(dat, aes(x = Distance, y = Correlation, color = Type, linetyp
   geom_line(linewidth = 1.2) +
   scale_color_viridis_d() +
   theme_bw(base_size = 14)
-cor_type
+correlations <- (cor_range | cor_type) +
+  plot_annotation(
+    tag_levels = "a",
+    tag_prefix = "(",
+    tag_suffix = ")"
+  )
+correlations
 ggsave(
-  filename = paste0(fig_path, "/figure-2.png"),
-  plot = cor_type,
-  dpi = 300,
-  height = 6.07,
-  width = 6.49
+  filename = paste0(fig_path, "/figure-1.pdf"),
+  plot = correlations,
+  height = 3.5,
+  width = 9
 )
 
 
 #######################
-######## Figure 3
+######## Figure 2
 #######################
 
 okabe <- c("#E69F00", "#56B4E9", "#009E73", "#F0E442", "#0072B2", "#D55E00", "#CC79A7")
@@ -74,7 +71,7 @@ obs_pred_presence <- ggplot(moose_comb, aes(color = presence, shape = samp)) +
   geom_sf(size = 2, data = moose_comb %>% filter(samp == "no"), color = "red", shape = 17)
 obs_pred_presence
 ggsave(
-  filename = paste0(fig_path, "/figure-3.png"),
+  filename = paste0(fig_path, "/figure-3.pdf"),
   plot = obs_pred_presence,
   dpi = 300,
   height = 5,
@@ -82,7 +79,7 @@ ggsave(
 )
 
 #######################
-######## Figure 4
+######## Figure 3
 #######################
 
 
@@ -110,7 +107,7 @@ p2 <- ggplot(spbin_aug, aes(color = .std.resid)) +
 
 p1 + p2
 ggsave(
-  filename = paste0(fig_path, "/figure-4.png"),
+  filename = paste0(fig_path, "/figure-4.pdf"),
   plot = p1 + p2,
   dpi = 300,
   height = 3,
@@ -118,11 +115,11 @@ ggsave(
 )
 
 ########################
-####### Figure 5
+####### Figure 4
 ########################
 
 
-png(paste0(fig_path, "/figure-5.png"), height = 5, width = 10, units = "in", res = 300)
+pdf(paste0(fig_path, "/figure-5.pdf"), height = 5, width = 10)
 par(mfrow = c(1, 2))
 plot(spbin, which = 4)
 plot(spbin, which = 7)
@@ -131,7 +128,7 @@ dev.off()
 
 
 ########################
-####### Figure 6
+####### Figure 5
 ########################
 
 preds_aug <- augment(
@@ -151,7 +148,7 @@ obs_pred_fitted <- ggplot(comb_aug, aes(color = .fitted, shape = Type)) +
   theme_bw()
 obs_pred_fitted
 ggsave(
-  filename = paste0(fig_path, "/figure-6.png"),
+  filename = paste0(fig_path, "/figure-6.pdf"),
   plot = obs_pred_fitted,
   dpi = 300,
   height = 5,
@@ -159,7 +156,7 @@ ggsave(
 )
 
 ########################
-####### Figure 7
+####### Figure 6
 ########################
 
 p1 <- ggplot(preds_aug, aes(color = .lower)) +
@@ -178,7 +175,7 @@ p2 <- ggplot(preds_aug, aes(color = .upper)) +
 
 p1 + p2
 ggsave(
-  filename = paste0(fig_path, "/figure-7.png"),
+  filename = paste0(fig_path, "/figure-7.pdf"),
   plot = p1 + p2,
   dpi = 300,
   height = 3,
@@ -186,7 +183,7 @@ ggsave(
 )
 
 ########################
-####### Figure 8
+####### Figure 7
 ########################
 
 obs_pred_count <- ggplot(moose_comb, aes(color = count, shape = samp)) +
@@ -199,7 +196,7 @@ obs_pred_count <- ggplot(moose_comb, aes(color = count, shape = samp)) +
   geom_sf(size = 2, data = moose_comb %>% filter(samp == "no"), color = "red", shape = 17)
 obs_pred_count
 ggsave(
-  filename = paste0(fig_path, "/figure-8.png"),
+  filename = paste0(fig_path, "/figure-8.pdf"),
   plot = obs_pred_count,
   dpi = 300,
   height = 5,
@@ -207,7 +204,7 @@ ggsave(
 )
 
 ########################
-####### Figure 9
+####### Figure 8
 ########################
 
 spnbin <- spglm(
@@ -220,7 +217,7 @@ spnbin <- spglm(
 
 spnbin_iso <- update(spnbin, anisotropy = FALSE)
 
-png(paste0(fig_path, "/figure-9.png"), height = 5, width = 10, units = "in", res = 300)
+pdf(paste0(fig_path, "/figure-9.pdf"), height = 5, width = 10)
 par(mfrow = c(1, 2))
 plot(spnbin_iso, which = 8)
 plot(spnbin, which = 8)
@@ -228,7 +225,7 @@ par(mfrow = c(1, 1))
 dev.off()
 
 ########################
-####### Figure 10
+####### Figure 9
 ########################
 seal$sampled <- factor(if_else(is.na(seal$log_trend), "no", "yes"), levels = c("yes", "no"))
 p1 <- ggplot(seal, aes(fill = sampled, color = stock)) +
@@ -248,7 +245,7 @@ p2 <- ggplot(seal, aes(fill = log_trend)) +
 
 p1 + p2
 ggsave(
-  filename = paste0(fig_path, "/figure-10.png"),
+  filename = paste0(fig_path, "/figure-10.pdf"),
   plot = p1 + p2,
   dpi = 300,
   height = 3,
@@ -257,7 +254,7 @@ ggsave(
 
 
 ########################
-####### Figure 11
+####### Figure 10
 ########################
 
 texas$samp <- factor(if_else(is.na(texas$turnout), "no", "yes"), levels = c("yes", "no"))
@@ -270,7 +267,7 @@ obs_prop2 <- ggplot(texas, aes(color = turnout, shape = samp)) +
   geom_sf(size = 2, data = texas %>% filter(samp == "no"), color = "red", shape = 17)
 obs_prop2
 ggsave(
-  filename = paste0(fig_path, "/figure-11.png"),
+  filename = paste0(fig_path, "/figure-11.pdf"),
   plot = obs_prop2,
   dpi = 300,
   height = 5,

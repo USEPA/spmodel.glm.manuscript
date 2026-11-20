@@ -173,7 +173,7 @@ Equation~\ref{eq-spcov-exp}, as the distance between two elements of
 \(\mathbf{y}\) increases, the spatial covariance decreases, which
 reflects intuition. Moreover, as the range parameter, \(\phi\),
 increases, the strength of spatial dependence increases
-(Figure~\ref{fig-range}). The random effect
+(Figure~\ref{fig-correlations}(a)). The random effect
 \(\boldsymbol{\epsilon}\) is an \(n \times 1\) column vector of
 independent Gaussian random errors. We assume that
 \( \E(\boldsymbol{\epsilon}) = \boldsymbol{0}\) and
@@ -191,9 +191,9 @@ simplicity of notation moving forward.
 
 \begin{figure}[t!]
 \centering
-\includegraphics[width = 0.7\linewidth, trim=0 0 0 0,clip]{figures/figure-1.png}
-\caption{An exponential spatial correlation function with varying range parameters.}
-\label{fig-range}
+\includegraphics[width = 1\linewidth]{figures/figure-1.pdf}
+\caption{Spatial correlation functions. (a) Exponential correlation functions with varying range parameters. (b) Exponential, Gaussian, and spherical correlation functions with range parameters equal to 0.5.}
+\label{fig-correlations}
 \end{figure}
 
 Through inclusion of \(\boldsymbol{\tau}\) and
@@ -281,16 +281,16 @@ syntax from base \proglang{R}, making the transition from GLMs to SPGLMs
 relatively seamless. The \code{spglm()} function fits SPGLMs for
 point-referenced support (e.g.,~$x$~ and $y$~coordinates representing point
 locations in a field; these models are sometimes called
-``geostatistical'' models), while the \code{spgautor()} function fits
+"geostatistical" models), while the \code{spgautor()} function fits
 SPGLMs for areal support (e.g.,~polygon boundaries representing
 geographic subsets of a region; these models are sometimes called
-``autoregressive'' models). For both point-referenced and areal
+"autoregressive" models). For both point-referenced and areal
 supports, \pkg{spmodel} supports the binomial distribution for binary
 data, Poisson and negative binomial distributions for count data, Gamma
 and inverse Gaussian distributions for skewed data, and the beta
 distribution for proportion data. There are 20 different spatial
 covariance structures available including the exponential, Gaussian, and
-spherical for point-referenced support (Figure~\ref{fig-type}) and
+spherical for point-referenced support (Figure~\ref{fig-correlations}(b)) and
 the conditional autoregressive and simultaneous autoregressive
 structures for areal support. \pkg{spmodel} provides commonly used model
 summaries, visualizations, and diagnostics (e.g.,~fitted values) using
@@ -302,13 +302,6 @@ uncertainty in those predictions using \code{predict()} and
 advanced features we describe throughout the manuscript, enables
 \pkg{spmodel} to introduce novel, important SPGLM modeling tools
 previously missing from the existing \proglang{R} ecosystem.
-
-\begin{figure}[t!]
-\centering
-\includegraphics[width = 0.7\linewidth]{figures/figure-2.png}
-\caption{Exponential, Gaussian, and spherical spatial correlation functions all with range parameters equal to 0.5.}
-\label{fig-type}
-\end{figure}
 
 Of the existing \proglang{R} packages for SPGLMs, \pkg{spmodel} (version
 0.11.1) is arguably most similar to \pkg{sdmTMB} (version 0.7.4) in
@@ -378,47 +371,69 @@ prediction.
 
 ## Formulating the hierarchical likelihood {#formulating-the-hierarchical-likelihood}
 
-We can write the SPGLM likelihood hierarchically as
+Conditional on the latent vector \(\mathbf{w}\) and dispersion parameter
+\(\varphi\), the response follows the GLM family with mean
+\(f^{-1}(\mathbf{w})\):
 
+\[
+  \mathbf{y} | \mathbf{w}, \varphi \sim g(f^{-1}(\mathbf{w}), \varphi).
+\]
 
-\begin{align}\label{eq-marginal}
-  [\mathbf{y}|\mathbf{X}, \varphi, \boldsymbol{\theta}] = \int_{\mathbf{w}} \int_{\boldsymbol{\beta}} [\mathbf{y} | f^{-1}(\mathbf{w}), \varphi] [\mathbf{w} | \mathbf{X}, \boldsymbol{\beta}, \boldsymbol{\theta}] d\boldsymbol{\beta} d\mathbf{w},
+Here, \([\mathbf{y} | f^{-1}(\mathbf{w}), \varphi]\) denotes the
+corresponding density (e.g.,~binomial or Poisson), and the response
+components are conditionally independent given \(\mathbf{w}\). The
+dispersion parameter \(\varphi\) controls the response variance when
+the family has a free dispersion parameter.
+
+The latent vector follows a multivariate Gaussian distribution with
+mean determined by the design matrix and fixed effects:
+
+\[
+  \mathbf{w} | \mathbf{X}, \boldsymbol{\beta}, \boldsymbol{\theta}
+  \sim \operatorname{MVN}(\mathbf{X}\boldsymbol{\beta},
+  \boldsymbol{\Sigma}(\boldsymbol{\theta})).
+\]
+
+Its density is denoted by
+\([\mathbf{w} | \mathbf{X}, \boldsymbol{\beta}, \boldsymbol{\theta}]\).
+The covariance matrix \(\boldsymbol{\Sigma}(\boldsymbol{\theta})\)
+encodes the spatial and nonspatial covariance parameters
+\(\boldsymbol{\theta}\).
+
+Under maximum likelihood (ML), the fixed effects are retained while the
+latent vector is integrated out. This gives the marginal likelihood
+[@bonat2016practical]:
+
+\begin{align}\label{eq-marginal-ml}
+  [\mathbf{y} | \mathbf{X}, \boldsymbol{\beta}, \varphi,
+  \boldsymbol{\theta}] = \int_{\mathbf{w}}
+  [\mathbf{y} | f^{-1}(\mathbf{w}), \varphi]
+  [\mathbf{w} | \mathbf{X}, \boldsymbol{\beta}, \boldsymbol{\theta}]
+  d\mathbf{w}.
 \end{align}
 
- where \([\mathbf{y} | f^{-1}(\mathbf{w}), \varphi]\) is the
-density for the appropriate response distribution of \(\mathbf{y}\)
-(e.g.,~binomial, Poisson) given the latent \(\mathbf{w}\) and dispersion
-parameter (\(\varphi\)), and
-\([\mathbf{w} | \mathbf{X}, \boldsymbol{\beta}, \boldsymbol{\theta}]\)
-is the multivariate Gaussian density for \(\mathbf{w}\) given the
-explanatory variables (\(\mathbf{X}\)), fixed effects
-(\(\boldsymbol{\beta}\)), and spatial covariance parameters
-(\(\boldsymbol{\theta}\)). The elements of
-\([\mathbf{y} | f^{-1}(\mathbf{w}), \varphi]\) are conditionally
-independent (given \(\mathbf{w}\)), but the elements of
-\([\mathbf{w} | \mathbf{X}, \boldsymbol{\beta}, \boldsymbol{\theta}]\)
-share spatial covariance. Following @harville1974bayesian, we can
-integrate \(\boldsymbol{\beta}\) out of Equation~\ref{eq-marginal},
-which yields 
-
-\begin{align}\label{eq-marginal2}
-  [\mathbf{y}|\mathbf{X}, \varphi, \boldsymbol{\theta}] = \int_{\mathbf{w}} [\mathbf{y} | f^{-1}(\mathbf{w}), \varphi] [\mathbf{w} | \mathbf{X}, \boldsymbol{\theta}] d\mathbf{w},
-\end{align}
-
- where \([\mathbf{w} | \mathbf{X}, \boldsymbol{\theta}]\) is
-the restricted (i.e.,~residual) multivariate Gaussian density
-[@patterson1971recovery] for \(\mathbf{w}\) given the explanatory
-variables and covariance parameters. The restricted multivariate
-Gaussian density is given by 
+Under restricted maximum likelihood (REML), the fixed effects are also
+integrated out of the Gaussian component [@ver2024marginal]. This
+produces the restricted Gaussian density for \(\mathbf{w}\) given
+\(\mathbf{X}\) and \(\boldsymbol{\theta}\) [@patterson1971recovery]:
 
 \begin{align}\label{eq-reml-def}
 [\mathbf{w} | \mathbf{X}, \boldsymbol{\theta}] = \frac{\exp(-\frac{1}{2}(\mathbf{w} - \mathbf{X}\tilde{\boldsymbol{\beta}})^\top \boldsymbol{\Sigma}^{-1} (\mathbf{w} - \mathbf{X}\tilde{\boldsymbol{\beta}}))}{(2 \pi)^{(n - p)/2} |\boldsymbol{\Sigma}|^{1/2}|\mathbf{X}^\top \boldsymbol{\Sigma}^{-1} \mathbf{X}|^{1/2}},
 \end{align}
 
- where
+where
 \(\tilde{\boldsymbol{\beta}} = (\mathbf{X}^\top \boldsymbol{\Sigma}^{-1} \mathbf{X})^{-1} \mathbf{X}^\top \boldsymbol{\Sigma}^{-1} \mathbf{w}\),
 \(\boldsymbol{\Sigma}\) denotes the covariance matrix (of
 \(\mathbf{w}\)), and \(|\cdot|\) denotes the determinant.
+The resulting REML likelihood integrates over the latent vector using
+this restricted Gaussian density:
+
+\begin{align}\label{eq-marginal}
+  [\mathbf{y} | \mathbf{X}, \varphi, \boldsymbol{\theta}] =
+  \int_{\mathbf{w}} [\mathbf{y} | f^{-1}(\mathbf{w}), \varphi]
+  [\mathbf{w} | \mathbf{X}, \boldsymbol{\theta}] d\mathbf{w}.
+\end{align}
+
 Next, let
 
 
@@ -426,7 +441,7 @@ Next, let
   \ell_\mathbf{w} = \log([\mathbf{y} | f^{-1}(\mathbf{w}), \varphi] [\mathbf{w} | \mathbf{X}, \boldsymbol{\theta}])
 \end{align}
 
- and rewrite Equation~\ref{eq-marginal2} as
+ and rewrite Equation~\ref{eq-marginal} as
 
 
 \begin{align}\label{eq-marginal3}
@@ -446,19 +461,13 @@ Hessian, respectively, of \(\ell_\mathbf{w}\) with respect to
 \(\mathbf{w}\). The forms of \(\mathbf{g}\) and \(\mathbf{G}\) are given by
 
 \begin{align}
-  \mathbf{g} & = \mathbf{d} - \mathbf{P}\mathbf{w}, \\
-  \mathbf{G} & = \mathbf{D} - \mathbf{P},
+  \mathbf{g} = \mathbf{d} - \mathbf{P}\mathbf{w}
+  \qquad \mathbf{G} = \mathbf{D} - \mathbf{P}
 \end{align}
 
-where \(\mathbf{d}\) and \(\mathbf{D}\) contain the first and second
-derivatives of the log conditional likelihood, \(\log[\mathbf{y} | f^{-1}(\mathbf{w}), \varphi]\), with respect to \(\mathbf{w}\), respectively:
-
-\begin{align}
-  d_i & = \frac{\partial \log[y_i | f^{-1}(w_i), \varphi]}{\partial w_i}, \\
-  D_{ii} & = \frac{\partial^2 \log[y_i | f^{-1}(w_i), \varphi]}{\partial w_i^2}.
-\end{align}
-
-The restricted precision matrix \(\mathbf{P}\) is
+where \(\mathbf{d}\) and \(\mathbf{D}\) are the gradient and Hessian
+contributions from the conditional log-likelihood, respectively, and
+\(\mathbf{P}\) is the restricted precision matrix defined as
 
 \begin{align}
   \mathbf{P} = \boldsymbol{\Sigma}^{-1} - \boldsymbol{\Sigma}^{-1}\mathbf{X}
@@ -466,8 +475,7 @@ The restricted precision matrix \(\mathbf{P}\) is
   \mathbf{X}^\top \boldsymbol{\Sigma}^{-1}.
 \end{align}
 
-If \(\mathbf{w}^{*}\) is a value for which
-\(\mathbf{g} = \mathbf{0}\) (i.e., the joint mode), 
+If \(\mathbf{w}^{*}\) is a value for which \(\mathbf{g} = \mathbf{0}\),
 
 \begin{align}\label{eq-marginal5}
   [\mathbf{y}|\mathbf{X}, \varphi, \boldsymbol{\theta}] \approx \exp(\ell_{\mathbf{w}^{*}}) \int_{\mathbf{w}} \exp(-\frac{1}{2}(\mathbf{w} - \mathbf{w}^{*})^\top (-\mathbf{G}) (\mathbf{w} - \mathbf{w}^{*}))d\mathbf{w}.
@@ -482,31 +490,28 @@ multivariate Gaussian distribution. Thus, rewriting
   [\mathbf{y}|\mathbf{X}, \varphi, \boldsymbol{\theta}] \approx [\mathbf{y} | f^{-1}(\mathbf{w}^{*}), \varphi] [\mathbf{w}^{*} | \mathbf{X}, \boldsymbol{\theta}] (2 \pi)^{n/2}|-\mathbf{G}_{\mathbf{w}^{*}}|^{-1/2},
 \end{align}
 
- which can be directly evaluated. This result suggests a
-doubly iterative optimization over 1) \(\boldsymbol{\theta}\) and
-\(\varphi\) and 2) the latent \(\mathbf{w}\) (to find each set of
-\(\mathbf{w}^{*}\)), which ultimately yields the marginal restricted
-maximum likelihood estimators \(\hat{\varphi}\) and
-\(\hat{\boldsymbol{\theta}}\) and their respective values of
-\(\mathbf{w}^{*}\), which we call \(\hat{\mathbf{w}}\).
-@ver2024marginal provide further details.
+ which can be directly evaluated. Equation~\ref{eq-marginal6} gives the
+REML Laplace approximation. Under ML, \(\boldsymbol{\beta}\) is retained
+in the likelihood. To locate \(\mathbf{w}^{*}\), it is profiled out of
+the Gaussian component, giving the score \(\mathbf{g}=\mathbf{d}-\mathbf{P}\mathbf{w}\)
+and profiled Hessian \(\mathbf{G}_{\mathrm{profile}}=\mathbf{D}-\mathbf{P}\).
+The Hessian in the Laplace determinant is different: because ML
+integrates over \(\mathbf{w}\) with \(\boldsymbol{\beta}\) held fixed,
+it uses \(\mathbf{G}_{\mathrm{ML}}^{*}=\mathbf{D}_{\mathbf{w}^{*}}-\boldsymbol{\Sigma}^{-1}\).
+For REML, where \(\boldsymbol{\beta}\) is integrated out first, the
+determinant uses \(\mathbf{G}_{\mathrm{REML}}^{*}=\mathbf{D}_{\mathbf{w}^{*}}-\mathbf{P}\).
+Thus, under ML the profiled Hessian is used to locate the mode, while
+the conditional Hessian is used in the Laplace determinant
+[@ver2024marginal].
 
-The derivation above is for restricted maximum likelihood (REML), which
-integrates over both \(\boldsymbol{\beta}\) and \(\mathbf{w}\). Under
-maximum likelihood (ML), \(\boldsymbol{\beta}\) is retained in the
-likelihood rather than integrated out. When locating the latent mode,
-\(\boldsymbol{\beta}\) is profiled out of the Gaussian component, so
-the Newton--Raphson score and Hessian retain the forms
-\(\mathbf{g}=\mathbf{d}-\mathbf{P}\mathbf{w}\) and
-\(\mathbf{G}=\mathbf{D}-\mathbf{P}\). However, the Hessian used in the
-ML Laplace determinant is
-\(\mathbf{G}^{*}_{\mathbf{a},\mathrm{ML}} =
-\mathbf{D}_{\mathbf{a}}-\boldsymbol{\Sigma}^{-1}\), rather than the
-REML Hessian
-\(\mathbf{G}_{\mathbf{a},\mathrm{REML}} =
-\mathbf{D}_{\mathbf{a}}-\mathbf{P}\) [@ver2024marginal]. Likelihood
-ratio tests require nested models; for REML comparisons, the fixed-effect
-structure should also be the same.
+For either method, evaluating the marginal likelihood involves an outer
+optimization over the covariance parameters \(\boldsymbol{\theta}\) and
+dispersion parameter \(\varphi\), with an inner optimization to find
+\(\mathbf{w}^{*}\) at each candidate parameter value. Under ML,
+\(\boldsymbol{\beta}\) is also retained and estimated; under REML it is
+integrated out and estimated afterward, as described below. At the
+fitted parameter values, we denote the latent-mode estimate by
+\(\hat{\mathbf{w}}\). @ver2024marginal provide further details.
 
 ## Estimating fixed effects {#sec:fixed}
 
@@ -524,17 +529,13 @@ GLS estimator for \(\boldsymbol{\beta}\) is given by
 \(\mathbf{B} = (\mathbf{X}^\top \boldsymbol{\Sigma}^{-1}\mathbf{X})^{-1}\mathbf{X}^\top \boldsymbol{\Sigma}^{-1}\).
 While we do not know \(\mathbf{w}\), we do estimate it via
 \(\hat{\mathbf{w}}\), and thus it is reasonable to define
-\(\hat{\boldsymbol{\beta}} = \mathbf{B}\hat{\mathbf{w}}\). To derive
-properties of \(\hat{\boldsymbol{\beta}}\) like expectation and
-variance, we must derive these properties for \(\hat{\mathbf{w}}\) by
-conditioning on \(\mathbf{w}\) as if it were observed and leveraging the
-laws of total expectation and variance. Based on asymptotic properties
-of (restricted) maximum likelihood estimators
-[@cressie1993asymptotic], we may assume that given \(\mathbf{w}\),
-\(\hat{\mathbf{w}}\) has mean \(\mathbf{w}\) and variance approximately
-equal to \(-\mathbf{G}^{-1}\), the negative inverse Hessian (i.e.,~the
-inverse observed information matrix). Thus it follows that
-\( \E(\hat{\mathbf{w}})\) is given by 
+\(\hat{\boldsymbol{\beta}} = \mathbf{B}\hat{\mathbf{w}}\). Following
+@ver2024marginal, assume that conditional on \(\mathbf{w}\),
+\(\hat{\mathbf{w}}\) is multivariate normal with mean
+\(\mathbf{w}\) and covariance approximately equal to
+\(-\mathbf{G}_{\mathbf{w}^{*}}^{-1}\), the inverse observed
+information evaluated at the latent mode. Thus,
+\(\E(\hat{\mathbf{w}})\) is given by
 
 \begin{align}
    \E(\hat{\mathbf{w}}) =  \E( \E(\hat{\mathbf{w}} | \mathbf{w}))
@@ -547,12 +548,12 @@ inverse observed information matrix). Thus it follows that
 
 \begin{align}
   \COV(\hat{\mathbf{w}}) & =  \E(\COV(\hat{\mathbf{w}} | \mathbf{w})) + \COV( \E(\hat{\mathbf{w}} | \mathbf{w})) \\
-  & \approx  \E(-\mathbf{G}^{-1}) + \COV(\mathbf{w})\\
-  & = -\mathbf{G}^{-1} + \boldsymbol{\Sigma}
+  & \approx -\mathbf{G}_{\mathbf{w}^{*}}^{-1} + \boldsymbol{\Sigma}
 \end{align}
 
- Putting this all together, it follows that
-\(\hat{\boldsymbol{\beta}}\) is unbiased for \(\boldsymbol{\beta}\):
+Under these assumptions, and treating the covariance parameters as
+fixed, \(\hat{\boldsymbol{\beta}}\) is unbiased for
+\(\boldsymbol{\beta}\):
 
 
 \begin{align}
@@ -764,7 +765,7 @@ prevalent in the southwestern and eastern parts of the Togiak region
 
 \begin{figure}[t!]
 \centering
-\includegraphics[width = 0.70\linewidth, trim=0 10 0 0,clip]{figures/figure-3.png}
+\includegraphics[width = 0.70\linewidth, trim=0 10 0 0,clip]{figures/figure-3.pdf}
 \caption{Moose presence in Alaska. Circles represent moose presence or absence (based on color) and triangles represent locations at which moose presence probability predictions are desired.}
 \label{fig-moose-data}
 \end{figure}
@@ -924,7 +925,7 @@ difference in model fit between the worst spatial model and the
 nonspatial model, implying that accounting for some form of spatial
 covariance is very beneficial. Two spatial covariance functions to
 consider starting with are the exponential and Gaussian, which have
-quite different origin behaviors (Figure~\ref{fig-type}), something
+ quite different origin behaviors (Figure~\ref{fig-correlations}(b)), something
 @stein1999interpolation argues is important to characterize
 accurately.
 
@@ -952,7 +953,7 @@ extract model diagnostics from the model object.
 
 \begin{figure}[t!]
 \centering
-\includegraphics[width = 1\linewidth, trim=0 20 0 20,clip]{figures/figure-4.png}
+\includegraphics[width = 1\linewidth, trim=0 20 0 20,clip]{figures/figure-4.pdf}
 \caption{Moose presence model diagnostics, including leverage values (left) and standardized residuals (right).}
 \label{fig-sp-diagnostic}
 \end{figure}
@@ -967,7 +968,7 @@ plot(spbin, which = c(4, 7))
 ```
 \begin{figure}[t!]
 \centering
-\includegraphics[width = 1\linewidth, trim=0 0 0 20,clip]{figures/figure-5.png}
+\includegraphics[width = 1\linewidth, trim=0 0 0 20,clip]{figures/figure-5.pdf}
 \caption{Moose presence model diagnostics, including Cook's distance (left) and the fitted spatial covariance as a function of distance (right).}
 \label{fig-sp-diagnostic2}
 \end{figure}
@@ -999,7 +1000,7 @@ predict(spbin, newdata = moose_preds, type = "response")[1:5]
 ```
 \begin{figure}[t!]
 \centering
-\includegraphics[width = 0.70\linewidth]{figures/figure-6.png}
+\includegraphics[width = 0.70\linewidth]{figures/figure-6.pdf}
 \caption{Moose presence probability fitted values ($f^{-1}(\hat{\mathbf{w}})$) and predictions. Fitted values are represented by circles and predictions by triangles.}
 \label{fig-moose-fit}
 \end{figure}
@@ -1024,7 +1025,7 @@ predictions and their corresponding uncertainties are readily available
 for spatial mapping (Figure~\ref{fig-moose-int}).
 \begin{figure}[t!]
 \centering
-\includegraphics[width = 1\linewidth, trim=0 20 0 20,clip]{figures/figure-7.png}
+\includegraphics[width = 1\linewidth, trim=0 20 0 20,clip]{figures/figure-7.pdf}
 \caption{Moose presence 95\% prediction interval lower bounds (left) and upper bounds (right).}
 \label{fig-moose-int}
 \end{figure}
@@ -1093,7 +1094,7 @@ spnb <- update(sppois, family = nbinomial)
 ```
 \begin{figure}[t!]
 \centering
-\includegraphics[width = 0.70\linewidth, trim=0 0 0 0,clip]{figures/figure-8.png}
+\includegraphics[width = 0.70\linewidth, trim=0 0 0 0,clip]{figures/figure-8.pdf}
 \caption{Moose counts in Alaska. Circles represent moose counts (based on color) and triangles represent locations at which mean count predictions are desired.}
 \label{fig-moose-data-count}
 \end{figure}
@@ -1163,7 +1164,7 @@ the similar patterns in moose counts from
 Figure~\ref{fig-moose-data-count}.
 \begin{figure}[t!]
 \centering
-\includegraphics[width = 1\linewidth, trim=0 0 0 20,clip]{figures/figure-9.png}
+\includegraphics[width = 1\linewidth, trim=0 0 0 20,clip]{figures/figure-9.pdf}
 \caption{Level curves of equal spatial covariance for the negative binomial moose count models. The ellipse is centered at zero distance in the $x$~direction and $y$~direction, and points along the ellipse have equal levels of spatial covariance.  In the isotropic level curve (left), spatial covariance decays equally in all directions. In the anisotropic level curve (right), spatial covariance decays fastest in the northeast-southwest direction (0.413 radians) and slowest in the northwest-southeast direction (2.729 radians).}
 \label{fig-tropy}
 \end{figure}
@@ -1256,7 +1257,7 @@ of coastal rocks that harbor seals go to rest, molt, and give birth.
 
 \begin{figure}[t!]
 \centering
-\includegraphics[width = 1\linewidth, trim=0 10 0 10,clip]{figures/figure-10.png}
+\includegraphics[width = 1\linewidth, trim=0 10 0 10,clip]{figures/figure-10.pdf}
 \caption{Seal trend distribution in Alaska. Observed and missing seal polygons by stock (left) and observed log seal trends (right).}
 \label{fig-seal}
 \end{figure}
@@ -1330,7 +1331,7 @@ centroids of each polygon are used as the point-referenced coordinates.
 
 \begin{figure}[t!]
 \centering
-\includegraphics[width = 0.70\linewidth,trim=0 8 0 0,clip]{figures/figure-11.png}
+\includegraphics[width = 0.70\linewidth,trim=0 8 0 0,clip]{figures/figure-11.pdf}
 \caption{Proportion of voter turnout in Texas for the 1980 presidential election. Circles represent voter turnout (based on color) and triangles represent locations at which voter turnout predictions are desired.}
 \label{fig-texas}
 \end{figure}

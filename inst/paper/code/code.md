@@ -223,7 +223,7 @@ kcv(spbin)
 ## # A tibble: 1 × 3
 ##       bias  MSPE RMSPE
 ##      <dbl> <dbl> <dbl>
-## 1 -0.00322 0.157 0.396
+## 1 -0.00112 0.158 0.397
 ```
 
 ``` r
@@ -234,7 +234,7 @@ kcv(bin)
 ## # A tibble: 1 × 3
 ##           bias  MSPE RMSPE
 ##          <dbl> <dbl> <dbl>
-## 1 0.0000000226 0.240 0.490
+## 1 0.0000000422 0.240 0.490
 ```
 
 ``` r
@@ -680,7 +680,7 @@ library("patchwork")
 okabe <- c("#E69F00", "#56B4E9", "#009E73", "#F0E442", "#0072B2", "#D55E00", "#CC79A7")
 
 #==========================================#
-# Figure 1 ####
+# Figure 1a: Correlation by range ####
 #==========================================#
 
 h <- seq(0, 1, length.out = 1000)
@@ -696,14 +696,8 @@ figure1 <- ggplot(dat, aes(x = Distance, y = Correlation, color = Range, linetyp
   geom_line(linewidth = 1.2) +
   scale_color_viridis_d() +
   theme_bw(base_size = 14)
-figure1
-```
-
-![plot of chunk unnamed-chunk-1](figure/unnamed-chunk-1-1.png)
-
-``` r
 #==========================================#
-# Figure 2 ####
+# Figure 1b: Correlation types ####
 #==========================================#
 
 h <- seq(0, 1, length.out = 1000)
@@ -716,14 +710,20 @@ figure2 <- ggplot(dat, aes(x = Distance, y = Correlation, color = Type, linetype
   geom_line(linewidth = 1.2) +
   scale_color_viridis_d() +
   theme_bw(base_size = 14)
-figure2
+correlations <- (figure1 | figure2) +
+  plot_annotation(
+    tag_levels = "a",
+    tag_prefix = "(",
+    tag_suffix = ")"
+  )
+correlations
 ```
 
-![plot of chunk unnamed-chunk-1](figure/unnamed-chunk-1-2.png)
+![plot of chunk unnamed-chunk-1](figure/unnamed-chunk-1-1.png)
 
 ``` r
 #==========================================#
-# Figure 3 ####
+# Figure 2 ####
 #==========================================#
 
 moose_comb <- bind_rows(moose |> mutate(samp = "yes"), moose_preds |> mutate(samp = "no"))
@@ -742,11 +742,11 @@ figure3 <- ggplot(moose_comb, aes(color = presence, shape = samp)) +
 figure3
 ```
 
-![plot of chunk unnamed-chunk-1](figure/unnamed-chunk-1-3.png)
+![plot of chunk unnamed-chunk-1](figure/unnamed-chunk-1-2.png)
 
 ``` r
 #==========================================#
-# Figure 4 ####
+# Figure 3 ####
 #==========================================#
 
 spbin <- spglm(
@@ -774,34 +774,34 @@ p2 <- ggplot(spbin_aug, aes(color = .std.resid)) +
 p1
 ```
 
-![plot of chunk unnamed-chunk-1](figure/unnamed-chunk-1-4.png)
+![plot of chunk unnamed-chunk-1](figure/unnamed-chunk-1-3.png)
 
 ``` r
 p2
 ```
 
-![plot of chunk unnamed-chunk-1](figure/unnamed-chunk-1-5.png)
+![plot of chunk unnamed-chunk-1](figure/unnamed-chunk-1-4.png)
 
 ``` r
 #==========================================#
-# Figure 5 ####
+# Figure 4 ####
 #==========================================#
 
 
 plot(spbin, which = 4)
 ```
 
-![plot of chunk unnamed-chunk-1](figure/unnamed-chunk-1-6.png)
+![plot of chunk unnamed-chunk-1](figure/unnamed-chunk-1-5.png)
 
 ``` r
 plot(spbin, which = 7)
 ```
 
-![plot of chunk unnamed-chunk-1](figure/unnamed-chunk-1-7.png)
+![plot of chunk unnamed-chunk-1](figure/unnamed-chunk-1-6.png)
 
 ``` r
 #==========================================#
-# Figure 6 ####
+# Figure 5 ####
 #==========================================#
 
 preds_aug <- augment(
@@ -833,11 +833,11 @@ figure6 <- ggplot(comb_aug, aes(color = .fitted, shape = Type)) +
 figure6
 ```
 
-![plot of chunk unnamed-chunk-1](figure/unnamed-chunk-1-8.png)
+![plot of chunk unnamed-chunk-1](figure/unnamed-chunk-1-7.png)
 
 ``` r
 #==========================================#
-# Figure 7 ####
+# Figure 6 ####
 #==========================================#
 
 p1 <- ggplot(preds_aug, aes(color = .lower)) +
@@ -857,17 +857,17 @@ p2 <- ggplot(preds_aug, aes(color = .upper)) +
 p1
 ```
 
-![plot of chunk unnamed-chunk-1](figure/unnamed-chunk-1-9.png)
+![plot of chunk unnamed-chunk-1](figure/unnamed-chunk-1-8.png)
 
 ``` r
 p2
 ```
 
-![plot of chunk unnamed-chunk-1](figure/unnamed-chunk-1-10.png)
+![plot of chunk unnamed-chunk-1](figure/unnamed-chunk-1-9.png)
 
 ``` r
 #==========================================#
-# Figure 8 ####
+# Figure 7 ####
 #==========================================#
 
 figure8 <- ggplot(moose_comb, aes(color = count, shape = samp)) +
@@ -881,11 +881,11 @@ figure8 <- ggplot(moose_comb, aes(color = count, shape = samp)) +
 figure8
 ```
 
-![plot of chunk unnamed-chunk-1](figure/unnamed-chunk-1-11.png)
+![plot of chunk unnamed-chunk-1](figure/unnamed-chunk-1-10.png)
 
 ``` r
 #==========================================#
-# Figure 9 ####
+# Figure 8 ####
 #==========================================#
 
 spnbin <- spglm(
@@ -902,17 +902,17 @@ spnbin_iso <- update(spnbin, anisotropy = FALSE)
 plot(spnbin_iso, which = 8)
 ```
 
-![plot of chunk unnamed-chunk-1](figure/unnamed-chunk-1-12.png)
+![plot of chunk unnamed-chunk-1](figure/unnamed-chunk-1-11.png)
 
 ``` r
 plot(spnbin, which = 8)
 ```
 
-![plot of chunk unnamed-chunk-1](figure/unnamed-chunk-1-13.png)
+![plot of chunk unnamed-chunk-1](figure/unnamed-chunk-1-12.png)
 
 ``` r
 #==========================================#
-# Figure 10 ####
+# Figure 9 ####
 #==========================================#
 
 seal$sampled <- factor(if_else(is.na(seal$log_trend), "no", "yes"), levels = c("yes", "no"))
@@ -934,17 +934,17 @@ p2 <- ggplot(seal, aes(fill = log_trend)) +
 p1
 ```
 
-![plot of chunk unnamed-chunk-1](figure/unnamed-chunk-1-14.png)
+![plot of chunk unnamed-chunk-1](figure/unnamed-chunk-1-13.png)
 
 ``` r
 p2
 ```
 
-![plot of chunk unnamed-chunk-1](figure/unnamed-chunk-1-15.png)
+![plot of chunk unnamed-chunk-1](figure/unnamed-chunk-1-14.png)
 
 ``` r
 #==========================================#
-# Figure 11 ####
+# Figure 10 ####
 #==========================================#
 
 texas$samp <- factor(if_else(is.na(texas$turnout), "no", "yes"), levels = c("yes", "no"))
@@ -958,7 +958,7 @@ figure11 <- ggplot(texas, aes(color = turnout, shape = samp)) +
 figure11
 ```
 
-![plot of chunk unnamed-chunk-1](figure/unnamed-chunk-1-16.png)
+![plot of chunk unnamed-chunk-1](figure/unnamed-chunk-1-15.png)
 
 ``` r
 #=========================================================#
@@ -991,37 +991,38 @@ sessionInfo()
 ## [7] base     
 ## 
 ## other attached packages:
-## [1] patchwork_1.3.2 here_1.0.2      car_3.1-3       carData_3.0-5  
-## [5] emmeans_1.10.3  dplyr_1.2.0     ggplot2_4.0.2   spmodel_0.15.0 
+##  [1] lubridate_1.9.4 forcats_1.0.1   stringr_1.5.2   purrr_1.1.0    
+##  [5] readr_2.1.5     tidyr_1.3.1     tibble_3.3.0    tidyverse_2.0.0
+##  [9] patchwork_1.3.2 here_1.0.2      car_3.1-3       carData_3.0-5  
+## [13] emmeans_1.10.3  dplyr_1.2.0     ggplot2_4.0.2   spmodel_0.15.0 
 ## 
 ## loaded via a namespace (and not attached):
-##  [1] gtable_0.3.6       xfun_0.52          processx_3.8.4    
-##  [4] lattice_0.22-6     callr_3.7.6        vctrs_0.7.1       
-##  [7] tools_4.4.1        pak_0.9.0          ps_1.7.6          
-## [10] generics_0.1.4     parallel_4.4.1     tibble_3.3.0      
-## [13] proxy_0.4-27       pkgconfig_2.0.3    pdftools_3.8.0    
-## [16] Matrix_1.7-0       KernSmooth_2.23-24 RColorBrewer_1.1-3
-## [19] S7_0.2.0           lifecycle_1.0.5    compiler_4.4.1    
-## [22] farver_2.1.2       stringr_1.5.2      textshaping_0.4.0 
-## [25] tinytex_0.57       litedown_0.7       htmltools_0.5.8.1 
-## [28] class_7.3-22       yaml_2.3.10        Formula_1.2-5     
-## [31] pillar_1.11.1      tidyr_1.3.1        classInt_0.4-11   
-## [34] abind_1.4-5        mime_0.12          commonmark_1.9.5  
-## [37] digest_0.6.36      tidyselect_1.2.1   mvtnorm_1.2-5     
-## [40] stringi_1.8.4      sf_1.0-21          purrr_1.1.0       
-## [43] labeling_0.4.3     fastmap_1.2.0      rprojroot_2.1.1   
-## [46] grid_4.4.1         cli_3.6.3          magrittr_2.0.4    
-## [49] utf8_1.2.4         broom_1.0.10       e1071_1.7-16      
-## [52] withr_3.0.2        scales_1.4.0       backports_1.5.0   
-## [55] estimability_1.5.1 rmarkdown_2.31     qpdf_1.4.1        
-## [58] ragg_1.5.0         askpass_1.2.0      spelling_2.3.1    
-## [61] coda_0.19-4.1      evaluate_0.24.0    knitr_1.50        
-## [64] rbibutils_2.3      viridisLite_0.4.2  markdown_2.0      
-## [67] rticles_0.27       rlang_1.1.7        Rcpp_1.0.12       
-## [70] xtable_1.8-4       glue_1.7.0         DBI_1.2.3         
-## [73] xml2_1.4.0         renv_1.0.7         hunspell_3.0.5    
-## [76] pkgload_1.5.3      R6_2.5.1           systemfonts_1.3.1 
-## [79] units_0.8-7
+##  [1] tidyselect_1.2.1   viridisLite_0.4.2  farver_2.1.2      
+##  [4] S7_0.2.0           fastmap_1.2.0      digest_0.6.36     
+##  [7] timechange_0.3.0   estimability_1.5.1 mime_0.12         
+## [10] lifecycle_1.0.5    qpdf_1.4.1         sf_1.0-21         
+## [13] processx_3.8.4     magrittr_2.0.4     compiler_4.4.1    
+## [16] rlang_1.1.7        tools_4.4.1        utf8_1.2.4        
+## [19] yaml_2.3.10        knitr_1.50         askpass_1.2.0     
+## [22] labeling_0.4.3     classInt_0.4-11    xml2_1.4.0        
+## [25] RColorBrewer_1.1-3 pkgload_1.5.3      abind_1.4-5       
+## [28] KernSmooth_2.23-24 withr_3.0.2        hunspell_3.0.5    
+## [31] grid_4.4.1         xtable_1.8-4       e1071_1.7-16      
+## [34] scales_1.4.0       tinytex_0.57       cli_3.6.3         
+## [37] mvtnorm_1.2-5      rmarkdown_2.31     ragg_1.5.0        
+## [40] generics_0.1.4     tzdb_0.4.0         commonmark_1.9.5  
+## [43] DBI_1.2.3          proxy_0.4-27       parallel_4.4.1    
+## [46] vctrs_0.7.1        Matrix_1.7-0       litedown_0.7      
+## [49] callr_3.7.6        hms_1.1.3          Formula_1.2-5     
+## [52] systemfonts_1.3.1  units_0.8-7        spelling_2.3.1    
+## [55] pak_0.9.0          glue_1.7.0         ps_1.7.6          
+## [58] stringi_1.8.4      gtable_0.3.6       pillar_1.11.1     
+## [61] htmltools_0.5.8.1  R6_2.5.1           textshaping_0.4.0 
+## [64] rprojroot_2.1.1    evaluate_0.24.0    lattice_0.22-6    
+## [67] markdown_2.0       rbibutils_2.3      backports_1.5.0   
+## [70] broom_1.0.10       renv_1.0.7         class_7.3-22      
+## [73] Rcpp_1.0.12        coda_0.19-4.1      xfun_0.52         
+## [76] rticles_0.27       pdftools_3.8.0     pkgconfig_2.0.3
 ```
 
 ``` r
