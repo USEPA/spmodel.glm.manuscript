@@ -194,36 +194,15 @@ glance(bin)
 ```
 
 ``` r
-loocv(spbin)
+set.seed(1)
+kcv(spbin)
 ```
 
 ```
 ## # A tibble: 1 × 3
 ##        bias  MSPE RMSPE
 ##       <dbl> <dbl> <dbl>
-## 1 0.0000406 0.155 0.394
-```
-
-``` r
-loocv(bin)
-```
-
-```
-## # A tibble: 1 × 3
-##       bias  MSPE RMSPE
-##      <dbl> <dbl> <dbl>
-## 1 -1.23e-9 0.240 0.490
-```
-
-``` r
-kcv(spbin)
-```
-
-```
-## # A tibble: 1 × 3
-##       bias  MSPE RMSPE
-##      <dbl> <dbl> <dbl>
-## 1 -0.00112 0.158 0.397
+## 1 -0.000324 0.159 0.398
 ```
 
 ``` r
@@ -234,7 +213,7 @@ kcv(bin)
 ## # A tibble: 1 × 3
 ##           bias  MSPE RMSPE
 ##          <dbl> <dbl> <dbl>
-## 1 0.0000000422 0.240 0.490
+## 1 0.0000000282 0.240 0.490
 ```
 
 ``` r
@@ -252,25 +231,26 @@ glances(spbin, spbin2)
 ```
 
 ``` r
-loocv(spbin)
+set.seed(1)
+kcv(spbin)
 ```
 
 ```
 ## # A tibble: 1 × 3
 ##        bias  MSPE RMSPE
 ##       <dbl> <dbl> <dbl>
-## 1 0.0000406 0.155 0.394
+## 1 -0.000324 0.159 0.398
 ```
 
 ``` r
-loocv(spbin2)
+kcv(spbin2)
 ```
 
 ```
 ## # A tibble: 1 × 3
 ##        bias  MSPE RMSPE
 ##       <dbl> <dbl> <dbl>
-## 1 -0.000237 0.146 0.382
+## 1 -0.000237 0.147 0.383
 ```
 
 ``` r
@@ -542,7 +522,7 @@ emmeans::emtrends(spgam, ~ state, var = "temp")
 #==========================================#
 
 seal$is_decreasing <- seal$trend < 1
-spbin <- spgautor(
+spbin_seal <- spgautor(
   formula = is_decreasing ~ 1,
   family = binomial,
   data = seal,
@@ -550,7 +530,7 @@ spbin <- spgautor(
   random = ~ stock
 )
 
-tidy(spbin, conf.int = TRUE)
+tidy(spbin_seal, conf.int = TRUE)
 ```
 
 ```
@@ -561,7 +541,7 @@ tidy(spbin, conf.int = TRUE)
 ```
 
 ``` r
-emmeans(spbin, ~ 1, type = "response")
+emmeans(spbin_seal, ~ 1, type = "response")
 ```
 
 ```
@@ -574,18 +554,18 @@ emmeans(spbin, ~ 1, type = "response")
 ```
 
 ``` r
-seal
+seal |> dplyr::select(-dplyr::any_of("sampled"))
 ```
 
 ```
-## Simple feature collection with 149 features and 5 fields
+## Simple feature collection with 149 features and 4 fields
 ## Geometry type: POLYGON
 ## Dimension:     XY
 ## Bounding box:  xmin: 913618.8 ymin: 855730.2 xmax: 1221859 ymax: 1145054
 ## Projected CRS: NAD83 / Alaska Albers
-## # A tibble: 149 × 6
+## # A tibble: 149 × 5
 ##    log_trend  trend stock                       geometry is_decreasing
-##  *     <dbl>  <dbl> <fct>                  <POLYGON [m]> <lgl>        
+##        <dbl>  <dbl> <fct>                  <POLYGON [m]> <lgl>        
 ##  1  NA       NA     8     ((1035002 1054710, 1035002 10… NA           
 ##  2  -0.282    0.754 8     ((1037002 1039492, 1037006 10… TRUE         
 ##  3  -0.00121  0.999 8     ((1070158 1030216, 1070185 10… TRUE         
@@ -597,11 +577,10 @@ seal
 ##  9  NA       NA     8     ((1043093 1020553, 1043097 10… NA           
 ## 10  -0.00961  0.990 8     ((1116002 1024542, 1116002 10… TRUE         
 ## # ℹ 139 more rows
-## # ℹ 1 more variable: sampled <fct>
 ```
 
 ``` r
-predict(spbin, type = "response", interval = "prediction")[1:5, ]
+predict(spbin_seal, type = "response", interval = "prediction")[1:5, ]
 ```
 
 ```
@@ -676,6 +655,16 @@ AIC(spbeta_full_ml, spbeta_reduced_ml)
 library("ggplot2", verbose = FALSE)
 library("dplyr", verbose = FALSE)
 library("patchwork")
+theme_caption_sized <- function(size = 14) {
+  theme_bw(base_size = size) +
+    theme(
+      axis.text = element_text(size = size),
+      axis.title = element_text(size = size),
+      legend.text = element_text(size = size),
+      legend.title = element_text(size = size),
+      plot.tag = element_text(size = size)
+    )
+}
 
 okabe <- c("#E69F00", "#56B4E9", "#009E73", "#F0E442", "#0072B2", "#D55E00", "#CC79A7")
 
@@ -695,7 +684,7 @@ dat$Range <- factor(dat$Range, levels = c("0.8", "0.5", "0.2"))
 figure1 <- ggplot(dat, aes(x = Distance, y = Correlation, color = Range, linetype = Range)) +
   geom_line(linewidth = 1.2) +
   scale_color_viridis_d() +
-  theme_bw(base_size = 14)
+  theme_caption_sized(14)
 #==========================================#
 # Figure 1b: Correlation types ####
 #==========================================#
@@ -709,7 +698,7 @@ dat <- bind_rows(dat1, dat2, dat3)
 figure2 <- ggplot(dat, aes(x = Distance, y = Correlation, color = Type, linetype = Type)) +
   geom_line(linewidth = 1.2) +
   scale_color_viridis_d() +
-  theme_bw(base_size = 14)
+  theme_caption_sized(14)
 correlations <- (figure1 | figure2) +
   plot_annotation(
     tag_levels = "a",
@@ -731,7 +720,7 @@ figure3 <- ggplot(moose_comb, aes(color = presence, shape = samp)) +
   geom_sf(size = 2) +
   scale_color_manual(name = "moose", values = okabe[1:2], breaks = c(1, 0), labels = c("yes", "no")) +
   scale_shape_manual(name = "sampled", values = c(19, 17), breaks = c("yes", "no"), labels = c("yes", "no")) +
-  theme_bw(base_size = 16) +
+  theme_caption_sized(16) +
   scale_y_continuous(breaks = seq(62.6, 63.6, length.out = 5)) +
   scale_x_continuous(breaks = seq(-148.5, -146, length.out = 3)) +
   guides(
@@ -762,14 +751,14 @@ p1 <- ggplot(spbin_aug, aes(color = .hat)) +
   scale_color_viridis_c(option = "E", name = ".hat") +
   scale_y_continuous(breaks = seq(62.6, 63.6, length.out = 5)) +
   scale_x_continuous(breaks = seq(-148.5, -146, length.out = 3)) +
-  theme_bw(base_size = 14)
+  theme_caption_sized(14)
 
 p2 <- ggplot(spbin_aug, aes(color = .std.resid)) +
   geom_sf(size = 2) +
   scale_color_viridis_c(option = "A", limits = c(-2, 2)) +
   scale_y_continuous(breaks = seq(62.6, 63.6, length.out = 5)) +
   scale_x_continuous(breaks = seq(-148.5, -146, length.out = 3)) +
-  theme_bw(base_size = 14)
+  theme_caption_sized(14)
 
 p1
 ```
@@ -787,19 +776,15 @@ p2
 # Figure 4 ####
 #==========================================#
 
-
+old_par <- par(mfrow = c(1, 2), cex = 1.5)
 plot(spbin, which = 4)
+plot(spbin, which = 7)
 ```
 
 ![plot of chunk unnamed-chunk-1](figure/unnamed-chunk-1-5.png)
 
 ``` r
-plot(spbin, which = 7)
-```
-
-![plot of chunk unnamed-chunk-1](figure/unnamed-chunk-1-6.png)
-
-``` r
+par(old_par)
 #==========================================#
 # Figure 5 ####
 #==========================================#
@@ -829,11 +814,11 @@ figure6 <- ggplot(comb_aug, aes(color = .fitted, shape = Type)) +
   scale_color_viridis_c(option = "H", name = "Prob", limits = c(0, 1)) +
   scale_y_continuous(breaks = seq(62.6, 63.6, length.out = 5)) +
   scale_x_continuous(breaks = seq(-148.5, -146, length.out = 3)) +
-  theme_bw()
+  theme_caption_sized(16)
 figure6
 ```
 
-![plot of chunk unnamed-chunk-1](figure/unnamed-chunk-1-7.png)
+![plot of chunk unnamed-chunk-1](figure/unnamed-chunk-1-6.png)
 
 ``` r
 #==========================================#
@@ -845,25 +830,25 @@ p1 <- ggplot(preds_aug, aes(color = .lower)) +
   scale_color_viridis_c(option = "H", name = "Lower", limits = c(0, 1)) +
   scale_y_continuous(breaks = seq(62.6, 63.6, length.out = 5)) +
   scale_x_continuous(breaks = seq(-148.5, -146, length.out = 3)) +
-  theme_bw(base_size = 14)
+  theme_caption_sized(14)
 
 p2 <- ggplot(preds_aug, aes(color = .upper)) +
   geom_sf(size = 2, pch = 17) +
   scale_color_viridis_c(option = "H", name = "Upper", limits = c(0, 1)) +
   scale_y_continuous(breaks = seq(62.6, 63.6, length.out = 5)) +
   scale_x_continuous(breaks = seq(-148.5, -146, length.out = 3)) +
-  theme_bw(base_size = 14)
+  theme_caption_sized(14)
 
 p1
 ```
 
-![plot of chunk unnamed-chunk-1](figure/unnamed-chunk-1-8.png)
+![plot of chunk unnamed-chunk-1](figure/unnamed-chunk-1-7.png)
 
 ``` r
 p2
 ```
 
-![plot of chunk unnamed-chunk-1](figure/unnamed-chunk-1-9.png)
+![plot of chunk unnamed-chunk-1](figure/unnamed-chunk-1-8.png)
 
 ``` r
 #==========================================#
@@ -874,14 +859,14 @@ figure8 <- ggplot(moose_comb, aes(color = count, shape = samp)) +
   geom_sf(size = 2) +
   scale_color_binned(breaks = c(0, 1, 2, 5, 10, 20, 40), type = "viridis") +
   scale_shape_manual(name = "sampled", values = c(19, 17), breaks = c("yes", "no"), labels = c("yes", "no")) +
-  theme_bw(base_size = 14) +
+  theme_caption_sized(16) +
   scale_y_continuous(breaks = seq(62.6, 63.6, length.out = 5)) +
   scale_x_continuous(breaks = seq(-148.5, -146, length.out = 3)) +
   geom_sf(size = 2, data = moose_comb %>% filter(samp == "no"), color = "red", shape = 17)
 figure8
 ```
 
-![plot of chunk unnamed-chunk-1](figure/unnamed-chunk-1-10.png)
+![plot of chunk unnamed-chunk-1](figure/unnamed-chunk-1-9.png)
 
 ``` r
 #==========================================#
@@ -898,19 +883,16 @@ spnbin <- spglm(
 
 spnbin_iso <- update(spnbin, anisotropy = FALSE)
 
-
+old_par <- par(mfrow = c(1, 2), cex = 1.5)
 plot(spnbin_iso, which = 8)
-```
-
-![plot of chunk unnamed-chunk-1](figure/unnamed-chunk-1-11.png)
-
-``` r
 plot(spnbin, which = 8)
 ```
 
-![plot of chunk unnamed-chunk-1](figure/unnamed-chunk-1-12.png)
+![plot of chunk unnamed-chunk-1](figure/unnamed-chunk-1-10.png)
 
 ``` r
+par(old_par)
+
 #==========================================#
 # Figure 9 ####
 #==========================================#
@@ -918,7 +900,7 @@ plot(spnbin, which = 8)
 seal$sampled <- factor(if_else(is.na(seal$log_trend), "no", "yes"), levels = c("yes", "no"))
 p1 <- ggplot(seal, aes(fill = sampled, color = stock)) +
   geom_sf(size = 1) +
-  theme_bw(base_size = 14) +
+  theme_caption_sized(14) +
   scale_fill_manual(name = "sampled", values = okabe[1:2], breaks = c("yes", "no"), labels = c("yes", "no")) +
   scale_color_manual(name = "stock", values = c("grey40", "grey80"), breaks = c(8, 10), labels = c(8, 10)) +
   scale_y_continuous(breaks = seq(57, 59, length.out = 5)) +
@@ -926,7 +908,7 @@ p1 <- ggplot(seal, aes(fill = sampled, color = stock)) +
 
 p2 <- ggplot(seal, aes(fill = log_trend)) +
   geom_sf(size = 1) +
-  theme_bw(base_size = 14) +
+  theme_caption_sized(14) +
   scale_fill_viridis_c(name = "logtrend", option = "D", begin = 0.5, limits = c(min(seal$log_trend), max(seal$log_trend))) +
   scale_y_continuous(breaks = seq(57, 59, length.out = 5)) +
   scale_x_continuous(breaks = seq(-139, -134, length.out = 3))
@@ -934,13 +916,13 @@ p2 <- ggplot(seal, aes(fill = log_trend)) +
 p1
 ```
 
-![plot of chunk unnamed-chunk-1](figure/unnamed-chunk-1-13.png)
+![plot of chunk unnamed-chunk-1](figure/unnamed-chunk-1-11.png)
 
 ``` r
 p2
 ```
 
-![plot of chunk unnamed-chunk-1](figure/unnamed-chunk-1-14.png)
+![plot of chunk unnamed-chunk-1](figure/unnamed-chunk-1-12.png)
 
 ``` r
 #==========================================#
@@ -952,13 +934,13 @@ figure11 <- ggplot(texas, aes(color = turnout, shape = samp)) +
   geom_sf(size = 2) +
   scale_color_viridis_c(option = "D") +
   scale_shape_manual(name = "sampled", values = c(19, 17), breaks = c("yes", "no"), labels = c("yes", "no")) +
-  theme_bw(base_size = 14) +
+  theme_caption_sized(16) +
   scale_x_continuous(breaks = seq(-94, -106, length.out = 3)) +
   geom_sf(size = 2, data = texas %>% filter(samp == "no"), color = "red", shape = 17)
 figure11
 ```
 
-![plot of chunk unnamed-chunk-1](figure/unnamed-chunk-1-15.png)
+![plot of chunk unnamed-chunk-1](figure/unnamed-chunk-1-13.png)
 
 ``` r
 #=========================================================#

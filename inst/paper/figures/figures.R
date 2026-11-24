@@ -4,6 +4,16 @@ library(spmodel)
 library(patchwork)
 library(here)
 fig_path <- here("inst", "paper", "figures")
+theme_caption_sized <- function(size = 14) {
+  theme_bw(base_size = size) +
+    theme(
+      axis.text = element_text(size = size),
+      axis.title = element_text(size = size),
+      legend.text = element_text(size = size),
+      legend.title = element_text(size = size),
+      plot.tag = element_text(size = size)
+    )
+}
 
 
 #######################
@@ -21,7 +31,7 @@ dat$Range <- factor(dat$Range, levels = c("0.8", "0.5", "0.2"))
 cor_range <- ggplot(dat, aes(x = Distance, y = Correlation, color = Range, linetype = Range)) +
   geom_line(linewidth = 1.2) +
   scale_color_viridis_d() +
-  theme_bw(base_size = 14)
+  theme_caption_sized(13)
 
 #######################
 ######## Figure 1b: Correlation types
@@ -35,13 +45,10 @@ dat <- bind_rows(dat1, dat2, dat3)
 cor_type <- ggplot(dat, aes(x = Distance, y = Correlation, color = Type, linetype = Type)) +
   geom_line(linewidth = 1.2) +
   scale_color_viridis_d() +
-  theme_bw(base_size = 14)
+  labs(color = "Function", linetype = "Function") +
+  theme_caption_sized(13)
 correlations <- (cor_range | cor_type) +
-  plot_annotation(
-    tag_levels = "a",
-    tag_prefix = "(",
-    tag_suffix = ")"
-  )
+  plot_annotation()
 correlations
 ggsave(
   filename = paste0(fig_path, "/figure-1.pdf"),
@@ -61,7 +68,7 @@ obs_pred_presence <- ggplot(moose_comb, aes(color = presence, shape = samp)) +
   geom_sf(size = 2) +
   scale_color_manual(name = "moose", values = okabe[1:2], breaks = c(1, 0), labels = c("yes", "no")) +
   scale_shape_manual(name = "sampled", values = c(19, 17), breaks = c("yes", "no"), labels = c("yes", "no")) +
-  theme_bw(base_size = 16) +
+  theme_caption_sized(15) +
   scale_y_continuous(breaks = seq(62.6, 63.6, length.out = 5)) +
   scale_x_continuous(breaks = seq(-148.5, -146, length.out = 3)) +
   guides(
@@ -96,14 +103,14 @@ p1 <- ggplot(spbin_aug, aes(color = .hat)) +
   scale_color_viridis_c(option = "E", name = ".hat") +
   scale_y_continuous(breaks = seq(62.6, 63.6, length.out = 5)) +
   scale_x_continuous(breaks = seq(-148.5, -146, length.out = 3)) +
-  theme_bw(base_size = 14)
+  theme_caption_sized(14)
 
 p2 <- ggplot(spbin_aug, aes(color = .std.resid)) +
   geom_sf(size = 1) +
   scale_color_viridis_c(option = "A", limits = c(-2, 2)) +
   scale_y_continuous(breaks = seq(62.6, 63.6, length.out = 5)) +
   scale_x_continuous(breaks = seq(-148.5, -146, length.out = 3)) +
-  theme_bw(base_size = 14)
+  theme_caption_sized(14)
 
 p1 + p2
 ggsave(
@@ -120,10 +127,10 @@ ggsave(
 
 
 pdf(paste0(fig_path, "/figure-5.pdf"), height = 5, width = 10)
-par(mfrow = c(1, 2))
+old_par <- par(mfrow = c(1, 2), cex = 1, cex.main = 0.8, mar = c(5.1, 4.1, 4.1, 3.2))
 plot(spbin, which = 4)
 plot(spbin, which = 7)
-par(mfrow = c(1, 1))
+par(old_par)
 dev.off()
 
 
@@ -137,7 +144,7 @@ preds_aug <- augment(
   type.predict = "response",
   interval = "prediction"
 )
-spbin_aug <- augment(spbin, type.predict = "response", interval = "prediction")
+spbin_aug <- augment(spbin)
 comb_aug <- bind_rows(spbin_aug %>% mutate(Type = "Fitted"), preds_aug %>% mutate(Type = "Pred"))
 
 obs_pred_fitted <- ggplot(comb_aug, aes(color = .fitted, shape = Type)) +
@@ -145,7 +152,7 @@ obs_pred_fitted <- ggplot(comb_aug, aes(color = .fitted, shape = Type)) +
   scale_color_viridis_c(option = "H", name = "Prob", limits = c(0, 1)) +
   scale_y_continuous(breaks = seq(62.6, 63.6, length.out = 5)) +
   scale_x_continuous(breaks = seq(-148.5, -146, length.out = 3)) +
-  theme_bw()
+  theme_caption_sized(16)
 obs_pred_fitted
 ggsave(
   filename = paste0(fig_path, "/figure-6.pdf"),
@@ -164,14 +171,14 @@ p1 <- ggplot(preds_aug, aes(color = .lower)) +
   scale_color_viridis_c(option = "H", name = "Lower", limits = c(0, 1)) +
   scale_y_continuous(breaks = seq(62.6, 63.6, length.out = 5)) +
   scale_x_continuous(breaks = seq(-148.5, -146, length.out = 3)) +
-  theme_bw(base_size = 14)
+  theme_caption_sized(14)
 
 p2 <- ggplot(preds_aug, aes(color = .upper)) +
   geom_sf(pch = 17) +
   scale_color_viridis_c(option = "H", name = "Upper", limits = c(0, 1)) +
   scale_y_continuous(breaks = seq(62.6, 63.6, length.out = 5)) +
   scale_x_continuous(breaks = seq(-148.5, -146, length.out = 3)) +
-  theme_bw(base_size = 14)
+  theme_caption_sized(14)
 
 p1 + p2
 ggsave(
@@ -190,7 +197,7 @@ obs_pred_count <- ggplot(moose_comb, aes(color = count, shape = samp)) +
   geom_sf(size = 2) +
   scale_color_binned(breaks = c(0, 1, 2, 5, 10, 20, 40), type = "viridis") +
   scale_shape_manual(name = "sampled", values = c(19, 17), breaks = c("yes", "no"), labels = c("yes", "no")) +
-  theme_bw(base_size = 14) +
+  theme_caption_sized(16) +
   scale_y_continuous(breaks = seq(62.6, 63.6, length.out = 5)) +
   scale_x_continuous(breaks = seq(-148.5, -146, length.out = 3)) +
   geom_sf(size = 2, data = moose_comb %>% filter(samp == "no"), color = "red", shape = 17)
@@ -218,28 +225,28 @@ spnbin <- spglm(
 spnbin_iso <- update(spnbin, anisotropy = FALSE)
 
 pdf(paste0(fig_path, "/figure-9.pdf"), height = 5, width = 10)
-par(mfrow = c(1, 2))
+old_par <- par(mfrow = c(1, 2), cex = 1, cex.main = 0.8)
 plot(spnbin_iso, which = 8)
 plot(spnbin, which = 8)
-par(mfrow = c(1, 1))
+par(old_par)
 dev.off()
 
 ########################
 ####### Figure 9
 ########################
-seal$sampled <- factor(if_else(is.na(seal$log_trend), "no", "yes"), levels = c("yes", "no"))
+seal$sampled <- factor(if_else(is.na(seal$trend), "no", "yes"), levels = c("yes", "no"))
 p1 <- ggplot(seal, aes(fill = sampled, color = stock)) +
   geom_sf(size = 0.25) +
-  theme_bw(base_size = 14) +
+  theme_caption_sized(14) +
   scale_fill_manual(name = "sampled", values = okabe[1:2], breaks = c("yes", "no"), labels = c("yes", "no")) +
   scale_color_manual(name = "stock", values = c("grey40", "grey80"), breaks = c(8, 10), labels = c(8, 10)) +
   scale_y_continuous(breaks = seq(57, 59, length.out = 5)) +
   scale_x_continuous(breaks = seq(-139, -134, length.out = 3))
 
-p2 <- ggplot(seal, aes(fill = log_trend)) +
+p2 <- ggplot(seal, aes(fill = trend)) +
   geom_sf(size = 0.25) +
-  theme_bw(base_size = 14) +
-  scale_fill_viridis_c(name = "logtrend", option = "D", begin = 0.5, limits = c(min(seal$log_trend), max(seal$log_trend))) +
+  theme_caption_sized(14) +
+  scale_fill_viridis_c(name = "trend", option = "D", begin = 0.5, limits = range(seal$trend, na.rm = TRUE)) +
   scale_y_continuous(breaks = seq(57, 59, length.out = 5)) +
   scale_x_continuous(breaks = seq(-139, -134, length.out = 3))
 
@@ -262,7 +269,7 @@ obs_prop2 <- ggplot(texas, aes(color = turnout, shape = samp)) +
   geom_sf(size = 2) +
   scale_color_viridis_c(option = "D") +
   scale_shape_manual(name = "sampled", values = c(19, 17), breaks = c("yes", "no"), labels = c("yes", "no")) +
-  theme_bw(base_size = 14) +
+  theme_caption_sized(16) +
   scale_x_continuous(breaks = seq(-94, -106, length.out = 3)) +
   geom_sf(size = 2, data = texas %>% filter(samp == "no"), color = "red", shape = 17)
 obs_prop2

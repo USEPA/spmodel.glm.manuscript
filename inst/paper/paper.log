@@ -1,9 +1,9 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.28 (TeX Live 2025) (preloaded format=pdflatex 2025.11.28)  20 NOV 2026 13:47
+This is pdfTeX, Version 3.141592653-2.6-1.40.28 (TeX Live 2025) (preloaded format=pdflatex 2025.11.28)  24 NOV 2026 14:04
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
-**C:/Users/MDUMELLE/Documents/spmodel.glm.manuscript/inst/paper/paper.tex
-(c:/Users/MDUMELLE/Documents/spmodel.glm.manuscript/inst/paper/paper.tex
+**paper.tex
+(./paper.tex
 LaTeX2e <2025-11-01>
 L3 programming layer <2025-11-14>
 (./jss.cls
@@ -643,7 +643,7 @@ Package: varwidth 2009/03/30 ver 0.92;  Variable-width minipages
 )
 ==> First Aid for varwidth.sty applied!
 )
-LaTeX Font Info:    Trying to load font information for T1+lmr on input line 101.
+LaTeX Font Info:    Trying to load font information for T1+lmr on input line 100.
 (c:/Users/MDUMELLE/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/lm/t1lmr.fd
 File: t1lmr.fd 2015/05/01 v1.6.1 Font defs for Latin Modern
 ) (c:/Users/MDUMELLE/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/l3backend/l3backend-pdftex.def
@@ -652,31 +652,31 @@ File: l3backend-pdftex.def 2025-10-09 L3 backend support: PDF output (pdfTeX)
 ) (./paper.aux)
 \openout1 = `paper.aux'.
 
-LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 101.
-LaTeX Font Info:    ... okay on input line 101.
-LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 101.
-LaTeX Font Info:    ... okay on input line 101.
-LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 101.
-LaTeX Font Info:    ... okay on input line 101.
-LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 101.
-LaTeX Font Info:    ... okay on input line 101.
-LaTeX Font Info:    Checking defaults for TS1/cmr/m/n on input line 101.
-LaTeX Font Info:    ... okay on input line 101.
-LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 101.
-LaTeX Font Info:    ... okay on input line 101.
-LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 101.
-LaTeX Font Info:    ... okay on input line 101.
-LaTeX Font Info:    Checking defaults for PD1/pdf/m/n on input line 101.
-LaTeX Font Info:    ... okay on input line 101.
-LaTeX Font Info:    Checking defaults for PU/pdf/m/n on input line 101.
-LaTeX Font Info:    ... okay on input line 101.
+LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 100.
+LaTeX Font Info:    ... okay on input line 100.
+LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 100.
+LaTeX Font Info:    ... okay on input line 100.
+LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 100.
+LaTeX Font Info:    ... okay on input line 100.
+LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 100.
+LaTeX Font Info:    ... okay on input line 100.
+LaTeX Font Info:    Checking defaults for TS1/cmr/m/n on input line 100.
+LaTeX Font Info:    ... okay on input line 100.
+LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 100.
+LaTeX Font Info:    ... okay on input line 100.
+LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 100.
+LaTeX Font Info:    ... okay on input line 100.
+LaTeX Font Info:    Checking defaults for PD1/pdf/m/n on input line 100.
+LaTeX Font Info:    ... okay on input line 100.
+LaTeX Font Info:    Checking defaults for PU/pdf/m/n on input line 100.
+LaTeX Font Info:    ... okay on input line 100.
 (c:/Users/MDUMELLE/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/epstopdf-pkg/epstopdf-base.sty
 Package: epstopdf-base 2020-01-24 v2.11 Base part for package epstopdf
 Package epstopdf-base Info: Redefining graphics rule for `.eps' on input line 485.
 (c:/Users/MDUMELLE/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/latexconfig/epstopdf-sys.cfg
 File: epstopdf-sys.cfg 2010/07/13 v1.3 Configuration of (r)epstopdf for TeX Live
 ))
-Package hyperref Info: Link coloring ON on input line 101.
+Package hyperref Info: Link coloring ON on input line 100.
 (./paper.out) (./paper.out)
 \@outlinefile=\write5
 \openout5 = `paper.out'.
@@ -684,55 +684,55 @@ Package hyperref Info: Link coloring ON on input line 101.
 <jsslogo.jpg, id=82, 540.0175pt x 393.47pt>
 File: jsslogo.jpg Graphic file (type jpg)
 <use jsslogo.jpg>
-Package pdftex.def Info: jsslogo.jpg  used on input line 101.
+Package pdftex.def Info: jsslogo.jpg  used on input line 100.
 (pdftex.def)             Requested size: 89.80768pt x 65.43607pt.
-LaTeX Font Info:    Trying to load font information for T1+pzc on input line 101.
+LaTeX Font Info:    Trying to load font information for T1+pzc on input line 100.
 (c:/Users/MDUMELLE/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/psnfss/t1pzc.fd
 File: t1pzc.fd 2020/03/25 font definitions for T1/pzc.
 )
 LaTeX Font Info:    Font shape `T1/pzc/m/n' in size <28> not available
-(Font)              Font shape `T1/pzc/m/it' tried instead on input line 101.
-LaTeX Font Info:    Trying to load font information for T1+lmss on input line 101.
+(Font)              Font shape `T1/pzc/m/it' tried instead on input line 100.
+LaTeX Font Info:    Trying to load font information for T1+lmss on input line 100.
 (c:/Users/MDUMELLE/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/lm/t1lmss.fd
 File: t1lmss.fd 2015/05/01 v1.6.1 Font defs for Latin Modern
 )
-LaTeX Font Info:    Trying to load font information for OT1+lmr on input line 101.
+LaTeX Font Info:    Trying to load font information for OT1+lmr on input line 100.
 (c:/Users/MDUMELLE/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/lm/ot1lmr.fd
 File: ot1lmr.fd 2015/05/01 v1.6.1 Font defs for Latin Modern
 )
-LaTeX Font Info:    Trying to load font information for OML+lmm on input line 101.
+LaTeX Font Info:    Trying to load font information for OML+lmm on input line 100.
 (c:/Users/MDUMELLE/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/lm/omllmm.fd
 File: omllmm.fd 2015/05/01 v1.6.1 Font defs for Latin Modern
 )
-LaTeX Font Info:    Trying to load font information for OMS+lmsy on input line 101.
+LaTeX Font Info:    Trying to load font information for OMS+lmsy on input line 100.
 (c:/Users/MDUMELLE/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/lm/omslmsy.fd
 File: omslmsy.fd 2015/05/01 v1.6.1 Font defs for Latin Modern
 )
-LaTeX Font Info:    Trying to load font information for OMX+lmex on input line 101.
+LaTeX Font Info:    Trying to load font information for OMX+lmex on input line 100.
 (c:/Users/MDUMELLE/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/lm/omxlmex.fd
 File: omxlmex.fd 2015/05/01 v1.6.1 Font defs for Latin Modern
 )
 LaTeX Font Info:    External font `lmex10' loaded for size
-(Font)              <10.95> on input line 101.
+(Font)              <10.95> on input line 100.
 LaTeX Font Info:    External font `lmex10' loaded for size
-(Font)              <8> on input line 101.
+(Font)              <8> on input line 100.
 LaTeX Font Info:    External font `lmex10' loaded for size
-(Font)              <6> on input line 101.
-LaTeX Font Info:    Trying to load font information for U+msa on input line 101.
+(Font)              <6> on input line 100.
+LaTeX Font Info:    Trying to load font information for U+msa on input line 100.
 (c:/Users/MDUMELLE/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/amsfonts/umsa.fd
 File: umsa.fd 2013/01/14 v3.01 AMS symbols A
 )
-LaTeX Font Info:    Trying to load font information for U+msb on input line 101.
+LaTeX Font Info:    Trying to load font information for U+msb on input line 100.
 (c:/Users/MDUMELLE/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/amsfonts/umsb.fd
 File: umsb.fd 2013/01/14 v3.01 AMS symbols B
 )
 LaTeX Font Info:    External font `lmex10' loaded for size
-(Font)              <10> on input line 101.
+(Font)              <10> on input line 100.
 LaTeX Font Info:    External font `lmex10' loaded for size
-(Font)              <7> on input line 101.
+(Font)              <7> on input line 100.
 LaTeX Font Info:    External font `lmex10' loaded for size
-(Font)              <5> on input line 101.
-LaTeX Font Info:    Trying to load font information for T1+lmtt on input line 101.
+(Font)              <5> on input line 100.
+LaTeX Font Info:    Trying to load font information for T1+lmtt on input line 100.
 (c:/Users/MDUMELLE/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/lm/t1lmtt.fd
 File: t1lmtt.fd 2015/05/01 v1.6.1 Font defs for Latin Modern
 )
@@ -745,9 +745,9 @@ Package caption Info: End \AtBeginDocument code.
 pdfTeX warning (ext4): destination with the same identifier (name{equation.1}) has been already used, duplicate ignored
 <to be read again> 
                    \relax 
-l.123 \end{align}
+l.124 \end{align}
                  
-LaTeX Font Info:    Trying to load font information for OT1+lmss on input line 168.
+LaTeX Font Info:    Trying to load font information for OT1+lmss on input line 152.
 (c:/Users/MDUMELLE/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/lm/ot1lmss.fd
 File: ot1lmss.fd 2015/05/01 v1.6.1 Font defs for Latin Modern
 )
@@ -756,10 +756,10 @@ Overfull \hbox (5.47499pt too wide) has occurred while \output is active
  []
 
 [2{c:/Users/MDUMELLE/AppData/Roaming/TinyTeX/texmf-dist/fonts/enc/dvips/lm/lm-mathsy.enc}{c:/Users/MDUMELLE/AppData/Roaming/TinyTeX/texmf-dist/fonts/enc/dvips/lm/lm-rm.enc}]
-<figures/figure-1.pdf, id=145, 650.43pt x 252.945pt>
+<figures/figure-1.pdf, id=142, 650.43pt x 252.945pt>
 File: figures/figure-1.pdf Graphic file (type pdf)
 <use figures/figure-1.pdf>
-Package pdftex.def Info: figures/figure-1.pdf  used on input line 206.
+Package pdftex.def Info: figures/figure-1.pdf  used on input line 209.
 (pdftex.def)             Requested size: 442.65375pt x 172.14699pt.
 
 Overfull \hbox (5.47499pt too wide) has occurred while \output is active
@@ -775,36 +775,43 @@ Overfull \hbox (5.47499pt too wide) has occurred while \output is active
  []
 
 [4]
+Underfull \vbox (badness 10000) has occurred while \output is active []
+
+
 Overfull \hbox (5.47499pt too wide) has occurred while \output is active
 [] \T1/lmr/m/n/10.95 5
  []
 
 [5]
+Overfull \hbox (3.8278pt too wide) in paragraph at lines 371--386
+\T1/lmr/m/n/10.95 where $\OT1/lmr/m/n/10.95 [\OT1/lmr/bx/n/10.95 y\OMS/lmsy/m/n/10.95 j\OML/lmm/m/it/10.95 g[]\OT1/lmr/m/n/10.95 (\OT1/lmr/bx/n/10.95 w\OT1/lmr/m/n/10.95 )\OML/lmm/m/it/10.95 ; '\OT1/lmr/m/n/10.95 ]$ \T1/lmr/m/n/10.95 is the den-sity for the ap-pro-pri-ate re-sponse dis-tri-bu-tion of $\OT1/lmr/bx/n/10.95 y$ \T1/lmr/m/n/10.95 (e.g.,~binomial,
+ []
+
+
 Overfull \hbox (5.47499pt too wide) has occurred while \output is active
 \T1/lmr/m/n/10.95 6 []
  []
 
-[6
-pdfTeX warning (ext4): destination with the same identifier (name{equation.4}) has been already used, duplicate ignored
-<argument> ...shipout:D \box_use:N \l_shipout_box 
-                                                  \__shipout_drop_firstpage_...
-l.458 \begin{align}
-                   \label{eq-marginal03}{c:/Users/MDUMELLE/AppData/Roaming/TinyTeX/texmf-dist/fonts/enc/dvips/lm/lm-mathex.enc}]
+[6{c:/Users/MDUMELLE/AppData/Roaming/TinyTeX/texmf-dist/fonts/enc/dvips/lm/lm-mathex.enc}]
 Overfull \hbox (5.47499pt too wide) has occurred while \output is active
 [] \T1/lmr/m/n/10.95 7
  []
 
-[7
-pdfTeX warning (ext4): destination with the same identifier (name{equation.4}) has been already used, duplicate ignored
-<argument> ...shipout:D \box_use:N \l_shipout_box 
-                                                  \__shipout_drop_firstpage_...
-l.534 
-      ]
+[7]
+Underfull \vbox (badness 10000) has occurred while \output is active []
+
+
 Overfull \hbox (5.47499pt too wide) has occurred while \output is active
 \T1/lmr/m/n/10.95 8 []
  []
 
 [8]
+<figures/figure-3.pdf, id=359, 554.07pt x 361.35pt>
+File: figures/figure-3.pdf Graphic file (type pdf)
+<use figures/figure-3.pdf>
+Package pdftex.def Info: figures/figure-3.pdf  used on input line 644.
+(pdftex.def)             Requested size: 331.99031pt x 210.49965pt.
+
 Overfull \hbox (5.47499pt too wide) has occurred while \output is active
 [] \T1/lmr/m/n/10.95 9
  []
@@ -814,101 +821,105 @@ Overfull \hbox (10.94998pt too wide) has occurred while \output is active
 \T1/lmr/m/n/10.95 10 []
  []
 
-[10]
-<figures/figure-3.pdf, id=378, 554.07pt x 361.35pt>
-File: figures/figure-3.pdf Graphic file (type pdf)
-<use figures/figure-3.pdf>
-Package pdftex.def Info: figures/figure-3.pdf  used on input line 801.
-(pdftex.def)             Requested size: 309.85626pt x 196.46562pt.
-
-Overfull \hbox (10.94998pt too wide) has occurred while \output is active
-[] \T1/lmr/m/n/10.95 11
- []
-
-[11]
-Overfull \hbox (10.94998pt too wide) has occurred while \output is active
-\T1/lmr/m/n/10.95 12 []
- []
-
-[12 <./figures/figure-3.pdf>]
-LaTeX Font Info:    Trying to load font information for TS1+lmtt on input line 892.
+[10 <./figures/figure-3.pdf>]
+LaTeX Font Info:    Trying to load font information for TS1+lmtt on input line 735.
 (c:/Users/MDUMELLE/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/lm/ts1lmtt.fd
 File: ts1lmtt.fd 2015/05/01 v1.6.1 Font defs for Latin Modern
 )
 Overfull \hbox (10.94998pt too wide) has occurred while \output is active
+[] \T1/lmr/m/n/10.95 11
+ []
+
+[11{c:/Users/MDUMELLE/AppData/Roaming/TinyTeX/texmf-dist/fonts/enc/dvips/lm/lm-ts1.enc}]
+Overfull \hbox (10.94998pt too wide) has occurred while \output is active
+\T1/lmr/m/n/10.95 12 []
+ []
+
+[12]
+Overfull \hbox (10.94998pt too wide) has occurred while \output is active
 [] \T1/lmr/m/n/10.95 13
  []
 
-[13{c:/Users/MDUMELLE/AppData/Roaming/TinyTeX/texmf-dist/fonts/enc/dvips/lm/lm-ts1.enc}]
+[13]
 Overfull \hbox (10.94998pt too wide) has occurred while \output is active
 \T1/lmr/m/n/10.95 14 []
  []
 
 [14]
+<figures/figure-4.pdf, id=425, 650.43pt x 216.81pt>
+File: figures/figure-4.pdf Graphic file (type pdf)
+<use figures/figure-4.pdf>
+Package pdftex.def Info: figures/figure-4.pdf  used on input line 970.
+(pdftex.def)             Requested size: 442.65375pt x 120.22955pt.
+<figures/figure-5.pdf, id=428, 722.7pt x 361.35pt>
+File: figures/figure-5.pdf Graphic file (type pdf)
+<use figures/figure-5.pdf>
+Package pdftex.def Info: figures/figure-5.pdf  used on input line 989.
+(pdftex.def)             Requested size: 442.65375pt x 209.03143pt.
+
 Overfull \hbox (10.94998pt too wide) has occurred while \output is active
 [] \T1/lmr/m/n/10.95 15
  []
 
-[15]
+[15 <./figures/figure-4.pdf>]
 Overfull \hbox (10.94998pt too wide) has occurred while \output is active
 \T1/lmr/m/n/10.95 16 []
  []
 
-[16]
+[16 <./figures/figure-5.pdf>]
+<figures/figure-6.pdf, id=458, 554.07pt x 361.35pt>
+File: figures/figure-6.pdf Graphic file (type pdf)
+<use figures/figure-6.pdf>
+Package pdftex.def Info: figures/figure-6.pdf  used on input line 1050.
+(pdftex.def)             Requested size: 331.99031pt x 216.51393pt.
+
 Overfull \hbox (10.94998pt too wide) has occurred while \output is active
 [] \T1/lmr/m/n/10.95 17
  []
 
-[17]
-<figures/figure-4.pdf, id=432, 650.43pt x 216.81pt>
-File: figures/figure-4.pdf Graphic file (type pdf)
-<use figures/figure-4.pdf>
-Package pdftex.def Info: figures/figure-4.pdf  used on input line 1206.
+[17 <./figures/figure-6.pdf>]
+<figures/figure-7.pdf, id=479, 650.43pt x 216.81pt>
+File: figures/figure-7.pdf Graphic file (type pdf)
+<use figures/figure-7.pdf>
+Package pdftex.def Info: figures/figure-7.pdf  used on input line 1115.
 (pdftex.def)             Requested size: 442.65375pt x 120.22955pt.
-<figures/figure-5.pdf, id=435, 722.7pt x 361.35pt>
-File: figures/figure-5.pdf Graphic file (type pdf)
-<use figures/figure-5.pdf>
-Package pdftex.def Info: figures/figure-5.pdf  used on input line 1225.
-(pdftex.def)             Requested size: 442.65375pt x 209.03143pt.
 
 Overfull \hbox (10.94998pt too wide) has occurred while \output is active
 \T1/lmr/m/n/10.95 18 []
  []
 
-[18 <./figures/figure-4.pdf>]
+[18 <./figures/figure-7.pdf>]
+<figures/figure-8.pdf, id=509, 554.07pt x 361.35pt>
+File: figures/figure-8.pdf Graphic file (type pdf)
+<use figures/figure-8.pdf>
+Package pdftex.def Info: figures/figure-8.pdf  used on input line 1192.
+(pdftex.def)             Requested size: 331.99031pt x 216.51393pt.
+
 Overfull \hbox (10.94998pt too wide) has occurred while \output is active
 [] \T1/lmr/m/n/10.95 19
  []
 
-[19 <./figures/figure-5.pdf>]
-<figures/figure-6.pdf, id=466, 554.07pt x 361.35pt>
-File: figures/figure-6.pdf Graphic file (type pdf)
-<use figures/figure-6.pdf>
-Package pdftex.def Info: figures/figure-6.pdf  used on input line 1286.
-(pdftex.def)             Requested size: 309.85626pt x 202.07893pt.
-
+[19]
 Overfull \hbox (10.94998pt too wide) has occurred while \output is active
 \T1/lmr/m/n/10.95 20 []
  []
 
-[20 <./figures/figure-6.pdf>]
-<figures/figure-7.pdf, id=487, 650.43pt x 216.81pt>
-File: figures/figure-7.pdf Graphic file (type pdf)
-<use figures/figure-7.pdf>
-Package pdftex.def Info: figures/figure-7.pdf  used on input line 1352.
-(pdftex.def)             Requested size: 442.65375pt x 120.22955pt.
+[20 <./figures/figure-8.pdf>]
+Overfull \hbox (0.15224pt too wide) in paragraph at lines 1282--1287
+[]\T1/lmr/m/n/10.95 From Fig-ure~[][][]8[][], spa-tial co-vari-ance de-cays slow-est along the ma-jor axis (roughly west-northwest
+ []
+
+<figures/figure-9.pdf, id=538, 722.7pt x 361.35pt>
+File: figures/figure-9.pdf Graphic file (type pdf)
+<use figures/figure-9.pdf>
+Package pdftex.def Info: figures/figure-9.pdf  used on input line 1290.
+(pdftex.def)             Requested size: 442.65375pt x 209.03143pt.
 
 Overfull \hbox (10.94998pt too wide) has occurred while \output is active
 [] \T1/lmr/m/n/10.95 21
  []
 
-[21 <./figures/figure-7.pdf>]
-<figures/figure-8.pdf, id=516, 554.07pt x 361.35pt>
-File: figures/figure-8.pdf Graphic file (type pdf)
-<use figures/figure-8.pdf>
-Package pdftex.def Info: figures/figure-8.pdf  used on input line 1429.
-(pdftex.def)             Requested size: 309.85626pt x 202.07893pt.
-
+[21 <./figures/figure-9.pdf>]
 Overfull \hbox (10.94998pt too wide) has occurred while \output is active
 \T1/lmr/m/n/10.95 22 []
  []
@@ -918,18 +929,24 @@ Overfull \hbox (10.94998pt too wide) has occurred while \output is active
 [] \T1/lmr/m/n/10.95 23
  []
 
-[23 <./figures/figure-8.pdf>]
-<figures/figure-9.pdf, id=545, 722.7pt x 361.35pt>
-File: figures/figure-9.pdf Graphic file (type pdf)
-<use figures/figure-9.pdf>
-Package pdftex.def Info: figures/figure-9.pdf  used on input line 1527.
-(pdftex.def)             Requested size: 442.65375pt x 209.03143pt.
+[23]
+<figures/figure-10.pdf, id=560, 650.43pt x 216.81pt>
+File: figures/figure-10.pdf Graphic file (type pdf)
+<use figures/figure-10.pdf>
+Package pdftex.def Info: figures/figure-10.pdf  used on input line 1456.
+(pdftex.def)             Requested size: 442.65375pt x 133.89206pt.
 
 Overfull \hbox (10.94998pt too wide) has occurred while \output is active
 \T1/lmr/m/n/10.95 24 []
  []
 
-[24 <./figures/figure-9.pdf>]
+[24 <./figures/figure-10.pdf>]
+<figures/figure-11.pdf, id=582, 554.07pt x 361.35pt>
+File: figures/figure-11.pdf Graphic file (type pdf)
+<use figures/figure-11.pdf>
+Package pdftex.def Info: figures/figure-11.pdf  used on input line 1563.
+(pdftex.def)             Requested size: 331.99031pt x 211.7025pt.
+
 Overfull \hbox (10.94998pt too wide) has occurred while \output is active
 [] \T1/lmr/m/n/10.95 25
  []
@@ -939,29 +956,24 @@ Overfull \hbox (10.94998pt too wide) has occurred while \output is active
 \T1/lmr/m/n/10.95 26 []
  []
 
-[26]
-<figures/figure-10.pdf, id=571, 650.43pt x 216.81pt>
-File: figures/figure-10.pdf Graphic file (type pdf)
-<use figures/figure-10.pdf>
-Package pdftex.def Info: figures/figure-10.pdf  used on input line 1726.
-(pdftex.def)             Requested size: 442.65375pt x 133.89206pt.
-
+[26 <./figures/figure-11.pdf>]
 Overfull \hbox (10.94998pt too wide) has occurred while \output is active
 [] \T1/lmr/m/n/10.95 27
  []
 
-[27]
+[27] (./paper.bbl
+
+LaTeX Font Warning: Font shape `T1/lmr/b/it' in size <10.95> not available
+(Font)              Font shape `T1/lmr/b/sl' tried instead on input line 37.
+
+LaTeX Font Info:    Font shape `T1/lmss/m/it' in size <10.95> not available
+(Font)              Font shape `T1/lmss/m/sl' tried instead on input line 62.
+
 Overfull \hbox (10.94998pt too wide) has occurred while \output is active
 \T1/lmr/m/n/10.95 28 []
  []
 
-[28 <./figures/figure-10.pdf>]
-<figures/figure-11.pdf, id=601, 554.07pt x 361.35pt>
-File: figures/figure-11.pdf Graphic file (type pdf)
-<use figures/figure-11.pdf>
-Package pdftex.def Info: figures/figure-11.pdf  used on input line 1864.
-(pdftex.def)             Requested size: 309.85626pt x 197.58827pt.
-
+[28]
 Overfull \hbox (10.94998pt too wide) has occurred while \output is active
 [] \T1/lmr/m/n/10.95 29
  []
@@ -971,76 +983,49 @@ Overfull \hbox (10.94998pt too wide) has occurred while \output is active
 \T1/lmr/m/n/10.95 30 []
  []
 
-[30 <./figures/figure-11.pdf>]
+[30]
 Overfull \hbox (10.94998pt too wide) has occurred while \output is active
 [] \T1/lmr/m/n/10.95 31
  []
 
-[31] (./paper.bbl
+[31])
+Underfull \hbox (badness 10000) in paragraph at lines 1687--1687
+
+ []
+
+LaTeX Font Info:    Font shape `T1/pzc/m/n' in size <13> not available
+(Font)              Font shape `T1/pzc/m/it' tried instead on input line 1687.
+
 Overfull \hbox (10.94998pt too wide) has occurred while \output is active
 \T1/lmr/m/n/10.95 32 []
  []
 
 [32]
-
-LaTeX Font Warning: Font shape `T1/lmr/b/it' in size <10.95> not available
-(Font)              Font shape `T1/lmr/b/sl' tried instead on input line 37.
-
-LaTeX Font Info:    Font shape `T1/lmss/m/it' in size <10.95> not available
-(Font)              Font shape `T1/lmss/m/sl' tried instead on input line 62.
-
 Overfull \hbox (10.94998pt too wide) has occurred while \output is active
 [] \T1/lmr/m/n/10.95 33
  []
 
-[33]
-Overfull \hbox (10.94998pt too wide) has occurred while \output is active
-\T1/lmr/m/n/10.95 34 []
- []
-
-[34]
-Overfull \hbox (10.94998pt too wide) has occurred while \output is active
-[] \T1/lmr/m/n/10.95 35
- []
-
-[35]
-Overfull \hbox (10.94998pt too wide) has occurred while \output is active
-\T1/lmr/m/n/10.95 36 []
- []
-
-[36])
-Underfull \hbox (badness 10000) in paragraph at lines 2025--2025
-
- []
-
-LaTeX Font Info:    Font shape `T1/pzc/m/n' in size <13> not available
-(Font)              Font shape `T1/pzc/m/it' tried instead on input line 2025.
-
-Overfull \hbox (10.94998pt too wide) has occurred while \output is active
-[] \T1/lmr/m/n/10.95 37
- []
-
-[37] (./paper.aux)
+[33] (./paper.aux)
  ***********
 LaTeX2e <2025-11-01>
 L3 programming layer <2025-11-14>
  ***********
 Package rerunfilecheck Info: File `paper.out' has not changed.
-(rerunfilecheck)             Checksum: 8300323B95E4C397E2E60FCD194C8940;4728.
+(rerunfilecheck)             Checksum: 1F913511FA340738139FD355CF7ACBC4;4836.
  ) 
 Here is how much of TeX's memory you used:
- 26043 strings out of 469458
- 492996 string characters out of 5465794
- 870718 words of memory out of 5000000
- 54036 multiletter control sequences out of 15000+600000
- 760942 words of font info for 127 fonts, out of 8000000 for 9000
+ 26027 strings out of 469458
+ 492597 string characters out of 5465794
+ 870687 words of memory out of 5000000
+ 54028 multiletter control sequences out of 15000+600000
+ 758222 words of font info for 126 fonts, out of 8000000 for 9000
  36 hyphenation exceptions out of 8191
- 99i,14n,108p,735b,880s stack positions out of 10000i,1000n,20000p,200000b,200000s
+ 99i,14n,108p,723b,880s stack positions out of 10000i,1000n,20000p,200000b,200000s
 <c:/Users/MDUMELLE/AppData/Roaming/TinyTeX/texmf-dist/fonts/type1/public/lm/lmb10.pfb><c:/Users/MDUMELLE/AppData/Roaming/TinyTeX/texmf-dist/fonts/type1/public/lm/lmbo10.pfb><c:/Users/MDUMELLE/AppData/Roaming/TinyTeX/texmf-dist/fonts/type1/public/lm/lmbx10.pfb><c:/Users/MDUMELLE/AppData/Roaming/TinyTeX/texmf-dist/fonts/type1/public/lm/lmbx12.pfb><c:/Users/MDUMELLE/AppData/Roaming/TinyTeX/texmf-dist/fonts/type1/public/lm/lmbx8.pfb><c:/Users/MDUMELLE/AppData/Roaming/TinyTeX/texmf-dist/fonts/type1/public/lm/lmex10.pfb><c:/Users/MDUMELLE/AppData/Roaming/TinyTeX/texmf-dist/fonts/type1/public/lm/lmmi10.pfb><c:/Users/MDUMELLE/AppData/Roaming/TinyTeX/texmf-dist/fonts/type1/public/lm/lmmi8.pfb><c:/Users/MDUMELLE/AppData/Roaming/TinyTeX/texmf-dist/fonts/type1/public/lm/lmmib10.pfb><c:/Users/MDUMELLE/AppData/Roaming/TinyTeX/texmf-dist/fonts/type1/public/lm/lmr10.pfb><c:/Users/MDUMELLE/AppData/Roaming/TinyTeX/texmf-dist/fonts/type1/public/lm/lmr8.pfb><c:/Users/MDUMELLE/AppData/Roaming/TinyTeX/texmf-dist/fonts/type1/public/lm/lmri10.pfb><c:/Users/MDUMELLE/AppData/Roaming/TinyTeX/texmf-dist/fonts/type1/public/lm/lmro10.pfb><c:/Users/MDUMELLE/AppData/Roaming/TinyTeX/texmf-dist/fonts/type1/public/lm/lmss10.pfb><c:/Users/MDUMELLE/AppData/Roaming/TinyTeX/texmf-dist/fonts/type1/public/lm/lmssbx10.pfb><c:/Users/MDUMELLE/AppData/Roaming/TinyTeX/texmf-dist/fonts/type1/public/lm/lmsso10.pfb><c:/Users/MDUMELLE/AppData/Roaming/TinyTeX/texmf-dist/fonts/type1/public/lm/lmsy10.pfb><c:/Users/MDUMELLE/AppData/Roaming/TinyTeX/texmf-dist/fonts/type1/public/lm/lmsy6.pfb><c:/Users/MDUMELLE/AppData/Roaming/TinyTeX/texmf-dist/fonts/type1/public/lm/lmsy8.pfb><c:/Users/MDUMELLE/AppData/Roaming/TinyTeX/texmf-dist/fonts/type1/public/lm/lmtt10.pfb><c:/Users/MDUMELLE/AppData/Roaming/TinyTeX/texmf-dist/fonts/type1/public/lm/lmtto10.pfb><c:/Users/MDUMELLE/AppData/Roaming/TinyTeX/texmf-dist/fonts/type1/urw/zapfchan/uzcmi8a.pfb>
-Output written on paper.pdf (37 pages, 1753747 bytes).
+Output written on paper.pdf (33 pages, 1733339 bytes).
 PDF statistics:
- 913 PDF objects out of 1000 (max. 8388607)
- 782 compressed objects within 8 object streams
- 159 named destinations out of 1000 (max. 500000)
+ 883 PDF objects out of 1000 (max. 8388607)
+ 756 compressed objects within 8 object streams
+ 153 named destinations out of 1000 (max. 500000)
  268 words of extra memory for PDF output out of 10000 (max. 10000000)
 
