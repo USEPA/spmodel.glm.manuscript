@@ -332,6 +332,13 @@ par(old_par)
 # Figure 9 ####
 #==========================================#
 seal$sampled <- factor(if_else(is.na(seal$trend), "no", "yes"), levels = c("yes", "no"))
+seal$trend_category <- factor(
+  case_when(
+    seal$trend > 1 ~ "Increasing",
+    seal$trend < 1 ~ "Decreasing"
+  ),
+  levels = c("Increasing", "Decreasing")
+)
 p1 <- ggplot(seal, aes(fill = sampled, color = stock)) +
   geom_sf(size = 0.25) +
   theme_caption_sized(14) +
@@ -340,10 +347,10 @@ p1 <- ggplot(seal, aes(fill = sampled, color = stock)) +
   scale_y_continuous(breaks = seq(57, 59, length.out = 5)) +
   scale_x_continuous(breaks = seq(-139, -134, length.out = 3))
 
-p2 <- ggplot(seal, aes(fill = trend)) +
+p2 <- ggplot(seal, aes(fill = trend_category)) +
   geom_sf(size = 0.25) +
   theme_caption_sized(14) +
-  scale_fill_viridis_c(name = "trend", option = "D", begin = 0.5, limits = range(seal$trend, na.rm = TRUE)) +
+  scale_fill_manual(name = "Trend", values = c("Increasing" = okabe[3], "Decreasing" = okabe[4])) +
   scale_y_continuous(breaks = seq(57, 59, length.out = 5)) +
   scale_x_continuous(breaks = seq(-139, -134, length.out = 3))
 

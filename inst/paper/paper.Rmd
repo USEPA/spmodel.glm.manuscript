@@ -411,7 +411,7 @@ variance of an observation generally depends on its mean, response
 residuals lack some utility. Deviance, Pearson, and standardized
 residuals are all different functions of response residuals that are
 appropriately scaled to behave more like response residuals from a
-standard linear model [@myers2012generalized]. For example, deviance residuals are given by
+standard linear model [@myers2012generalized]. Deviance residuals are given by
 \(\mathbf{r}_{d} = \operatorname{sgn}(\mathbf{r}_{r})\sqrt{\boldsymbol{\delta}}\),
 where \(\boldsymbol{\delta}\) is the vector of individual deviances.
 The sum of the squared deviance residuals equals the sum of the elements
@@ -419,7 +419,8 @@ of \(\boldsymbol{\delta}\), known as the model fit's deviance. The deviance, oft
 quantifies twice the difference in log likelihoods
 between the saturated model that fits every observation perfectly
 (i.e.,&nbsp;\(\mu_{i} \equiv y_i\) for all \(i\)) and the
-fitted model [@mccullagh1989generalized]. MOVE OTHER TWO RESIDUAL DEFINITIONS HERE. REMOVE STANDARDIZED RESIDUAL DEFINITION FROM COOKS DISTANCE SECTION.
+fitted model [@mccullagh1989generalized]. The standardized (deviance) residuals are \(\mathbf{r}_{d}/\sqrt{a(\varphi)\mathbf{1} - diag(\mathbf{H})}\), where \(a(\varphi)\) is a dispersion scaling factor [@faraway2016extending]. The Pearson residuals are 
+\(\mathbf{r}_{p} = \mathbf{r}_{r}/\sqrt{\VAR(\hat{\mathbf{w}})}\), where \(\VAR(\hat{\text{y}}_i)\) is the response-scale variance implied by the GLM family and evaluated at the fitted \(\hat{\text{w}}\).
 
 An observation has high leverage if its combination of explanatory
 variables is far away from other observations. Let \(\mathbf{X}_v = \mathbf{V}^{1/2} \mathbf{X}\), where \(\mathbf{V}\) is a diagonal matrix with \(i\)th
@@ -429,9 +430,7 @@ An observation is influential if it has a sizable impact on model fit.
 Influence is measured using Cook's distance
 [@cook1979influential; @cook1982residuals], which can be expressed as 
 \(\mathbf{c} = [\mathbf{r}^2_{s}/\text{tr}(\mathbf{H})][diag(\mathbf{H})/(\mathbf{1} - diag(\mathbf{H}))]\),
-where \(\mathbf{r}_{s}\) is the vector of standardized deviance residuals (\(\mathbf{r}_{d}/\sqrt{a(\varphi)\mathbf{1} - diag(\mathbf{H})}\), where \(a(\varphi)\) is a dispersion scaling factor) and
-\(diag(\mathbf{H})\) contains the diagonal entries of the leverage
-matrix [@faraway2016extending]. The larger the value of \(\text{c}_i\), the more severe the
+where \(\mathbf{r}_{s}\). The larger the value of \(\text{c}_i\), the more severe the
 influence from the \(i\)th observation.
 
 In a linear model, the \(R^2\) (R-squared) statistic quantifies the
@@ -962,7 +961,7 @@ of coastal rocks that harbor seals go to rest, molt, and give birth.
 \begin{figure}[t!]
 \centering
 \includegraphics[width = 1\linewidth, trim=0 10 0 10,clip]{figures/figure-10.pdf}
-\caption{Seal trend distribution in Alaska. Observed and missing seal polygons by stock (left) and observed seal trends (right).}
+\caption{Seal trend distribution in Alaska. Observed and missing seal polygons by stock (left) and increasing or decreasing trends, based on whether the trend is above or below one (right).}
 \label{fig-seal}
 \end{figure}
 

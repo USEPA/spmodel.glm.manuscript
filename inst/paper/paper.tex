@@ -481,8 +481,7 @@ observation generally depends on its mean, response residuals lack some
 utility. Deviance, Pearson, and standardized residuals are all different
 functions of response residuals that are appropriately scaled to behave
 more like response residuals from a standard linear model
-\citep{myers2012generalized}. For example, deviance residuals are given
-by
+\citep{myers2012generalized}. Deviance residuals are given by
 \(\mathbf{r}_{d} = \operatorname{sgn}(\mathbf{r}_{r})\sqrt{\boldsymbol{\delta}}\),
 where \(\boldsymbol{\delta}\) is the vector of individual deviances. The
 sum of the squared deviance residuals equals the sum of the elements of
@@ -490,9 +489,14 @@ sum of the squared deviance residuals equals the sum of the elements of
 deviance, often used as a (conditional) fit statistic, quantifies twice
 the difference in log likelihoods between the saturated model that fits
 every observation perfectly (i.e.,~\(\mu_{i} \equiv y_i\) for all \(i\))
-and the fitted model \citep{mccullagh1989generalized}. MOVE OTHER TWO
-RESIDUAL DEFINITIONS HERE. REMOVE STANDARDIZED RESIDUAL DEFINITION FROM
-COOKS DISTANCE SECTION.
+and the fitted model \citep{mccullagh1989generalized}. The standardized
+(deviance) residuals are
+\(\mathbf{r}_{d}/\sqrt{a(\varphi)\mathbf{1} - diag(\mathbf{H})}\), where
+\(a(\varphi)\) is a dispersion scaling factor
+\citep{faraway2016extending}. The Pearson residuals are
+\(\mathbf{r}_{p} = \mathbf{r}_{r}/\sqrt{\VAR(\hat{\mathbf{w}})}\), where
+\(\VAR(\hat{\text{y}}_i)\) is the response-scale variance implied by the
+GLM family and evaluated at the fitted \(\hat{\text{w}}\).
 
 An observation has high leverage if its combination of explanatory
 variables is far away from other observations. Let
@@ -511,14 +515,8 @@ Influence is measured using Cook's distance
 \citep{cook1979influential, cook1982residuals}, which can be expressed
 as
 \(\mathbf{c} = [\mathbf{r}^2_{s}/\text{tr}(\mathbf{H})][diag(\mathbf{H})/(\mathbf{1} - diag(\mathbf{H}))]\),
-where \(\mathbf{r}_{s}\) is the vector of standardized deviance
-residuals
-(\(\mathbf{r}_{d}/\sqrt{a(\varphi)\mathbf{1} - diag(\mathbf{H})}\),
-where \(a(\varphi)\) is a dispersion scaling factor) and
-\(diag(\mathbf{H})\) contains the diagonal entries of the leverage
-matrix \citep{faraway2016extending}. The larger the value of
-\(\text{c}_i\), the more severe the influence from the \(i\)th
-observation.
+where \(\mathbf{r}_{s}\). The larger the value of \(\text{c}_i\), the
+more severe the influence from the \(i\)th observation.
 
 In a linear model, the \(R^2\) (R-squared) statistic quantifies the
 proportion of variability in the data captured by the explanatory
@@ -1294,8 +1292,9 @@ occurring or human made) on conductivity. Conductivity is a measure of
 dissolved ions (measured here in water), which is important for various
 physical, chemical, and biological processes. The data are right-skewed,
 so we model them using an SPGLM assuming a Gamma distribution for the
-response. The \code{cond} variable in \code{lake} measures conductivity
-on its original scale:
+response and a Cauchy spatial covariance \citep{zimmerman2024spatial}.
+The \code{cond} variable in \code{lake} measures conductivity on its
+original scale:
 
 \begin{CodeChunk}
 \begin{CodeInput}
@@ -1313,7 +1312,8 @@ We model conductivity as a function of temperature, state, and lake
 origin, and we allow the effect of temperature to vary by state
 (\code{temp:state} interaction). The \code{year} partition factor
 (specified via \code{partition_factor}) forces independence between
-observations sampled in different years (here, 2012 vs 2017).
+observations sampled in different years (here, meaning observations in
+2012 are assumed independent of observations in 2017).
 
 When categorical variables have more than two levels, the default
 reference group contrasts are not well-suited to assess the variable's
@@ -1448,7 +1448,7 @@ coastal rocks that harbor seals go to rest, molt, and give birth.
 \begin{figure}[t!]
 \centering
 \includegraphics[width = 1\linewidth, trim=0 10 0 10,clip]{figures/figure-10.pdf}
-\caption{Seal trend distribution in Alaska. Observed and missing seal polygons by stock (left) and observed seal trends (right).}
+\caption{Seal trend distribution in Alaska. Observed and missing seal polygons by stock (left) and increasing or decreasing trends, based on whether the trend is above or below one (right).}
 \label{fig-seal}
 \end{figure}
 

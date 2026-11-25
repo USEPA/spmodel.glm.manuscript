@@ -550,13 +550,6 @@ anova(spbeta_full_ml, spbeta_reduced_ml)
 library("ggplot2", verbose = FALSE)
 library("dplyr", verbose = FALSE)
 library("patchwork")
-```
-
-```
-## Warning: package 'patchwork' was built under R version 4.4.3
-```
-
-``` r
 theme_caption_sized <- function(size = 14) {
   theme_bw(base_size = size) +
     theme(
@@ -759,6 +752,13 @@ par(old_par)
 # Figure 9 ####
 #==========================================#
 seal$sampled <- factor(if_else(is.na(seal$trend), "no", "yes"), levels = c("yes", "no"))
+seal$trend_category <- factor(
+  case_when(
+    seal$trend > 1 ~ "Increasing",
+    seal$trend < 1 ~ "Decreasing"
+  ),
+  levels = c("Increasing", "Decreasing")
+)
 p1 <- ggplot(seal, aes(fill = sampled, color = stock)) +
   geom_sf(size = 0.25) +
   theme_caption_sized(14) +
@@ -767,10 +767,10 @@ p1 <- ggplot(seal, aes(fill = sampled, color = stock)) +
   scale_y_continuous(breaks = seq(57, 59, length.out = 5)) +
   scale_x_continuous(breaks = seq(-139, -134, length.out = 3))
 
-p2 <- ggplot(seal, aes(fill = trend)) +
+p2 <- ggplot(seal, aes(fill = trend_category)) +
   geom_sf(size = 0.25) +
   theme_caption_sized(14) +
-  scale_fill_viridis_c(name = "trend", option = "D", begin = 0.5, limits = range(seal$trend, na.rm = TRUE)) +
+  scale_fill_manual(name = "Trend", values = c("Increasing" = okabe[3], "Decreasing" = okabe[4])) +
   scale_y_continuous(breaks = seq(57, 59, length.out = 5)) +
   scale_x_continuous(breaks = seq(-139, -134, length.out = 3))
 
@@ -839,17 +839,19 @@ sessionInfo()
 ## [13] mvtnorm_1.2-5      fastmap_1.2.0      rprojroot_2.1.1   
 ## [16] Matrix_1.7-0       e1071_1.7-16       DBI_1.2.3         
 ## [19] tinytex_0.57       viridisLite_0.4.2  scales_1.4.0      
-## [22] cli_3.6.3          rlang_1.1.7        units_0.8-7       
-## [25] withr_3.0.2        yaml_2.3.10        tools_4.4.1       
-## [28] parallel_4.4.1     coda_0.19-4.1      vctrs_0.7.1       
-## [31] R6_2.5.1           proxy_0.4-27       lifecycle_1.0.5   
-## [34] emmeans_1.10.3     classInt_0.4-11    rticles_0.27      
-## [37] pkgconfig_2.0.3    pillar_1.11.1      gtable_0.3.6      
-## [40] glue_1.7.0         Rcpp_1.0.12        sf_1.0-21         
-## [43] xfun_0.52          tibble_3.3.0       tidyselect_1.2.1  
-## [46] knitr_1.50         farver_2.1.2       xtable_1.8-4      
-## [49] htmltools_0.5.8.1  labeling_0.4.3     rmarkdown_2.31    
-## [52] compiler_4.4.1     S7_0.2.0
+## [22] textshaping_0.4.0  cli_3.6.3          rlang_1.1.7       
+## [25] units_0.8-7        litedown_0.7       commonmark_1.9.5  
+## [28] withr_3.0.2        yaml_2.3.10        tools_4.4.1       
+## [31] parallel_4.4.1     coda_0.19-4.1      mime_0.12         
+## [34] vctrs_0.7.1        R6_2.5.1           proxy_0.4-27      
+## [37] lifecycle_1.0.5    emmeans_1.10.3     classInt_0.4-11   
+## [40] rticles_0.27       ragg_1.5.0         pkgconfig_2.0.3   
+## [43] pillar_1.11.1      gtable_0.3.6       glue_1.7.0        
+## [46] Rcpp_1.0.12        systemfonts_1.3.1  sf_1.0-21         
+## [49] xfun_0.52          tibble_3.3.0       tidyselect_1.2.1  
+## [52] knitr_1.50         farver_2.1.2       xtable_1.8-4      
+## [55] htmltools_0.5.8.1  labeling_0.4.3     rmarkdown_2.31    
+## [58] compiler_4.4.1     S7_0.2.0           markdown_2.0
 ```
 
 ``` r
