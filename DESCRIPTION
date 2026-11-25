@@ -33,3 +33,10 @@ Imports:
     ggplot2,
     dplyr,
     emmeans
+Suggests:
+    here,
+    knitr,
+    markdown,
+    patchwork,
+    rmarkdown,
+    rticles

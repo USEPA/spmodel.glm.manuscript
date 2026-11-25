@@ -33,31 +33,23 @@ bin <- spglm(
   data = moose,
   spcov_type = "none"
 )
-tidy(bin)
-
-bin_glm <- glm(
-  formula = presence ~ elev + strat,
-  family = binomial,
-  data = moose,
-)
-broom::tidy(bin_glm)
-
-bin_ml <- update(bin, estmethod = "ml")
-glance(bin_ml)[, c("logLik", "AIC", "BIC", "deviance")]
-broom::glance(bin_glm)[, c("logLik", "AIC", "BIC", "deviance")]
-
 glance(spbin)
 glance(bin)
 
-set.seed(1)
-kcv(spbin)
-kcv(bin)
+bin_ml <- update(bin, estmethod = "ml")
+bin_glm <- glm(
+  formula = presence ~ elev + strat,
+  family = binomial,
+  data = moose
+)
+logLik(bin_ml)
+logLik(bin_glm)
+
+loocv(spbin)
+loocv(bin)
 
 spbin2 <- update(spbin, spcov_type = "gaussian")
-glances(spbin, spbin2)
-set.seed(1)
-kcv(spbin)
-kcv(spbin2)
+glances(spbin, spbin2)[, c("model", "AIC", "AICc", "BIC")]
 
 #==========================================#
 # Section 3.3: Model Diagnostics ####
@@ -118,8 +110,6 @@ summary(spgam)
 
 anova(spgam)
 
-car::vif(spgam)
-
 pairs(emmeans::emmeans(spgam, ~ state | temp))
 
 emmeans::emtrends(spgam, ~ state, var = "temp")
@@ -139,9 +129,7 @@ spbin_seal <- spgautor(
 
 tidy(spbin_seal, conf.int = TRUE)
 
-emmeans(spbin_seal, ~ 1, type = "response")
-
-seal |> dplyr::select(-dplyr::any_of("sampled"))
+emmeans::emmeans(spbin_seal, ~ 1, type = "response")
 
 predict(spbin_seal, type = "response", interval = "prediction")[1:5, ]
 
@@ -170,7 +158,6 @@ spbeta_full_ml <- update(spbeta_geo, estmethod = "ml")
 spbeta_reduced_ml <- update(spbeta_full_ml, formula = turnout ~ 1)
 anova(spbeta_full_ml, spbeta_reduced_ml)
 
-AIC(spbeta_full_ml, spbeta_reduced_ml)
 
 #=========================================================#
 # Figures ####
@@ -190,12 +177,9 @@ theme_caption_sized <- function(size = 14) {
     )
 }
 
-okabe <- c("#E69F00", "#56B4E9", "#009E73", "#F0E442", "#0072B2", "#D55E00", "#CC79A7")
-
 #==========================================#
-# Figure 1a: Correlation by range ####
+# Figure 1
 #==========================================#
-
 h <- seq(0, 1, length.out = 1000)
 range1 <- 0.2
 dat1 <- data.frame(Distance = h, Correlation = exp(-h/range1), Range = "0.2")
@@ -205,13 +189,10 @@ range3 <- 0.8
 dat3 <- data.frame(Distance = h, Correlation = exp(-h/range3), Range = "0.8")
 dat <- bind_rows(dat1, dat2, dat3)
 dat$Range <- factor(dat$Range, levels = c("0.8", "0.5", "0.2"))
-figure1 <- ggplot(dat, aes(x = Distance, y = Correlation, color = Range, linetype = Range)) +
+cor_range <- ggplot(dat, aes(x = Distance, y = Correlation, color = Range, linetype = Range)) +
   geom_line(linewidth = 1.2) +
   scale_color_viridis_d() +
-  theme_caption_sized(14)
-#==========================================#
-# Figure 1b: Correlation types ####
-#==========================================#
+  theme_caption_sized(13)
 
 h <- seq(0, 1, length.out = 1000)
 range <- 0.5
@@ -219,28 +200,25 @@ dat1 <- data.frame(Distance = h, Correlation = exp(-h/range), Type = "Exponentia
 dat2 <- data.frame(Distance = h, Correlation = exp(-(h/range)^2), Type = "Gaussian")
 dat3 <- data.frame(Distance = h, Correlation = (1 - 1.5 * h/range + 0.5 * (h/range)^3) * (h <= range), Type = "Spherical")
 dat <- bind_rows(dat1, dat2, dat3)
-figure2 <- ggplot(dat, aes(x = Distance, y = Correlation, color = Type, linetype = Type)) +
+cor_type <- ggplot(dat, aes(x = Distance, y = Correlation, color = Type, linetype = Type)) +
   geom_line(linewidth = 1.2) +
   scale_color_viridis_d() +
-  theme_caption_sized(14)
-correlations <- (figure1 | figure2) +
-  plot_annotation(
-    tag_levels = "a",
-    tag_prefix = "(",
-    tag_suffix = ")"
-  )
+  labs(color = "Function", linetype = "Function") +
+  theme_caption_sized(13)
+correlations <- cor_range | cor_type
 correlations
 
 #==========================================#
 # Figure 2 ####
 #==========================================#
 
+okabe <- c("#E69F00", "#56B4E9", "#009E73", "#F0E442", "#0072B2", "#D55E00", "#CC79A7")
 moose_comb <- bind_rows(moose |> mutate(samp = "yes"), moose_preds |> mutate(samp = "no"))
-figure3 <- ggplot(moose_comb, aes(color = presence, shape = samp)) +
+obs_pred_presence <- ggplot(moose_comb, aes(color = presence, shape = samp)) +
   geom_sf(size = 2) +
   scale_color_manual(name = "moose", values = okabe[1:2], breaks = c(1, 0), labels = c("yes", "no")) +
   scale_shape_manual(name = "sampled", values = c(19, 17), breaks = c("yes", "no"), labels = c("yes", "no")) +
-  theme_caption_sized(16) +
+  theme_caption_sized(15) +
   scale_y_continuous(breaks = seq(62.6, 63.6, length.out = 5)) +
   scale_x_continuous(breaks = seq(-148.5, -146, length.out = 3)) +
   guides(
@@ -248,45 +226,41 @@ figure3 <- ggplot(moose_comb, aes(color = presence, shape = samp)) +
     shape = guide_legend(order = 2)
   ) +
   geom_sf(size = 2, data = moose_comb %>% filter(samp == "no"), color = "red", shape = 17)
-figure3
+obs_pred_presence
 
 #==========================================#
 # Figure 3 ####
 #==========================================#
 
-spbin <- spglm(
-  formula = presence ~ elev + strat,
-  family = binomial,
-  data = moose,
-  spcov_type = "exponential"
-)
 spbin_aug <- augment(spbin)
 
 p1 <- ggplot(spbin_aug, aes(color = .hat)) +
-  geom_sf(size = 2) +
+  geom_sf(size = 1) +
   scale_color_viridis_c(option = "E", name = ".hat") +
   scale_y_continuous(breaks = seq(62.6, 63.6, length.out = 5)) +
   scale_x_continuous(breaks = seq(-148.5, -146, length.out = 3)) +
   theme_caption_sized(14)
 
 p2 <- ggplot(spbin_aug, aes(color = .std.resid)) +
-  geom_sf(size = 2) +
+  geom_sf(size = 1) +
   scale_color_viridis_c(option = "A", limits = c(-2, 2)) +
   scale_y_continuous(breaks = seq(62.6, 63.6, length.out = 5)) +
   scale_x_continuous(breaks = seq(-148.5, -146, length.out = 3)) +
   theme_caption_sized(14)
 
-p1
-p2
+p1 + p2
 
 #==========================================#
 # Figure 4 ####
 #==========================================#
 
-old_par <- par(mfrow = c(1, 2), cex = 1.5)
-plot(spbin, which = 4)
-plot(spbin, which = 7)
+#+ fig.width=10, fig.height=5
+old_par <- par(no.readonly = TRUE)
+par(mfrow = c(1, 2), mar = c(5.1, 4.1, 4.1, 3.2))
+par(cex = 1.5, cex.main = 1, cex.axis = 0.95, cex.sub = 0.95)
+plot(spbin, which = c(4, 7))
 par(old_par)
+
 #==========================================#
 # Figure 5 ####
 #==========================================#
@@ -297,43 +271,42 @@ preds_aug <- augment(
   type.predict = "response",
   interval = "prediction"
 )
-spbin_aug <- augment(spbin)
+spbin_aug <- augment(spbin, type.predict = "response")
 comb_aug <- bind_rows(spbin_aug %>% mutate(Type = "Fitted"), preds_aug %>% mutate(Type = "Pred"))
 
-figure6 <- ggplot(comb_aug, aes(color = .fitted, shape = Type)) +
+obs_pred_fitted <- ggplot(comb_aug, aes(color = .fitted, shape = Type)) +
   geom_sf(size = 2) +
   scale_color_viridis_c(option = "H", name = "Prob", limits = c(0, 1)) +
   scale_y_continuous(breaks = seq(62.6, 63.6, length.out = 5)) +
   scale_x_continuous(breaks = seq(-148.5, -146, length.out = 3)) +
   theme_caption_sized(16)
-figure6
+obs_pred_fitted
 
 #==========================================#
 # Figure 6 ####
 #==========================================#
 
 p1 <- ggplot(preds_aug, aes(color = .lower)) +
-  geom_sf(size = 2, pch = 17) +
+  geom_sf(pch = 17) +
   scale_color_viridis_c(option = "H", name = "Lower", limits = c(0, 1)) +
   scale_y_continuous(breaks = seq(62.6, 63.6, length.out = 5)) +
   scale_x_continuous(breaks = seq(-148.5, -146, length.out = 3)) +
   theme_caption_sized(14)
 
 p2 <- ggplot(preds_aug, aes(color = .upper)) +
-  geom_sf(size = 2, pch = 17) +
+  geom_sf(pch = 17) +
   scale_color_viridis_c(option = "H", name = "Upper", limits = c(0, 1)) +
   scale_y_continuous(breaks = seq(62.6, 63.6, length.out = 5)) +
   scale_x_continuous(breaks = seq(-148.5, -146, length.out = 3)) +
   theme_caption_sized(14)
 
-p1
-p2
+p1 + p2
 
 #==========================================#
 # Figure 7 ####
 #==========================================#
 
-figure8 <- ggplot(moose_comb, aes(color = count, shape = samp)) +
+obs_pred_count <- ggplot(moose_comb, aes(color = count, shape = samp)) +
   geom_sf(size = 2) +
   scale_color_binned(breaks = c(0, 1, 2, 5, 10, 20, 40), type = "viridis") +
   scale_shape_manual(name = "sampled", values = c(19, 17), breaks = c("yes", "no"), labels = c("yes", "no")) +
@@ -341,63 +314,54 @@ figure8 <- ggplot(moose_comb, aes(color = count, shape = samp)) +
   scale_y_continuous(breaks = seq(62.6, 63.6, length.out = 5)) +
   scale_x_continuous(breaks = seq(-148.5, -146, length.out = 3)) +
   geom_sf(size = 2, data = moose_comb %>% filter(samp == "no"), color = "red", shape = 17)
-figure8
+obs_pred_count
 
 #==========================================#
 # Figure 8 ####
 #==========================================#
 
-spnbin <- spglm(
-  formula = count ~ elev + strat,
-  family = nbinomial,
-  data = moose,
-  spcov_type = "spherical",
-  anisotropy = TRUE
-)
-
-spnbin_iso <- update(spnbin, anisotropy = FALSE)
-
-old_par <- par(mfrow = c(1, 2), cex = 1.5)
-plot(spnbin_iso, which = 8)
-plot(spnbin, which = 8)
+#+ fig.width=10, fig.height=5
+old_par <- par(no.readonly = TRUE)
+par(mfrow = c(1, 2))
+par(cex = 1.5, cex.main = 1, cex.axis = 0.95, cex.sub = 0.95)
+plot(spnb, which = 8)
+plot(spnb_anis, which = 8)
 par(old_par)
 
 #==========================================#
 # Figure 9 ####
 #==========================================#
-
-seal$sampled <- factor(if_else(is.na(seal$log_trend), "no", "yes"), levels = c("yes", "no"))
+seal$sampled <- factor(if_else(is.na(seal$trend), "no", "yes"), levels = c("yes", "no"))
 p1 <- ggplot(seal, aes(fill = sampled, color = stock)) +
-  geom_sf(size = 1) +
+  geom_sf(size = 0.25) +
   theme_caption_sized(14) +
   scale_fill_manual(name = "sampled", values = okabe[1:2], breaks = c("yes", "no"), labels = c("yes", "no")) +
   scale_color_manual(name = "stock", values = c("grey40", "grey80"), breaks = c(8, 10), labels = c(8, 10)) +
   scale_y_continuous(breaks = seq(57, 59, length.out = 5)) +
   scale_x_continuous(breaks = seq(-139, -134, length.out = 3))
 
-p2 <- ggplot(seal, aes(fill = log_trend)) +
-  geom_sf(size = 1) +
+p2 <- ggplot(seal, aes(fill = trend)) +
+  geom_sf(size = 0.25) +
   theme_caption_sized(14) +
-  scale_fill_viridis_c(name = "logtrend", option = "D", begin = 0.5, limits = c(min(seal$log_trend), max(seal$log_trend))) +
+  scale_fill_viridis_c(name = "trend", option = "D", begin = 0.5, limits = range(seal$trend, na.rm = TRUE)) +
   scale_y_continuous(breaks = seq(57, 59, length.out = 5)) +
   scale_x_continuous(breaks = seq(-139, -134, length.out = 3))
 
-p1
-p2
+p1 + p2
 
 #==========================================#
 # Figure 10 ####
 #==========================================#
 
 texas$samp <- factor(if_else(is.na(texas$turnout), "no", "yes"), levels = c("yes", "no"))
-figure11 <- ggplot(texas, aes(color = turnout, shape = samp)) +
+obs_prop2 <- ggplot(texas, aes(color = turnout, shape = samp)) +
   geom_sf(size = 2) +
   scale_color_viridis_c(option = "D") +
   scale_shape_manual(name = "sampled", values = c(19, 17), breaks = c("yes", "no"), labels = c("yes", "no")) +
   theme_caption_sized(16) +
   scale_x_continuous(breaks = seq(-94, -106, length.out = 3)) +
   geom_sf(size = 2, data = texas %>% filter(samp == "no"), color = "red", shape = 17)
-figure11
+obs_prop2
 
 #=========================================================#
 # Session Information ####

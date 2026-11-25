@@ -116,60 +116,6 @@ bin <- spglm(
   data = moose,
   spcov_type = "none"
 )
-tidy(bin)
-```
-
-```
-## # A tibble: 3 × 5
-##   term         estimate std.error statistic p.value
-##   <chr>           <dbl>     <dbl>     <dbl>   <dbl>
-## 1 (Intercept) -0.425      0.421      -1.01  0.313  
-## 2 elev        -0.000317   0.00186    -0.171 0.865  
-## 3 stratM       0.807      0.291       2.78  0.00549
-```
-
-``` r
-bin_glm <- glm(
-  formula = presence ~ elev + strat,
-  family = binomial,
-  data = moose,
-)
-broom::tidy(bin_glm)
-```
-
-```
-## # A tibble: 3 × 5
-##   term         estimate std.error statistic p.value
-##   <chr>           <dbl>     <dbl>     <dbl>   <dbl>
-## 1 (Intercept) -0.425      0.421      -1.01  0.313  
-## 2 elev        -0.000317   0.00186    -0.171 0.865  
-## 3 stratM       0.807      0.291       2.78  0.00549
-```
-
-``` r
-bin_ml <- update(bin, estmethod = "ml")
-glance(bin_ml)[, c("logLik", "AIC", "BIC", "deviance")]
-```
-
-```
-## # A tibble: 1 × 4
-##   logLik   AIC   BIC deviance
-##    <dbl> <dbl> <dbl>    <dbl>
-## 1  -147.  300.  310.     294.
-```
-
-``` r
-broom::glance(bin_glm)[, c("logLik", "AIC", "BIC", "deviance")]
-```
-
-```
-## # A tibble: 1 × 4
-##   logLik   AIC   BIC deviance
-##    <dbl> <dbl> <dbl>    <dbl>
-## 1  -147.  300.  310.     294.
-```
-
-``` r
 glance(spbin)
 ```
 
@@ -194,63 +140,60 @@ glance(bin)
 ```
 
 ``` r
-set.seed(1)
-kcv(spbin)
+bin_ml <- update(bin, estmethod = "ml")
+bin_glm <- glm(
+  formula = presence ~ elev + strat,
+  family = binomial,
+  data = moose
+)
+logLik(bin_ml)
+```
+
+```
+## 'log Lik.' -146.8733 (df=3)
+```
+
+``` r
+logLik(bin_glm)
+```
+
+```
+## 'log Lik.' -146.8733 (df=3)
+```
+
+``` r
+loocv(spbin)
 ```
 
 ```
 ## # A tibble: 1 × 3
 ##        bias  MSPE RMSPE
 ##       <dbl> <dbl> <dbl>
-## 1 -0.000324 0.159 0.398
+## 1 0.0000406 0.155 0.394
 ```
 
 ``` r
-kcv(bin)
+loocv(bin)
 ```
 
 ```
 ## # A tibble: 1 × 3
-##           bias  MSPE RMSPE
-##          <dbl> <dbl> <dbl>
-## 1 0.0000000282 0.240 0.490
+##       bias  MSPE RMSPE
+##      <dbl> <dbl> <dbl>
+## 1 -1.23e-9 0.240 0.490
 ```
 
 ``` r
 spbin2 <- update(spbin, spcov_type = "gaussian")
-glances(spbin, spbin2)
+glances(spbin, spbin2)[, c("model", "AIC", "AICc", "BIC")]
 ```
 
 ```
-## # A tibble: 2 × 11
-##   model      n     p  npar value   AIC  AICc   BIC logLik deviance
-##   <chr>  <int> <dbl> <int> <dbl> <dbl> <dbl> <dbl>  <dbl>    <dbl>
-## 1 spbin2   218     3     3  273.  279.  279.  289.  -136.     198.
-## 2 spbin    218     3     3  276.  282.  282.  292.  -138.     175.
-## # ℹ 1 more variable: pseudo.r.squared <dbl>
-```
-
-``` r
-set.seed(1)
-kcv(spbin)
-```
-
-```
-## # A tibble: 1 × 3
-##        bias  MSPE RMSPE
-##       <dbl> <dbl> <dbl>
-## 1 -0.000324 0.159 0.398
-```
-
-``` r
-kcv(spbin2)
-```
-
-```
-## # A tibble: 1 × 3
-##        bias  MSPE RMSPE
-##       <dbl> <dbl> <dbl>
-## 1 -0.000237 0.147 0.383
+## # A tibble: 2 × 4
+##   model    AIC  AICc   BIC
+##   <chr>  <dbl> <dbl> <dbl>
+## 1 spbin2  279.  279.  289.
+## 2 spbin   282.  282.  292.
 ```
 
 ``` r
@@ -469,18 +412,6 @@ anova(spgam)
 ```
 
 ``` r
-car::vif(spgam)
-```
-
-```
-##                  GVIF Df GVIF^(1/(2*Df))
-## temp         4.725774  1        2.173885
-## state      126.219690  3        2.239690
-## origin       1.270228  1        1.127044
-## temp:state  75.860886  3        2.057483
-```
-
-``` r
 pairs(emmeans::emmeans(spgam, ~ state | temp))
 ```
 
@@ -541,7 +472,7 @@ tidy(spbin_seal, conf.int = TRUE)
 ```
 
 ``` r
-emmeans(spbin_seal, ~ 1, type = "response")
+emmeans::emmeans(spbin_seal, ~ 1, type = "response")
 ```
 
 ```
@@ -551,32 +482,6 @@ emmeans(spbin_seal, ~ 1, type = "response")
 ## Degrees-of-freedom method: asymptotic 
 ## Confidence level used: 0.95 
 ## Intervals are back-transformed from the logit scale
-```
-
-``` r
-seal |> dplyr::select(-dplyr::any_of("sampled"))
-```
-
-```
-## Simple feature collection with 149 features and 4 fields
-## Geometry type: POLYGON
-## Dimension:     XY
-## Bounding box:  xmin: 913618.8 ymin: 855730.2 xmax: 1221859 ymax: 1145054
-## Projected CRS: NAD83 / Alaska Albers
-## # A tibble: 149 × 5
-##    log_trend  trend stock                       geometry is_decreasing
-##        <dbl>  <dbl> <fct>                  <POLYGON [m]> <lgl>        
-##  1  NA       NA     8     ((1035002 1054710, 1035002 10… NA           
-##  2  -0.282    0.754 8     ((1037002 1039492, 1037006 10… TRUE         
-##  3  -0.00121  0.999 8     ((1070158 1030216, 1070185 10… TRUE         
-##  4   0.0354   1.04  8     ((1054906 1034826, 1054931 10… FALSE        
-##  5  -0.0160   0.984 8     ((1025142 1056940, 1025184 10… TRUE         
-##  6   0.0872   1.09  8     ((1026035 1044623, 1026037 10… FALSE        
-##  7  -0.266    0.767 8     ((1100345 1060709, 1100287 10… TRUE         
-##  8   0.0743   1.08  8     ((1030247 1029637, 1030248 10… FALSE        
-##  9  NA       NA     8     ((1043093 1020553, 1043097 10… NA           
-## 10  -0.00961  0.990 8     ((1116002 1024542, 1116002 10… TRUE         
-## # ℹ 139 more rows
 ```
 
 ``` r
@@ -638,16 +543,6 @@ anova(spbeta_full_ml, spbeta_reduced_ml)
 ```
 
 ``` r
-AIC(spbeta_full_ml, spbeta_reduced_ml)
-```
-
-```
-##                   df       AIC
-## spbeta_full_ml     7 -467.6174
-## spbeta_reduced_ml  6 -450.4478
-```
-
-``` r
 #=========================================================#
 # Figures ####
 #=========================================================#
@@ -655,6 +550,13 @@ AIC(spbeta_full_ml, spbeta_reduced_ml)
 library("ggplot2", verbose = FALSE)
 library("dplyr", verbose = FALSE)
 library("patchwork")
+```
+
+```
+## Warning: package 'patchwork' was built under R version 4.4.3
+```
+
+``` r
 theme_caption_sized <- function(size = 14) {
   theme_bw(base_size = size) +
     theme(
@@ -666,12 +568,9 @@ theme_caption_sized <- function(size = 14) {
     )
 }
 
-okabe <- c("#E69F00", "#56B4E9", "#009E73", "#F0E442", "#0072B2", "#D55E00", "#CC79A7")
-
 #==========================================#
-# Figure 1a: Correlation by range ####
+# Figure 1
 #==========================================#
-
 h <- seq(0, 1, length.out = 1000)
 range1 <- 0.2
 dat1 <- data.frame(Distance = h, Correlation = exp(-h/range1), Range = "0.2")
@@ -681,13 +580,10 @@ range3 <- 0.8
 dat3 <- data.frame(Distance = h, Correlation = exp(-h/range3), Range = "0.8")
 dat <- bind_rows(dat1, dat2, dat3)
 dat$Range <- factor(dat$Range, levels = c("0.8", "0.5", "0.2"))
-figure1 <- ggplot(dat, aes(x = Distance, y = Correlation, color = Range, linetype = Range)) +
+cor_range <- ggplot(dat, aes(x = Distance, y = Correlation, color = Range, linetype = Range)) +
   geom_line(linewidth = 1.2) +
   scale_color_viridis_d() +
-  theme_caption_sized(14)
-#==========================================#
-# Figure 1b: Correlation types ####
-#==========================================#
+  theme_caption_sized(13)
 
 h <- seq(0, 1, length.out = 1000)
 range <- 0.5
@@ -695,16 +591,12 @@ dat1 <- data.frame(Distance = h, Correlation = exp(-h/range), Type = "Exponentia
 dat2 <- data.frame(Distance = h, Correlation = exp(-(h/range)^2), Type = "Gaussian")
 dat3 <- data.frame(Distance = h, Correlation = (1 - 1.5 * h/range + 0.5 * (h/range)^3) * (h <= range), Type = "Spherical")
 dat <- bind_rows(dat1, dat2, dat3)
-figure2 <- ggplot(dat, aes(x = Distance, y = Correlation, color = Type, linetype = Type)) +
+cor_type <- ggplot(dat, aes(x = Distance, y = Correlation, color = Type, linetype = Type)) +
   geom_line(linewidth = 1.2) +
   scale_color_viridis_d() +
-  theme_caption_sized(14)
-correlations <- (figure1 | figure2) +
-  plot_annotation(
-    tag_levels = "a",
-    tag_prefix = "(",
-    tag_suffix = ")"
-  )
+  labs(color = "Function", linetype = "Function") +
+  theme_caption_sized(13)
+correlations <- cor_range | cor_type
 correlations
 ```
 
@@ -715,12 +607,13 @@ correlations
 # Figure 2 ####
 #==========================================#
 
+okabe <- c("#E69F00", "#56B4E9", "#009E73", "#F0E442", "#0072B2", "#D55E00", "#CC79A7")
 moose_comb <- bind_rows(moose |> mutate(samp = "yes"), moose_preds |> mutate(samp = "no"))
-figure3 <- ggplot(moose_comb, aes(color = presence, shape = samp)) +
+obs_pred_presence <- ggplot(moose_comb, aes(color = presence, shape = samp)) +
   geom_sf(size = 2) +
   scale_color_manual(name = "moose", values = okabe[1:2], breaks = c(1, 0), labels = c("yes", "no")) +
   scale_shape_manual(name = "sampled", values = c(19, 17), breaks = c("yes", "no"), labels = c("yes", "no")) +
-  theme_caption_sized(16) +
+  theme_caption_sized(15) +
   scale_y_continuous(breaks = seq(62.6, 63.6, length.out = 5)) +
   scale_x_continuous(breaks = seq(-148.5, -146, length.out = 3)) +
   guides(
@@ -728,7 +621,7 @@ figure3 <- ggplot(moose_comb, aes(color = presence, shape = samp)) +
     shape = guide_legend(order = 2)
   ) +
   geom_sf(size = 2, data = moose_comb %>% filter(samp == "no"), color = "red", shape = 17)
-figure3
+obs_pred_presence
 ```
 
 ![plot of chunk unnamed-chunk-1](figure/unnamed-chunk-1-2.png)
@@ -738,53 +631,45 @@ figure3
 # Figure 3 ####
 #==========================================#
 
-spbin <- spglm(
-  formula = presence ~ elev + strat,
-  family = binomial,
-  data = moose,
-  spcov_type = "exponential"
-)
 spbin_aug <- augment(spbin)
 
 p1 <- ggplot(spbin_aug, aes(color = .hat)) +
-  geom_sf(size = 2) +
+  geom_sf(size = 1) +
   scale_color_viridis_c(option = "E", name = ".hat") +
   scale_y_continuous(breaks = seq(62.6, 63.6, length.out = 5)) +
   scale_x_continuous(breaks = seq(-148.5, -146, length.out = 3)) +
   theme_caption_sized(14)
 
 p2 <- ggplot(spbin_aug, aes(color = .std.resid)) +
-  geom_sf(size = 2) +
+  geom_sf(size = 1) +
   scale_color_viridis_c(option = "A", limits = c(-2, 2)) +
   scale_y_continuous(breaks = seq(62.6, 63.6, length.out = 5)) +
   scale_x_continuous(breaks = seq(-148.5, -146, length.out = 3)) +
   theme_caption_sized(14)
 
-p1
+p1 + p2
 ```
 
 ![plot of chunk unnamed-chunk-1](figure/unnamed-chunk-1-3.png)
 
 ``` r
-p2
-```
-
-![plot of chunk unnamed-chunk-1](figure/unnamed-chunk-1-4.png)
-
-``` r
 #==========================================#
 # Figure 4 ####
 #==========================================#
-
-old_par <- par(mfrow = c(1, 2), cex = 1.5)
-plot(spbin, which = 4)
-plot(spbin, which = 7)
 ```
 
-![plot of chunk unnamed-chunk-1](figure/unnamed-chunk-1-5.png)
+``` r
+old_par <- par(no.readonly = TRUE)
+par(mfrow = c(1, 2), mar = c(5.1, 4.1, 4.1, 3.2))
+par(cex = 1.5, cex.main = 1, cex.axis = 0.95, cex.sub = 0.95)
+plot(spbin, which = c(4, 7))
+```
+
+![plot of chunk unnamed-chunk-2](figure/unnamed-chunk-2-1.png)
 
 ``` r
 par(old_par)
+
 #==========================================#
 # Figure 5 ####
 #==========================================#
@@ -795,30 +680,19 @@ preds_aug <- augment(
   type.predict = "response",
   interval = "prediction"
 )
-spbin_aug <- augment(spbin, type.predict = "response", interval = "prediction")
-```
-
-```
-## Warning: interval = "prediction" is ignored when newdata is not
-## supplied, because a prediction interval requires a location that has
-## not been observed. Supply newdata for prediction intervals, or use
-## interval = "confidence" for an interval around the fitted mean at the
-## observed locations.
-```
-
-``` r
+spbin_aug <- augment(spbin, type.predict = "response")
 comb_aug <- bind_rows(spbin_aug %>% mutate(Type = "Fitted"), preds_aug %>% mutate(Type = "Pred"))
 
-figure6 <- ggplot(comb_aug, aes(color = .fitted, shape = Type)) +
+obs_pred_fitted <- ggplot(comb_aug, aes(color = .fitted, shape = Type)) +
   geom_sf(size = 2) +
   scale_color_viridis_c(option = "H", name = "Prob", limits = c(0, 1)) +
   scale_y_continuous(breaks = seq(62.6, 63.6, length.out = 5)) +
   scale_x_continuous(breaks = seq(-148.5, -146, length.out = 3)) +
   theme_caption_sized(16)
-figure6
+obs_pred_fitted
 ```
 
-![plot of chunk unnamed-chunk-1](figure/unnamed-chunk-1-6.png)
+![plot of chunk unnamed-chunk-2](figure/unnamed-chunk-2-2.png)
 
 ``` r
 #==========================================#
@@ -826,36 +700,30 @@ figure6
 #==========================================#
 
 p1 <- ggplot(preds_aug, aes(color = .lower)) +
-  geom_sf(size = 2, pch = 17) +
+  geom_sf(pch = 17) +
   scale_color_viridis_c(option = "H", name = "Lower", limits = c(0, 1)) +
   scale_y_continuous(breaks = seq(62.6, 63.6, length.out = 5)) +
   scale_x_continuous(breaks = seq(-148.5, -146, length.out = 3)) +
   theme_caption_sized(14)
 
 p2 <- ggplot(preds_aug, aes(color = .upper)) +
-  geom_sf(size = 2, pch = 17) +
+  geom_sf(pch = 17) +
   scale_color_viridis_c(option = "H", name = "Upper", limits = c(0, 1)) +
   scale_y_continuous(breaks = seq(62.6, 63.6, length.out = 5)) +
   scale_x_continuous(breaks = seq(-148.5, -146, length.out = 3)) +
   theme_caption_sized(14)
 
-p1
+p1 + p2
 ```
 
-![plot of chunk unnamed-chunk-1](figure/unnamed-chunk-1-7.png)
-
-``` r
-p2
-```
-
-![plot of chunk unnamed-chunk-1](figure/unnamed-chunk-1-8.png)
+![plot of chunk unnamed-chunk-2](figure/unnamed-chunk-2-3.png)
 
 ``` r
 #==========================================#
 # Figure 7 ####
 #==========================================#
 
-figure8 <- ggplot(moose_comb, aes(color = count, shape = samp)) +
+obs_pred_count <- ggplot(moose_comb, aes(color = count, shape = samp)) +
   geom_sf(size = 2) +
   scale_color_binned(breaks = c(0, 1, 2, 5, 10, 20, 40), type = "viridis") +
   scale_shape_manual(name = "sampled", values = c(19, 17), breaks = c("yes", "no"), labels = c("yes", "no")) +
@@ -863,32 +731,26 @@ figure8 <- ggplot(moose_comb, aes(color = count, shape = samp)) +
   scale_y_continuous(breaks = seq(62.6, 63.6, length.out = 5)) +
   scale_x_continuous(breaks = seq(-148.5, -146, length.out = 3)) +
   geom_sf(size = 2, data = moose_comb %>% filter(samp == "no"), color = "red", shape = 17)
-figure8
+obs_pred_count
 ```
 
-![plot of chunk unnamed-chunk-1](figure/unnamed-chunk-1-9.png)
+![plot of chunk unnamed-chunk-2](figure/unnamed-chunk-2-4.png)
 
 ``` r
 #==========================================#
 # Figure 8 ####
 #==========================================#
-
-spnbin <- spglm(
-  formula = count ~ elev + strat,
-  family = nbinomial,
-  data = moose,
-  spcov_type = "spherical",
-  anisotropy = TRUE
-)
-
-spnbin_iso <- update(spnbin, anisotropy = FALSE)
-
-old_par <- par(mfrow = c(1, 2), cex = 1.5)
-plot(spnbin_iso, which = 8)
-plot(spnbin, which = 8)
 ```
 
-![plot of chunk unnamed-chunk-1](figure/unnamed-chunk-1-10.png)
+``` r
+old_par <- par(no.readonly = TRUE)
+par(mfrow = c(1, 2))
+par(cex = 1.5, cex.main = 1, cex.axis = 0.95, cex.sub = 0.95)
+plot(spnb, which = 8)
+plot(spnb_anis, which = 8)
+```
+
+![plot of chunk unnamed-chunk-3](figure/unnamed-chunk-3-1.png)
 
 ``` r
 par(old_par)
@@ -896,33 +758,26 @@ par(old_par)
 #==========================================#
 # Figure 9 ####
 #==========================================#
-
-seal$sampled <- factor(if_else(is.na(seal$log_trend), "no", "yes"), levels = c("yes", "no"))
+seal$sampled <- factor(if_else(is.na(seal$trend), "no", "yes"), levels = c("yes", "no"))
 p1 <- ggplot(seal, aes(fill = sampled, color = stock)) +
-  geom_sf(size = 1) +
+  geom_sf(size = 0.25) +
   theme_caption_sized(14) +
   scale_fill_manual(name = "sampled", values = okabe[1:2], breaks = c("yes", "no"), labels = c("yes", "no")) +
   scale_color_manual(name = "stock", values = c("grey40", "grey80"), breaks = c(8, 10), labels = c(8, 10)) +
   scale_y_continuous(breaks = seq(57, 59, length.out = 5)) +
   scale_x_continuous(breaks = seq(-139, -134, length.out = 3))
 
-p2 <- ggplot(seal, aes(fill = log_trend)) +
-  geom_sf(size = 1) +
+p2 <- ggplot(seal, aes(fill = trend)) +
+  geom_sf(size = 0.25) +
   theme_caption_sized(14) +
-  scale_fill_viridis_c(name = "logtrend", option = "D", begin = 0.5, limits = c(min(seal$log_trend), max(seal$log_trend))) +
+  scale_fill_viridis_c(name = "trend", option = "D", begin = 0.5, limits = range(seal$trend, na.rm = TRUE)) +
   scale_y_continuous(breaks = seq(57, 59, length.out = 5)) +
   scale_x_continuous(breaks = seq(-139, -134, length.out = 3))
 
-p1
+p1 + p2
 ```
 
-![plot of chunk unnamed-chunk-1](figure/unnamed-chunk-1-11.png)
-
-``` r
-p2
-```
-
-![plot of chunk unnamed-chunk-1](figure/unnamed-chunk-1-12.png)
+![plot of chunk unnamed-chunk-3](figure/unnamed-chunk-3-2.png)
 
 ``` r
 #==========================================#
@@ -930,17 +785,17 @@ p2
 #==========================================#
 
 texas$samp <- factor(if_else(is.na(texas$turnout), "no", "yes"), levels = c("yes", "no"))
-figure11 <- ggplot(texas, aes(color = turnout, shape = samp)) +
+obs_prop2 <- ggplot(texas, aes(color = turnout, shape = samp)) +
   geom_sf(size = 2) +
   scale_color_viridis_c(option = "D") +
   scale_shape_manual(name = "sampled", values = c(19, 17), breaks = c("yes", "no"), labels = c("yes", "no")) +
   theme_caption_sized(16) +
   scale_x_continuous(breaks = seq(-94, -106, length.out = 3)) +
   geom_sf(size = 2, data = texas %>% filter(samp == "no"), color = "red", shape = 17)
-figure11
+obs_prop2
 ```
 
-![plot of chunk unnamed-chunk-1](figure/unnamed-chunk-1-13.png)
+![plot of chunk unnamed-chunk-3](figure/unnamed-chunk-3-3.png)
 
 ``` r
 #=========================================================#
@@ -973,38 +828,28 @@ sessionInfo()
 ## [7] base     
 ## 
 ## other attached packages:
-##  [1] lubridate_1.9.4 forcats_1.0.1   stringr_1.5.2   purrr_1.1.0    
-##  [5] readr_2.1.5     tidyr_1.3.1     tibble_3.3.0    tidyverse_2.0.0
-##  [9] patchwork_1.3.2 here_1.0.2      car_3.1-3       carData_3.0-5  
-## [13] emmeans_1.10.3  dplyr_1.2.0     ggplot2_4.0.2   spmodel_0.15.0 
+## [1] patchwork_1.3.2 here_1.0.2      dplyr_1.2.0     ggplot2_4.0.2  
+## [5] spmodel_0.15.0 
 ## 
 ## loaded via a namespace (and not attached):
-##  [1] tidyselect_1.2.1   viridisLite_0.4.2  farver_2.1.2      
-##  [4] S7_0.2.0           fastmap_1.2.0      digest_0.6.36     
-##  [7] timechange_0.3.0   estimability_1.5.1 mime_0.12         
-## [10] lifecycle_1.0.5    qpdf_1.4.1         sf_1.0-21         
-## [13] processx_3.8.4     magrittr_2.0.4     compiler_4.4.1    
-## [16] rlang_1.1.7        tools_4.4.1        utf8_1.2.4        
-## [19] yaml_2.3.10        knitr_1.50         askpass_1.2.0     
-## [22] labeling_0.4.3     classInt_0.4-11    xml2_1.4.0        
-## [25] RColorBrewer_1.1-3 pkgload_1.5.3      abind_1.4-5       
-## [28] KernSmooth_2.23-24 withr_3.0.2        hunspell_3.0.5    
-## [31] grid_4.4.1         xtable_1.8-4       e1071_1.7-16      
-## [34] scales_1.4.0       tinytex_0.57       cli_3.6.3         
-## [37] mvtnorm_1.2-5      rmarkdown_2.31     ragg_1.5.0        
-## [40] generics_0.1.4     tzdb_0.4.0         commonmark_1.9.5  
-## [43] DBI_1.2.3          proxy_0.4-27       parallel_4.4.1    
-## [46] vctrs_0.7.1        Matrix_1.7-0       litedown_0.7      
-## [49] callr_3.7.6        hms_1.1.3          Formula_1.2-5     
-## [52] systemfonts_1.3.1  units_0.8-7        spelling_2.3.1    
-## [55] pak_0.9.0          glue_1.7.0         ps_1.7.6          
-## [58] stringi_1.8.4      gtable_0.3.6       pillar_1.11.1     
-## [61] htmltools_0.5.8.1  R6_2.5.1           textshaping_0.4.0 
-## [64] rprojroot_2.1.1    evaluate_0.24.0    lattice_0.22-6    
-## [67] markdown_2.0       rbibutils_2.3      backports_1.5.0   
-## [70] broom_1.0.10       renv_1.0.7         class_7.3-22      
-## [73] Rcpp_1.0.12        coda_0.19-4.1      xfun_0.52         
-## [76] rticles_0.27       pdftools_3.8.0     pkgconfig_2.0.3
+##  [1] utf8_1.2.4         generics_0.1.4     renv_1.0.7        
+##  [4] class_7.3-22       KernSmooth_2.23-24 lattice_0.22-6    
+##  [7] digest_0.6.36      magrittr_2.0.4     evaluate_0.24.0   
+## [10] grid_4.4.1         estimability_1.5.1 RColorBrewer_1.1-3
+## [13] mvtnorm_1.2-5      fastmap_1.2.0      rprojroot_2.1.1   
+## [16] Matrix_1.7-0       e1071_1.7-16       DBI_1.2.3         
+## [19] tinytex_0.57       viridisLite_0.4.2  scales_1.4.0      
+## [22] cli_3.6.3          rlang_1.1.7        units_0.8-7       
+## [25] withr_3.0.2        yaml_2.3.10        tools_4.4.1       
+## [28] parallel_4.4.1     coda_0.19-4.1      vctrs_0.7.1       
+## [31] R6_2.5.1           proxy_0.4-27       lifecycle_1.0.5   
+## [34] emmeans_1.10.3     classInt_0.4-11    rticles_0.27      
+## [37] pkgconfig_2.0.3    pillar_1.11.1      gtable_0.3.6      
+## [40] glue_1.7.0         Rcpp_1.0.12        sf_1.0-21         
+## [43] xfun_0.52          tibble_3.3.0       tidyselect_1.2.1  
+## [46] knitr_1.50         farver_2.1.2       xtable_1.8-4      
+## [49] htmltools_0.5.8.1  labeling_0.4.3     rmarkdown_2.31    
+## [52] compiler_4.4.1     S7_0.2.0
 ```
 
 ``` r

@@ -1,5 +1,6 @@
 # Preliminaries
-library(tidyverse)
+library(ggplot2)
+library(dplyr)
 library(spmodel)
 library(patchwork)
 library(here)
@@ -17,7 +18,7 @@ theme_caption_sized <- function(size = 14) {
 
 
 #######################
-######## Figure 1a: Correlation by range
+######## Figure 1
 #######################
 h <- seq(0, 1, length.out = 1000)
 range1 <- 0.2
@@ -33,9 +34,6 @@ cor_range <- ggplot(dat, aes(x = Distance, y = Correlation, color = Range, linet
   scale_color_viridis_d() +
   theme_caption_sized(13)
 
-#######################
-######## Figure 1b: Correlation types
-#######################
 h <- seq(0, 1, length.out = 1000)
 range <- 0.5
 dat1 <- data.frame(Distance = h, Correlation = exp(-h/range), Type = "Exponential")
@@ -47,8 +45,7 @@ cor_type <- ggplot(dat, aes(x = Distance, y = Correlation, color = Type, linetyp
   scale_color_viridis_d() +
   labs(color = "Function", linetype = "Function") +
   theme_caption_sized(13)
-correlations <- (cor_range | cor_type) +
-  plot_annotation()
+correlations <- cor_range | cor_type
 correlations
 ggsave(
   filename = paste0(fig_path, "/figure-1.pdf"),
@@ -127,9 +124,10 @@ ggsave(
 
 
 pdf(paste0(fig_path, "/figure-5.pdf"), height = 5, width = 10)
-old_par <- par(mfrow = c(1, 2), cex = 1, cex.main = 0.8, mar = c(5.1, 4.1, 4.1, 3.2))
-plot(spbin, which = 4)
-plot(spbin, which = 7)
+old_par <- par(no.readonly = TRUE)
+par(mfrow = c(1, 2), mar = c(5.1, 4.1, 4.1, 3.2))
+par(cex = 1.5, cex.main = 1, cex.axis = 0.95, cex.sub = 0.95)
+plot(spbin, which = c(4, 7))
 par(old_par)
 dev.off()
 
@@ -144,7 +142,7 @@ preds_aug <- augment(
   type.predict = "response",
   interval = "prediction"
 )
-spbin_aug <- augment(spbin)
+spbin_aug <- augment(spbin, type.predict = "response")
 comb_aug <- bind_rows(spbin_aug %>% mutate(Type = "Fitted"), preds_aug %>% mutate(Type = "Pred"))
 
 obs_pred_fitted <- ggplot(comb_aug, aes(color = .fitted, shape = Type)) +
@@ -214,20 +212,21 @@ ggsave(
 ####### Figure 8
 ########################
 
-spnbin <- spglm(
+sppois <- spglm(
   formula = count ~ elev + strat,
-  family = nbinomial,
+  family = poisson,
   data = moose,
-  spcov_type = "spherical",
-  anisotropy = TRUE
+  spcov_type = "spherical"
 )
-
-spnbin_iso <- update(spnbin, anisotropy = FALSE)
+spnb <- update(sppois, family = nbinomial)
+spnb_anis <- update(spnb, anisotropy = TRUE)
 
 pdf(paste0(fig_path, "/figure-9.pdf"), height = 5, width = 10)
-old_par <- par(mfrow = c(1, 2), cex = 1, cex.main = 0.8)
-plot(spnbin_iso, which = 8)
-plot(spnbin, which = 8)
+old_par <- par(no.readonly = TRUE)
+par(mfrow = c(1, 2))
+par(cex = 1.5, cex.main = 1, cex.axis = 0.95, cex.sub = 0.95)
+plot(spnb, which = 8)
+plot(spnb_anis, which = 8)
 par(old_par)
 dev.off()
 
