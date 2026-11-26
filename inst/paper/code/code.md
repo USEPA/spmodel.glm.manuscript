@@ -562,7 +562,7 @@ theme_caption_sized <- function(size = 14) {
 }
 
 #==========================================#
-# Figure 1
+# Figure 1 ####
 #==========================================#
 h <- seq(0, 1, length.out = 1000)
 range1 <- 0.2
@@ -770,7 +770,7 @@ p1 <- ggplot(seal, aes(fill = sampled, color = stock)) +
 p2 <- ggplot(seal, aes(fill = trend_category)) +
   geom_sf(size = 0.25) +
   theme_caption_sized(14) +
-  scale_fill_manual(name = "Trend", values = c("Increasing" = okabe[3], "Decreasing" = okabe[4])) +
+  scale_fill_manual(name = "Trend", values = c("Increasing" = okabe[3], "Decreasing" = okabe[4]), breaks = c("Increasing", "Decreasing"), na.value = "grey50") +
   scale_y_continuous(breaks = seq(57, 59, length.out = 5)) +
   scale_x_continuous(breaks = seq(-139, -134, length.out = 3))
 
@@ -828,30 +828,31 @@ sessionInfo()
 ## [7] base     
 ## 
 ## other attached packages:
-## [1] patchwork_1.3.2 here_1.0.2      dplyr_1.2.0     ggplot2_4.0.2  
-## [5] spmodel_0.15.0 
+## [1] here_1.0.2      patchwork_1.3.2 spmodel_0.15.0  dplyr_1.2.0    
+## [5] ggplot2_4.0.2  
 ## 
 ## loaded via a namespace (and not attached):
-##  [1] utf8_1.2.4         generics_0.1.4     renv_1.0.7        
-##  [4] class_7.3-22       KernSmooth_2.23-24 lattice_0.22-6    
-##  [7] digest_0.6.36      magrittr_2.0.4     evaluate_0.24.0   
-## [10] grid_4.4.1         estimability_1.5.1 RColorBrewer_1.1-3
-## [13] mvtnorm_1.2-5      fastmap_1.2.0      rprojroot_2.1.1   
-## [16] Matrix_1.7-0       e1071_1.7-16       DBI_1.2.3         
-## [19] tinytex_0.57       viridisLite_0.4.2  scales_1.4.0      
-## [22] textshaping_0.4.0  cli_3.6.3          rlang_1.1.7       
-## [25] units_0.8-7        litedown_0.7       commonmark_1.9.5  
-## [28] withr_3.0.2        yaml_2.3.10        tools_4.4.1       
-## [31] parallel_4.4.1     coda_0.19-4.1      mime_0.12         
-## [34] vctrs_0.7.1        R6_2.5.1           proxy_0.4-27      
-## [37] lifecycle_1.0.5    emmeans_1.10.3     classInt_0.4-11   
-## [40] rticles_0.27       ragg_1.5.0         pkgconfig_2.0.3   
-## [43] pillar_1.11.1      gtable_0.3.6       glue_1.7.0        
-## [46] Rcpp_1.0.12        systemfonts_1.3.1  sf_1.0-21         
-## [49] xfun_0.52          tibble_3.3.0       tidyselect_1.2.1  
-## [52] knitr_1.50         farver_2.1.2       xtable_1.8-4      
-## [55] htmltools_0.5.8.1  labeling_0.4.3     rmarkdown_2.31    
-## [58] compiler_4.4.1     S7_0.2.0           markdown_2.0
+##  [1] gtable_0.3.6       xfun_0.52          lattice_0.22-6    
+##  [4] vctrs_0.7.1        tools_4.4.1        generics_0.1.4    
+##  [7] parallel_4.4.1     tibble_3.3.0       proxy_0.4-27      
+## [10] pkgconfig_2.0.3    pdftools_3.8.0     Matrix_1.7-0      
+## [13] KernSmooth_2.23-24 RColorBrewer_1.1-3 S7_0.2.0          
+## [16] lifecycle_1.0.5    compiler_4.4.1     farver_2.1.2      
+## [19] textshaping_0.4.0  tinytex_0.57       litedown_0.7      
+## [22] htmltools_0.5.8.1  class_7.3-22       yaml_2.3.10       
+## [25] pillar_1.11.1      classInt_0.4-11    mime_0.12         
+## [28] commonmark_1.9.5   tidyselect_1.2.1   digest_0.6.36     
+## [31] mvtnorm_1.2-5      sf_1.0-21          labeling_0.4.3    
+## [34] rprojroot_2.1.1    fastmap_1.2.0      grid_4.4.1        
+## [37] cli_3.6.3          magrittr_2.0.4     utf8_1.2.4        
+## [40] e1071_1.7-16       withr_3.0.2        scales_1.4.0      
+## [43] estimability_1.5.1 rmarkdown_2.31     emmeans_1.10.3    
+## [46] qpdf_1.4.1         askpass_1.2.0      ragg_1.5.0        
+## [49] coda_0.19-4.1      evaluate_0.24.0    knitr_1.50        
+## [52] viridisLite_0.4.2  markdown_2.0       rticles_0.27      
+## [55] rlang_1.1.7        Rcpp_1.0.12        xtable_1.8-4      
+## [58] glue_1.7.0         DBI_1.2.3          R6_2.5.1          
+## [61] systemfonts_1.3.1  units_0.8-7
 ```
 
 ``` r

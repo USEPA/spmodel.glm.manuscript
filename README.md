@@ -1,6 +1,6 @@
-# spmodel.glm. manuscript
+# spmodel.glm.manuscript
 
-### Supplement to "Spatial GeneralizedLinear Models in R using spmodel"
+### Supplement to "Spatial Generalized Linear Models in R Using spmodel"
 
 ##### Michael Dumelle<sup>1</sup>, Jay M. Ver Hoef<sup>2</sup>, Matt Higham<sup>3</sup>
 
@@ -35,21 +35,21 @@ All data are available upon download of the **spmodel** **R** package.
 
 The files required to reproduce the manuscript are available at the file path found by running
 ```r
-system.file("manuscript", package = "spmodel.glm.manuscript")
+system.file("paper", package = "spmodel.glm.manuscript")
 ```
 
 ### Figures
 
 Figures are available at the file path found by running
 ```r
-system.file("manuscript/figures", package = "spmodel.glm.manuscript")
+system.file("paper", "figures", package = "spmodel.glm.manuscript")
 ```
 
 ### Replication Code
 
 Replication code is available at the file path found by running
 ```r
-system.file("manuscript/code", package = "spmodel.glm.manuscript")
+system.file("paper", "code", package = "spmodel.glm.manuscript")
 ```
 
 ### Disclaimer

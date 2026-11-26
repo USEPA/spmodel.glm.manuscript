@@ -178,7 +178,7 @@ theme_caption_sized <- function(size = 14) {
 }
 
 #==========================================#
-# Figure 1
+# Figure 1 ####
 #==========================================#
 h <- seq(0, 1, length.out = 1000)
 range1 <- 0.2
@@ -350,7 +350,7 @@ p1 <- ggplot(seal, aes(fill = sampled, color = stock)) +
 p2 <- ggplot(seal, aes(fill = trend_category)) +
   geom_sf(size = 0.25) +
   theme_caption_sized(14) +
-  scale_fill_manual(name = "Trend", values = c("Increasing" = okabe[3], "Decreasing" = okabe[4])) +
+  scale_fill_manual(name = "Trend", values = c("Increasing" = okabe[3], "Decreasing" = okabe[4]), breaks = c("Increasing", "Decreasing"), na.value = "grey50") +
   scale_y_continuous(breaks = seq(57, 59, length.out = 5)) +
   scale_x_continuous(breaks = seq(-139, -134, length.out = 3))
 

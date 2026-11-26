@@ -39,7 +39,7 @@ abstract: |
   similar than distant ones. The \pkg{spmodel} package in \proglang{R}
   provides a suite of tools for fitting spatial generalized linear models
   (SPGLMs) to non-Gaussian data and making spatial predictions
-  (i.e.,&nbsp;kriging). SPGLMs for point-referenced ($x$&nbsp; and $y$&nbsp;coordinates) support are
+  (i.e.,&nbsp;kriging). SPGLMs for point-referenced ($x$ and $y$&nbsp;coordinates) support are
   fit using the \code{spglm()} function, while SPGLMs for areal (lattice,
   polygon) support are fit using the \code{spgautor()} function. Both
   \code{spglm()} and \code{spgautor()} maximize a Laplace approximation
@@ -124,8 +124,7 @@ correlation matrix that depends on a function controlling its shape and a range 
   \COV(\boldsymbol{\tau}) = \sigma^2_{\tau} \mathbf{R}_{exp} =  \sigma^2_{\tau} \exp(-\boldsymbol \Delta/\phi),
 \end{align}
 
-where \(\boldsymbol \Delta\) is a matrix of pairwise distances among
-the elements of \(\mathbf{y}\). The random effect
+where \(\boldsymbol \Delta\) is a matrix of pairwise distances among the observed locations. The random effect
 \(\boldsymbol{\epsilon}\) is an \(n \times 1\) column vector that captures nonspatial variance. It is assumed to follow a multivariate Gaussian distribution where
 \( \E(\boldsymbol{\epsilon}) = \boldsymbol{0}\) and
 \(\COV(\boldsymbol{\epsilon}) = \sigma^2_\epsilon \mathbf{I}\) for 
@@ -159,7 +158,7 @@ and \(\mathbf{X}\) may instead be written \(\mathbf{y}(\mathbf{s})\) and
 \end{figure}
 
 While SPGLMs are challenging to work with, both conceptually and
-computationally [@bolker2009generalized], there have been many recent contributions to the \proglang{R} programming language [@rcore2024] that have made them more accessible to practitioners. The \pkg{brms}
+computationally [@bolker2009generalized], there have been many recent contributions to the \proglang{R} programming language [@rcore2026] that have made them more accessible to practitioners. The \pkg{brms}
 [@burkner2017brms], \pkg{carBayes} [@lee2013carbayes],
 \pkg{ngspatial} [@hughes2020ngspatial], \pkg{R-INLA}
 [@lindgren2015bayesian], \pkg{inlabru} [@bachl2019inlabru],
@@ -246,7 +245,7 @@ packages for modeling like \pkg{broom}
 tools for model summaries, prediction, and simulating data. There are
 some notable differences between the two packages, however. \pkg{sdmTMB}
 supports several additional GLM distributions like the Tweedie, supports
-Hurdle models, and can incorporate prior information through Bayesian
+hurdle models, and can incorporate prior information through Bayesian
 applications. \pkg{sdmTMB} also provides tools for working with temporal
 data and spatiotemporal data and provides enhanced visualizations of the
 model's marginal effects. \pkg{sdmTMB} does require a preprocessing step
@@ -351,12 +350,12 @@ doubly iterative optimization over 1) \(\boldsymbol{\theta}\) and
 \(\varphi\) and 2) the latent \(\mathbf{w}\) (to find each set of
 \(\mathbf{w}^{*}\)), which ultimately yields REML estimators \(\hat{\varphi}\) and
 \(\hat{\boldsymbol{\theta}}\) and their respective values of
-\(\mathbf{w}^{*}\), which we call \(\hat{\mathbf{w}}\).
-For ML estimation, \(\boldsymbol{\beta}\) is held fixed in the integral over \(\mathbf{w}\) [@bonat2016practical], so Equation&nbsp;\ref{eq-marginal6} uses \([\mathbf{w}^{*} | \mathbf{X}, \boldsymbol{\beta}, \boldsymbol{\theta}]\) in place of \([\mathbf{w}^{*} | \mathbf{X}, \boldsymbol{\theta}]\) and replaces \(\mathbf{G}_{\mathbf{w}^{*}}\) in its determinant with the Hessian of \(\log([\mathbf{y} | g^{-1}(\mathbf{w}), \varphi] [\mathbf{w} | \mathbf{X}, \boldsymbol{\beta}, \boldsymbol{\theta}])\), with \(\boldsymbol{\beta}\) evaluated at \(\hat{\boldsymbol{\beta}}\); for ML estimation in \pkg{spmodel}, \(\hat{\mathbf{w}}\) and the covariance formulas below use \(\mathbf{G}_{\mathbf{w}^{*}}\) as defined above, as \(\boldsymbol \beta\) is profiled during optimization.
-For a fixed dispersion $\varphi$, the ML and REML fixed-effect estimates both approach the standard GLM estimates as $\sigma^2_{de}$ and $\sigma^2_{ie}$ approach zero.
-\citet{ver2024marginal} provide further details, which includes explicit
+\(\mathbf{w}^{*}\), which we call \(\hat{\mathbf{w}}\). \citet{ver2024marginal} provide further details, which include explicit
 forms of \(\mathbf{g}\) and \(\mathbf{G}\) for various response
 distributions. 
+
+For ML estimation, \(\boldsymbol{\beta}\) is held fixed in the integral over \(\mathbf{w}\) [@bonat2016practical], so Equation&nbsp;\ref{eq-marginal6} uses \([\mathbf{w}^{*} | \mathbf{X}, \boldsymbol{\beta}, \boldsymbol{\theta}]\) in place of \([\mathbf{w}^{*} | \mathbf{X}, \boldsymbol{\theta}]\) and replaces \(\mathbf{G}_{\mathbf{w}^{*}}\) in its determinant with the Hessian of \(\log([\mathbf{y} | g^{-1}(\mathbf{w}), \varphi] [\mathbf{w} | \mathbf{X}, \boldsymbol{\beta}, \boldsymbol{\theta}])\). For ML estimation in \pkg{spmodel}, \(\boldsymbol{\beta}\) is otherwise profiled out of the Gaussian likelihood using its generalized least squares form, \(\boldsymbol{\beta} = \mathbf{B}\mathbf{w}\) (Section&nbsp;\ref{sec:fixed}). Hence the optimization over \(\mathbf{w}\) to obtain \(\hat{\mathbf{w}}\) substitutes \(\mathbf{B}\mathbf{w}\) for \(\boldsymbol{\beta}\) at each candidate \(\mathbf{w}\). This implies that for ML, the Gaussian density in Equation&nbsp;\ref{eq-marginal6} is evaluated at \(\hat{\boldsymbol{\beta}} = \mathbf{B}\hat{\mathbf{w}}\) and the covariance formulas below use the profiled Hessian, which has the form of \(\mathbf{G}_{\mathbf{w}^{*}}\) defined as for REML.  For a fixed dispersion $\varphi$, the ML and REML fixed-effect estimates both approach the standard GLM estimates as $\sigma^2_{de}$ and $\sigma^2_{ie}$ approach zero.
+
 
 ## Estimating fixed effects {#sec:fixed}
 
@@ -415,12 +414,8 @@ standard linear model [@myers2012generalized]. Deviance residuals are given by
 \(\mathbf{r}_{d} = \operatorname{sgn}(\mathbf{r}_{r})\sqrt{\boldsymbol{\delta}}\),
 where \(\boldsymbol{\delta}\) is the vector of individual deviances.
 The sum of the squared deviance residuals equals the sum of the elements
-of \(\boldsymbol{\delta}\), known as the model fit's deviance. The deviance, often used as a (conditional) fit statistic,
-quantifies twice the difference in log likelihoods
-between the saturated model that fits every observation perfectly
-(i.e.,&nbsp;\(\mu_{i} \equiv y_i\) for all \(i\)) and the
-fitted model [@mccullagh1989generalized]. The standardized (deviance) residuals are \(\mathbf{r}_{d}/\sqrt{a(\varphi)\mathbf{1} - diag(\mathbf{H})}\), where \(a(\varphi)\) is a dispersion scaling factor [@faraway2016extending]. The Pearson residuals are 
-\(\mathbf{r}_{p} = \mathbf{r}_{r}/\sqrt{\VAR(\hat{\mathbf{w}})}\), where \(\VAR(\hat{\text{y}}_i)\) is the response-scale variance implied by the GLM family and evaluated at the fitted \(\hat{\text{w}}\).
+of \(\boldsymbol{\delta}\), known as the model fit's deviance. The deviance, often used as a (conditional) fit statistic, measures lack of fit relative to the saturated model that fits every observation perfectly (i.e.,&nbsp;\(\mu_{i} \equiv y_i\) for all \(i\)) [@mccullagh1989generalized]. The standardized (deviance) residuals are \(\mathbf{r}_{d}/\sqrt{\mathbf{a}(\varphi)(\mathbf{1} - diag(\mathbf{H}))}\), where \(\mathbf{a}(\varphi)\) is a vector of dispersion scaling factors [@faraway2016extending]. The Pearson residuals are
+\(r_{p,i} = r_{r,i}/\sqrt{\VAR(y_i | \hat{w}_i, \hat{\varphi})}\), where \(\VAR(y_i | \hat{w}_i, \hat{\varphi})\) is the variance of \(y_i\) implied by the response distribution given the latent mean, evaluated at \(\hat{w}_i\) and \(\hat{\varphi}\).
 
 An observation has high leverage if its combination of explanatory
 variables is far away from other observations. Let \(\mathbf{X}_v = \mathbf{V}^{1/2} \mathbf{X}\), where \(\mathbf{V}\) is a diagonal matrix with \(i\)th
@@ -430,7 +425,7 @@ An observation is influential if it has a sizable impact on model fit.
 Influence is measured using Cook's distance
 [@cook1979influential; @cook1982residuals], which can be expressed as 
 \(\mathbf{c} = [\mathbf{r}^2_{s}/\text{tr}(\mathbf{H})][diag(\mathbf{H})/(\mathbf{1} - diag(\mathbf{H}))]\),
-where \(\mathbf{r}_{s}\). The larger the value of \(\text{c}_i\), the more severe the
+where \(\mathbf{r}_{s}\) is the vector of standardized residuals. The larger the value of \(\text{c}_i\), the more severe the
 influence from the \(i\)th observation.
 
 In a linear model, the \(R^2\) (R-squared) statistic quantifies the
@@ -459,7 +454,7 @@ should be used as an informative diagnostic tool that is unique to each
 model fit and describes how much variability from that model is
 attributable to the explanatory variables.
 
-## Predicting at new locations (i.e., Kriging) {#predicting-at-new-locations}
+## Predicting at new locations (i.e., kriging) {#predicting-at-new-locations}
 
 We may also predict values of the latent mean (on the link scale) at new
 locations by leveraging the spatial covariance between observed
@@ -505,7 +500,7 @@ where \(\mathbf{I}\) is the \(n \times n\) identity matrix. As with
 # Modeling moose presence in Alaska, USA {#sec-applications}
 
 The \code{moose} data in \pkg{spmodel} contain information on moose
-(Alces alces) presence in the Togiak region of Alaska, USA. \code{moose}
+(\emph{Alces alces}) presence in the Togiak region of Alaska, USA. \code{moose}
 is an \code{sf} object, a special data frame that is supplemented with
 spatial information using the \pkg{sf} package in \proglang{R}
 [@pebesma2018sf]. After loading \pkg{spmodel}, the first few rows
@@ -529,12 +524,12 @@ prevalent in the southwestern and eastern parts of the Togiak region
 
 \begin{figure}[t!]
 \centering
-\includegraphics[width = 0.75\linewidth, trim=0 10 0 0,clip]{figures/figure-3.pdf}
+\includegraphics[width = 0.75\linewidth, trim=0 10 0 0,clip]{figures/figure-2.pdf}
 \caption{Moose presence in Alaska. Circles represent moose presence or absence (based on color) and triangles represent locations at which moose presence probability predictions are desired.}
 \label{fig-moose-data}
 \end{figure}
 
-The \code{moose_preds} data in \pkg{spmodel} is a \code{sf} object with
+The \code{moose_preds} data in \pkg{spmodel} is an \code{sf} object with
 point locations at which moose presence predictions are desired. Like
 \code{moose}, \code{moose_preds} contains \code{elev} and \code{strat}
 for each site:
@@ -551,13 +546,13 @@ for the response variable; \code{data}, the data frame that contains the
 variables in \code{formula}, and \code{spcov_type}, the type of spatial
 covariance (which defaults to \code{"exponential"}). The
 \code{formula}, \code{family}, and \code{data} arguments
-are familiar because they are the three required arguments to
+are familiar because they are the three primary arguments to
 \code{glm()} for nonspatial GLMs. So the transition from \code{glm()} to
 \code{spglm()} typically involves only one additional argument:
 \code{spcov_type}. When \code{data} is not an \code{sf} object,
 \code{spglm()} also requires the \code{xcoord} and \code{ycoord}
 arguments, which indicate the columns in \code{data} that represent the
-projected $x$&nbsp; and $y$&nbsp;coordinates, respectively.
+projected $x$ and $y$&nbsp;coordinates, respectively.
 
 We use \code{spglm()} to fit a SPGLM (here, a spatial logistic
 regression model with the default REML estimation) quantifying the effect of elevation and strata on
@@ -582,8 +577,8 @@ summary(spbin)
 The model provides some evidence that elevation is positively associated
 with the log odds of moose presence (\(p\)&nbsp;value \(\approx\) 0.087),
 after controlling for strata. The model also provides strong evidence
-that moose have a higher log odds of presence in the \code{"M"} strata
-compared to the \code{"L"} strata (\(p\)&nbsp;value \textless{} 0.001), after
+that moose have a higher log odds of presence in the \code{"M"} stratum
+compared to the \code{"L"} stratum (\(p\)&nbsp;value \textless{} 0.001), after
 controlling for elevation.
 
 The fixed effects coefficients table from \code{summary()} is often of
@@ -613,7 +608,7 @@ glance(bin)
 ```
 
 The likelihood-based statistics AIC, AICc, and BIC are much lower for
-the SPGLM than for the GLM, which indicates the SPGLM model is preferred. While the REML likelihood has some additional terms, the ML likelihood is the likelihood that (approximately) matches `glm()`: 
+the SPGLM than for the GLM, which indicates the SPGLM is preferred. While the REML likelihood has some additional terms, the ML likelihood is the likelihood that (approximately) matches `glm()`:
 ```{r}
 bin_ml <- update(bin, estmethod = "ml")
 bin_glm <- glm(
@@ -628,7 +623,7 @@ logLik(bin_glm)
 Instead of relying on likelihood-based statistics, models can be
 compared using a cross-validation procedure
 \citep{james2013introduction}. The \code{loocv()} function performs
-leave-one-out cross validation, comparing the predicted mean (on the
+leave-one-out cross-validation, comparing the predicted mean (on the
 response scale) to the observed response variable for each hold-out
 observation, recomputing estimates of \(\boldsymbol{\beta}\) in each
 iteration (but using the \(\hat{\boldsymbol \theta}\) and \(\hat{\mathbf{w}}\) from the full model fit). Statistics
@@ -640,10 +635,10 @@ loocv(bin)
 ```
 
 Both models have negligible bias, but the SPGLM has much lower MSPE and
-RMSPE than the GLM, indicating a better fitting model. In addition to leave-one-out cross validation, k-fold cross validation is also available via \code{kcv()}.
+RMSPE than the GLM, indicating a better-fitting model. In addition to leave-one-out cross-validation, $k$-fold cross-validation is also available via \code{kcv()}.
 
-In the previous example, we compared the fit of an SPGLM to a GLM. However, we may instead want to compare the fit of two different SPGLMs. Below, we compare the fit with an
-\texttt{"exponential"} spatial covariance to the fit with a \texttt{"gaussian"} spatial covariance, which have quite different origin behaviors (Figure&nbsp;\ref{fig-correlations}; right):
+In the previous example, we compared the fit of a SPGLM to a GLM. However, we may instead want to compare the fit of two different SPGLMs. Below, we compare the fit with an
+\code{"exponential"} spatial covariance to the fit with a \code{"gaussian"} spatial covariance, which have quite different origin behaviors (Figure&nbsp;\ref{fig-correlations}; right):
 ```{r}
 spbin2 <- update(spbin, spcov_type = "gaussian")
 glances(spbin, spbin2)[, c("model", "AIC", "AICc", "BIC")]
@@ -652,7 +647,7 @@ glances(spbin, spbin2)[, c("model", "AIC", "AICc", "BIC")]
 The SPGLM with the \code{"gaussian"} spatial covariance
 (\code{spbin2}) has slightly lower (better) AIC, AICc, and BIC. 
 
-REML estimation (\pkg{spmodel} default) is often preferred to ML estimation because REML estimation tends to yield less biased covariance parameter estimates than ML estimation [@cressie1993asymptotic]. REML can be used for models with different sets of fixed effects when the model comparison method does not depend on the likelihood (e.g., cross-validation). However, when the goal is to compare models with different sets of fixed effects using likelihood-based methods like AIC or BIC, it is generally recommended to use ML estimation instead of REML estimation. This is because REML estimation can be viewed as using a transformed response built on error contrasts that varies with $\mathbf{X}$ [@wolfinger1993covariance; @bates2015lme4]. Some authors, including @zuur2009mixed, discuss using REML estimation to fit a final model after model selection using ML. @gurka2006selecting and @kubokawa2011conditional, among others, however, argue instead that REML comparisons may be valid when the fixed effects vary across models.
+REML estimation (\pkg{spmodel} default) is often preferred to ML estimation because REML estimation tends to yield less biased covariance parameter estimates than ML estimation [@cressie1993asymptotic]. REML can be used for models with different sets of fixed effects when the model comparison method does not depend on the likelihood (e.g., cross-validation). However, when the goal is to compare models with different sets of fixed effects using likelihood-based methods like AIC or BIC, it is generally recommended to use ML estimation instead of REML estimation. This is because REML estimation can be viewed as using a transformed response built on error contrasts that varies with $\mathbf{X}$ [@wolfinger1993covariance; @bates2015lme4]. Some authors, including @zuur2009mixed, discuss using REML estimation to fit a final model after model selection using ML. @gurka2006selecting and @kubokawa2011conditional, among others, however, argue instead that REML-based model selection may be valid when the fixed effects vary across models.
 
 ## Model Diagnostics {#model-diagnostics}
 
@@ -678,7 +673,7 @@ extract model diagnostics from the model object.
 
 \begin{figure}[t!]
 \centering
-\includegraphics[width = 1\linewidth, trim=0 20 0 20,clip]{figures/figure-4.pdf}
+\includegraphics[width = 1\linewidth, trim=0 20 0 20,clip]{figures/figure-3.pdf}
 \caption{Moose presence model diagnostics, including leverage values (left) and standardized residuals (right).}
 \label{fig-sp-diagnostic}
 \end{figure}
@@ -693,7 +688,7 @@ plot(spbin, which = c(4, 7))
 ```
 \begin{figure}[t!]
 \centering
-\includegraphics[width = 1\linewidth, trim=0 0 0 20,clip]{figures/figure-5.pdf}
+\includegraphics[width = 1\linewidth, trim=0 0 0 20,clip]{figures/figure-4.pdf}
 \caption{Moose presence model diagnostics, including Cook's distance (left) and the fitted spatial covariance as a function of distance (right).}
 \label{fig-sp-diagnostic2}
 \end{figure}
@@ -725,7 +720,7 @@ predict(spbin, newdata = moose_preds, type = "response")[1:5]
 ```
 \begin{figure}[t!]
 \centering
-\includegraphics[width = 0.75\linewidth]{figures/figure-6.pdf}
+\includegraphics[width = 0.75\linewidth]{figures/figure-5.pdf}
 \caption{Moose presence probability fitted values ($g^{-1}(\hat{\mathbf{w}})$) and predictions. Fitted values are represented by circles and predictions by triangles.}
 \label{fig-moose-fit}
 \end{figure}
@@ -749,12 +744,12 @@ with predictions, using the same arguments as for \code{predict()}:
 augment(spbin, newdata = moose_preds, interval = "prediction")
 ```
 
-By using \code{augment()} when \code{newdata} is a \code{sf} object,
+By using \code{augment()} when \code{newdata} is an \code{sf} object,
 predictions and their corresponding uncertainties are readily available
 for spatial mapping (Figure&nbsp;\ref{fig-moose-int}).
 \begin{figure}[t!]
 \centering
-\includegraphics[width = 1\linewidth, trim=0 20 0 20,clip]{figures/figure-7.pdf}
+\includegraphics[width = 1\linewidth, trim=0 20 0 20,clip]{figures/figure-6.pdf}
 \caption{Moose presence 95\% prediction interval lower bounds (left) and upper bounds (right).}
 \label{fig-moose-int}
 \end{figure}
@@ -823,7 +818,7 @@ spnb <- update(sppois, family = nbinomial)
 ```
 \begin{figure}[t!]
 \centering
-\includegraphics[width = 0.75\linewidth, trim=0 0 0 0,clip]{figures/figure-8.pdf}
+\includegraphics[width = 0.75\linewidth, trim=0 0 0 0,clip]{figures/figure-7.pdf}
 \caption{Moose counts in Alaska. Circles represent moose counts (based on color) and triangles represent locations at which mean count predictions are desired.}
 \label{fig-moose-data-count}
 \end{figure}
@@ -891,22 +886,22 @@ south-southwest). This pattern is consistent with the moose counts in
 Figure&nbsp;\ref{fig-moose-data-count}.
 \begin{figure}[t!]
 \centering
-\includegraphics[width = 1\linewidth, trim=0 0 0 20,clip]{figures/figure-9.pdf}
+\includegraphics[width = 1\linewidth, trim=0 0 0 20,clip]{figures/figure-8.pdf}
 \caption{Level curves of equal spatial covariance for the negative binomial moose count models. The ellipse is centered at zero distance in the $x$~ and $y$~directions, and points along it have equal covariance. In the isotropic level curve (left), covariance decays equally in all directions. In the anisotropic level curve (right), covariance decays slowest along the major axis, at 2.737 radians counterclockwise from the positive $x$~axis (roughly west-northwest to east-southeast), and fastest along the perpendicular minor axis (roughly north-northeast to south-southwest).}
 \label{fig-tropy}
 \end{figure}
 
 ## Modeling lake conductivity in Southwest, USA {#sec-lake}
 
-The \code{lake} data in \pkg{spmodel} contains
+The \code{lake} data in \pkg{spmodel} contain
 data for several lakes in four southwestern states in the United States:
-Arizona, Colorado, Nevada, and Utah. We desire an SPGLM that
+Arizona, Colorado, Nevada, and Utah. We desire a SPGLM that
 characterizes the effect of temperature, state, and lake origin (whether
 the lake is naturally occurring or human made) on conductivity.
 Conductivity is a measure of dissolved ions (measured here in water),
 which is important for various physical, chemical, and biological
 processes. The data are right-skewed, so we model
-them using an SPGLM assuming a Gamma distribution for the response and a Cauchy spatial covariance [@zimmerman2024spatial]. The
+them using a SPGLM assuming a Gamma distribution for the response and a Cauchy spatial covariance [@zimmerman2024spatial]. The
 \code{cond} variable in \code{lake} measures conductivity on its
 original scale:
 ```{r}
@@ -950,7 +945,7 @@ emmeans::emtrends(spgam, ~ state, var = "temp")
 ```
 ## Modeling harbor seal trends in Alaska, USA {#sec-seal}
 
-The \code{seal} data in \pkg{spmodel} contains harbor seal abundance
+The \code{seal} data in \pkg{spmodel} contain harbor seal abundance
 trends for two different harbor seal stocks (genetically distinct
 populations). While the \code{moose} and \code{lake} data have
 point-referenced support, the \code{seal} data have areal support. Each
@@ -960,8 +955,8 @@ of coastal rocks that harbor seals go to rest, molt, and give birth.
 
 \begin{figure}[t!]
 \centering
-\includegraphics[width = 1\linewidth, trim=0 10 0 10,clip]{figures/figure-10.pdf}
-\caption{Seal trend distribution in Alaska. Observed and missing seal polygons by stock (left) and increasing or decreasing trends, based on whether the trend is above or below one (right).}
+\includegraphics[width = 1\linewidth, trim=0 10 0 10,clip]{figures/figure-9.pdf}
+\caption{Seal trend distribution in Alaska. Observed and missing seal polygons by stock (left) and increasing or decreasing trends, based on whether the trend is above or below one (right). Grey polygons in the right panel were not sampled and are the locations requiring prediction.}
 \label{fig-seal}
 \end{figure}
 
@@ -1029,12 +1024,12 @@ centroids of each polygon are used as the point-referenced coordinates.
 
 \begin{figure}[t!]
 \centering
-\includegraphics[width = 0.75\linewidth,trim=0 8 0 0,clip]{figures/figure-11.pdf}
+\includegraphics[width = 0.75\linewidth,trim=0 8 0 0,clip]{figures/figure-10.pdf}
 \caption{Proportion of voter turnout in Texas for the 1980 presidential election. Circles represent voter turnout (based on color) and triangles represent locations at which voter turnout predictions are desired.}
 \label{fig-texas}
 \end{figure}
 
-The \code{texas} data in \pkg{spmodel} contains voter turnout data for
+The \code{texas} data in \pkg{spmodel} contain voter turnout data for
 Texas counties in the 1980 United States Presidential Election
 [@bivand2024spdata]. The data have point-referenced support, with
 polygon centroids representing the spatial location of each county
@@ -1093,7 +1088,7 @@ binary, count, proportion, and skewed data and 20 covariance structures.
 \pkg{spmodel} includes tools for data visualization, inference, model
 diagnostics, and prediction. Other features include simultaneous fitting
 of multiple models, fixing covariance and dispersion parameters,
-spatial indexing for large non-Gaussian datasets [@ver2023indexing],
+spatial indexing for large non-Gaussian data sets [@ver2023indexing],
 conditional simulation of realized surfaces [@zimmerman2024spatial],
 and simulation of spatially dependent data with functions such as
 \code{sprbinom()} and \code{sprpois()}. Additional documentation is available at

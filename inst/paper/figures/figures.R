@@ -75,7 +75,7 @@ obs_pred_presence <- ggplot(moose_comb, aes(color = presence, shape = samp)) +
   geom_sf(size = 2, data = moose_comb %>% filter(samp == "no"), color = "red", shape = 17)
 obs_pred_presence
 ggsave(
-  filename = paste0(fig_path, "/figure-3.pdf"),
+  filename = paste0(fig_path, "/figure-2.pdf"),
   plot = obs_pred_presence,
   dpi = 300,
   height = 5,
@@ -111,7 +111,7 @@ p2 <- ggplot(spbin_aug, aes(color = .std.resid)) +
 
 p1 + p2
 ggsave(
-  filename = paste0(fig_path, "/figure-4.pdf"),
+  filename = paste0(fig_path, "/figure-3.pdf"),
   plot = p1 + p2,
   dpi = 300,
   height = 3,
@@ -123,7 +123,7 @@ ggsave(
 ########################
 
 
-pdf(paste0(fig_path, "/figure-5.pdf"), height = 5, width = 10)
+pdf(paste0(fig_path, "/figure-4.pdf"), height = 5, width = 10)
 old_par <- par(no.readonly = TRUE)
 par(mfrow = c(1, 2), mar = c(5.1, 4.1, 4.1, 3.2))
 par(cex = 1.5, cex.main = 1, cex.axis = 0.95, cex.sub = 0.95)
@@ -153,7 +153,7 @@ obs_pred_fitted <- ggplot(comb_aug, aes(color = .fitted, shape = Type)) +
   theme_caption_sized(16)
 obs_pred_fitted
 ggsave(
-  filename = paste0(fig_path, "/figure-6.pdf"),
+  filename = paste0(fig_path, "/figure-5.pdf"),
   plot = obs_pred_fitted,
   dpi = 300,
   height = 5,
@@ -180,7 +180,7 @@ p2 <- ggplot(preds_aug, aes(color = .upper)) +
 
 p1 + p2
 ggsave(
-  filename = paste0(fig_path, "/figure-7.pdf"),
+  filename = paste0(fig_path, "/figure-6.pdf"),
   plot = p1 + p2,
   dpi = 300,
   height = 3,
@@ -201,7 +201,7 @@ obs_pred_count <- ggplot(moose_comb, aes(color = count, shape = samp)) +
   geom_sf(size = 2, data = moose_comb %>% filter(samp == "no"), color = "red", shape = 17)
 obs_pred_count
 ggsave(
-  filename = paste0(fig_path, "/figure-8.pdf"),
+  filename = paste0(fig_path, "/figure-7.pdf"),
   plot = obs_pred_count,
   dpi = 300,
   height = 5,
@@ -221,7 +221,7 @@ sppois <- spglm(
 spnb <- update(sppois, family = nbinomial)
 spnb_anis <- update(spnb, anisotropy = TRUE)
 
-pdf(paste0(fig_path, "/figure-9.pdf"), height = 5, width = 10)
+pdf(paste0(fig_path, "/figure-8.pdf"), height = 5, width = 10)
 old_par <- par(no.readonly = TRUE)
 par(mfrow = c(1, 2))
 par(cex = 1.5, cex.main = 1, cex.axis = 0.95, cex.sub = 0.95)
@@ -252,13 +252,13 @@ p1 <- ggplot(seal, aes(fill = sampled, color = stock)) +
 p2 <- ggplot(seal, aes(fill = trend_category)) +
   geom_sf(size = 0.25) +
   theme_caption_sized(14) +
-  scale_fill_manual(name = "Trend", values = c("Increasing" = okabe[3], "Decreasing" = okabe[4])) +
+  scale_fill_manual(name = "Trend", values = c("Increasing" = okabe[3], "Decreasing" = okabe[4]), breaks = c("Increasing", "Decreasing"), na.value = "grey50") +
   scale_y_continuous(breaks = seq(57, 59, length.out = 5)) +
   scale_x_continuous(breaks = seq(-139, -134, length.out = 3))
 
 p1 + p2
 ggsave(
-  filename = paste0(fig_path, "/figure-10.pdf"),
+  filename = paste0(fig_path, "/figure-9.pdf"),
   plot = p1 + p2,
   dpi = 300,
   height = 3,
@@ -280,7 +280,7 @@ obs_prop2 <- ggplot(texas, aes(color = turnout, shape = samp)) +
   geom_sf(size = 2, data = texas %>% filter(samp == "no"), color = "red", shape = 17)
 obs_prop2
 ggsave(
-  filename = paste0(fig_path, "/figure-11.pdf"),
+  filename = paste0(fig_path, "/figure-10.pdf"),
   plot = obs_prop2,
   dpi = 300,
   height = 5,
