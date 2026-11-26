@@ -415,7 +415,7 @@ standard linear model [@myers2012generalized]. Deviance residuals are given by
 where \(\boldsymbol{\delta}\) is the vector of individual deviances.
 The sum of the squared deviance residuals equals the sum of the elements
 of \(\boldsymbol{\delta}\), known as the model fit's deviance. The deviance, often used as a (conditional) fit statistic, measures lack of fit relative to the saturated model that fits every observation perfectly (i.e.,&nbsp;\(\mu_{i} \equiv y_i\) for all \(i\)) [@mccullagh1989generalized]. The standardized (deviance) residuals are \(\mathbf{r}_{d}/\sqrt{\mathbf{a}(\varphi)(\mathbf{1} - diag(\mathbf{H}))}\), where \(\mathbf{a}(\varphi)\) is a vector of dispersion scaling factors [@faraway2016extending]. The Pearson residuals are
-\(r_{p,i} = r_{r,i}/\sqrt{\VAR(y_i | \hat{w}_i, \hat{\varphi})}\), where \(\VAR(y_i | \hat{w}_i, \hat{\varphi})\) is the variance of \(y_i\) implied by the response distribution given the latent mean, evaluated at \(\hat{w}_i\) and \(\hat{\varphi}\).
+\(r_{p,i} = r_{r,i}/\sqrt{\VAR(y_i | \hat{w}_i, \hat{\varphi})}\), where \(\VAR(y_i | \hat{w}_i, \hat{\varphi})\) is the variance of \(y_i\) implied by the response distribution given the estimated \(\hat{w}_i\) and \(\hat{\varphi}\).
 
 An observation has high leverage if its combination of explanatory
 variables is far away from other observations. Let \(\mathbf{X}_v = \mathbf{V}^{1/2} \mathbf{X}\), where \(\mathbf{V}\) is a diagonal matrix with \(i\)th
