@@ -900,7 +900,7 @@ R> glances(spbin, spbin2)[, c("model", "AIC", "AICc", "BIC")]
 The SPGLM with the \code{"gaussian"} spatial covariance (\code{spbin2})
 has slightly lower (better) AIC, AICc, and BIC.
 
-REML estimation (\pkg{spmodel} default) is often preferred to ML
+REML estimation (the \pkg{spmodel} default) is often preferred to ML
 estimation because REML estimation tends to yield less biased covariance
 parameter estimates than ML estimation \citep{cressie1993asymptotic}.
 REML can be used for models with different sets of fixed effects when
@@ -1136,7 +1136,7 @@ which can be modeled using point-referenced or areal support, and use
 maximum likelihood to compare two models with different explanatory
 variables. Table~\ref{tab:additional} outlines, for each application,
 the section number, data set, family (i.e.,~response distribution),
-geometry type (point-referenced or areal support), and additional
+geometry type (point-referenced or areal support), and the additional
 \pkg{spmodel} features highlighted in each application.
 
 \begin{table}
@@ -1392,16 +1392,16 @@ The main effect for temperature and the temperature by state interaction
 are statistically significant (\(p\)~value \textless{} 0.001), while the
 main effects for state and lake origin are not. Because of the
 interaction, however, the \code{temp} and \code{state} main effects are
-conditional: with the default treatment contrasts, they describe the
-temperature slope in the reference state (AZ) and the state differences
-at a temperature of zero, respectively.
+conditional: With the default treatment contrasts, they describe (on the
+link scale) the temperature slope in the reference state (AZ) and the
+state differences at a temperature of zero, respectively.
 
 Because of the interaction between \code{temp} and \code{state},
-contrasts that assess mean differences among states should condition
-upon a specific temperature value. \pkg{spmodel} provides support for
-\pkg{emmeans}, which provides tools for understanding models with
-interactions. First, we assess state-level contrasts at the mean
-temperature value (here, 7.63):
+contrasts that assess mean differences (on the link scale) among states
+should condition upon a specific temperature value. \pkg{spmodel}
+provides support for \pkg{emmeans}, which provides tools for
+understanding models with interactions. First, we assess state-level
+contrasts at the mean temperature value (7.63 degrees Celsius):
 
 \begin{CodeChunk}
 \begin{CodeInput}
