@@ -770,7 +770,7 @@ p1 <- ggplot(seal, aes(fill = sampled, color = stock)) +
 p2 <- ggplot(seal, aes(fill = trend_category)) +
   geom_sf(size = 0.25) +
   theme_caption_sized(14) +
-  scale_fill_manual(name = "Trend", values = c("Increasing" = okabe[3], "Decreasing" = okabe[4]), breaks = c("Increasing", "Decreasing"), na.value = "grey50") +
+  scale_fill_manual(name = "Trend", values = c("Increasing" = okabe[3], "Decreasing" = okabe[4]), breaks = c("Increasing", "Decreasing"), na.value = "grey75") +
   scale_y_continuous(breaks = seq(57, 59, length.out = 5)) +
   scale_x_continuous(breaks = seq(-139, -134, length.out = 3))
 
@@ -851,8 +851,8 @@ sessionInfo()
 ## [49] coda_0.19-4.1      evaluate_0.24.0    knitr_1.50        
 ## [52] viridisLite_0.4.2  markdown_2.0       rticles_0.27      
 ## [55] rlang_1.1.7        Rcpp_1.0.12        xtable_1.8-4      
-## [58] glue_1.7.0         DBI_1.2.3          R6_2.5.1          
-## [61] systemfonts_1.3.1  units_0.8-7
+## [58] glue_1.7.0         DBI_1.2.3          renv_1.0.7        
+## [61] R6_2.5.1           systemfonts_1.3.1  units_0.8-7
 ```
 
 ``` r

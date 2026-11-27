@@ -39,11 +39,10 @@ abstract: |
   similar than distant ones. The \pkg{spmodel} package in \proglang{R}
   provides a suite of tools for fitting spatial generalized linear models
   (SPGLMs) to non-Gaussian data and making spatial predictions
-  (i.e.,&nbsp;kriging). SPGLMs for point-referenced ($x$ and $y$&nbsp;coordinates) support are
-  fit using the \code{spglm()} function, while SPGLMs for areal (lattice,
-  polygon) support are fit using the \code{spgautor()} function. Both
+  (i.e.,&nbsp;kriging). SPGLMs for point-referenced support ($x$ and $y$&nbsp;coordinates) are
+  fit using the \code{spglm()} function, while SPGLMs for areal support (polygon boundaries) are fit using the \code{spgautor()} function. Both
   \code{spglm()} and \code{spgautor()} maximize a Laplace approximation
-  to the marginal or restricted likelihood. The default restricted
+  to a marginal likelihood. The default restricted
   maximum likelihood (REML) approach integrates over the latent mean
   and fixed effects while accounting for spatial covariance. The inputs
   and outputs of \code{spglm()} and \code{spgautor()} closely resemble the
@@ -279,7 +278,7 @@ SPGLMs in \proglang{R}.
 # The spatial generalized linear model and marginalization {#sec-spglm}
 
 \pkg{spmodel} fits a hierarchical GLM [@lee1996hierarchical; @wood2017generalized]
-with spatial covariance by maximizing the Laplace approximation to the marginal likelihood or the marginal restricted likelihood. When the marginal likelihood is used, the approach is called maximum likelihood (ML) estimation [@bonat2016practical]. When the marginal restricted likelihood is used, the approach is called restricted maximum likelihood (REML) estimation [@ver2024marginal]. This general Laplace approximation approach enables the use of
+with spatial covariance by maximizing the Laplace approximation to the marginal likelihood or the marginal restricted likelihood. When the marginal likelihood is maximized, the approach is called maximum likelihood (ML) estimation [@bonat2016practical]. When the marginal restricted likelihood is maximized, the approach is called restricted maximum likelihood (REML) estimation [@ver2024marginal]. This general Laplace approximation approach enables the use of
 likelihood-based statistics for model comparison via statistics like AIC
 [@akaike1974new], AICc [@hurvich1989regression], BIC
 [@schwarz1978estimating], and likelihood ratios.
@@ -354,7 +353,7 @@ doubly iterative optimization over 1) \(\boldsymbol{\theta}\) and
 forms of \(\mathbf{g}\) and \(\mathbf{G}\) for various response
 distributions. 
 
-For ML estimation, \(\boldsymbol{\beta}\) is held fixed in the integral over \(\mathbf{w}\) [@bonat2016practical], so Equation&nbsp;\ref{eq-marginal6} uses \([\mathbf{w}^{*} | \mathbf{X}, \boldsymbol{\beta}, \boldsymbol{\theta}]\) in place of \([\mathbf{w}^{*} | \mathbf{X}, \boldsymbol{\theta}]\) and replaces \(\mathbf{G}_{\mathbf{w}^{*}}\) in its determinant with the Hessian of \(\log([\mathbf{y} | g^{-1}(\mathbf{w}), \varphi] [\mathbf{w} | \mathbf{X}, \boldsymbol{\beta}, \boldsymbol{\theta}])\). For ML estimation in \pkg{spmodel}, \(\boldsymbol{\beta}\) is otherwise profiled out of the Gaussian likelihood using its generalized least squares form, \(\boldsymbol{\beta} = \mathbf{B}\mathbf{w}\) (Section&nbsp;\ref{sec:fixed}). Hence the optimization over \(\mathbf{w}\) to obtain \(\hat{\mathbf{w}}\) substitutes \(\mathbf{B}\mathbf{w}\) for \(\boldsymbol{\beta}\) at each candidate \(\mathbf{w}\). This implies that for ML, the Gaussian density in Equation&nbsp;\ref{eq-marginal6} is evaluated at \(\hat{\boldsymbol{\beta}} = \mathbf{B}\hat{\mathbf{w}}\) and the covariance formulas below use the profiled Hessian, which has the form of \(\mathbf{G}_{\mathbf{w}^{*}}\) defined as for REML.  For a fixed dispersion $\varphi$, the ML and REML fixed-effect estimates both approach the standard GLM estimates as $\sigma^2_{de}$ and $\sigma^2_{ie}$ approach zero.
+With ML estimation, \(\boldsymbol{\beta}\) is held fixed in the integral over \(\mathbf{w}\) [@bonat2016practical], so Equation&nbsp;\ref{eq-marginal6} uses \([\mathbf{w}^{*} | \mathbf{X}, \boldsymbol{\beta}, \boldsymbol{\theta}]\) in place of \([\mathbf{w}^{*} | \mathbf{X}, \boldsymbol{\theta}]\) and replaces \(\mathbf{G}_{\mathbf{w}^{*}}\) in its determinant with the Hessian of \(\log([\mathbf{y} | g^{-1}(\mathbf{w}), \varphi] [\mathbf{w} | \mathbf{X}, \boldsymbol{\beta}, \boldsymbol{\theta}])\). For ML estimation in \pkg{spmodel}, \(\boldsymbol{\beta}\) is otherwise profiled out of the Gaussian likelihood using its generalized least squares form, \(\boldsymbol{\beta} = \mathbf{B}\mathbf{w}\) (Section&nbsp;\ref{sec:fixed}). Hence the optimization over \(\mathbf{w}\) to obtain \(\hat{\mathbf{w}}\) substitutes \(\mathbf{B}\mathbf{w}\) for \(\boldsymbol{\beta}\) at each candidate \(\mathbf{w}\). This implies that for ML, the Gaussian density in Equation&nbsp;\ref{eq-marginal6} is evaluated at \(\hat{\boldsymbol{\beta}} = \mathbf{B}\hat{\mathbf{w}}\) and the covariance formulas below use the profiled Hessian, which has the same form of \(\mathbf{G}_{\mathbf{w}^{*}}\) as defined for REML.  For a fixed dispersion $\varphi$, the ML and REML fixed-effect estimates both approach the standard GLM estimates as $\sigma^2_{de}$ and $\sigma^2_{ie}$ approach zero.
 
 
 ## Estimating fixed effects {#sec:fixed}
@@ -403,7 +402,7 @@ these types of statistics, including cutoffs to consider when
 identifying extreme residual, leverage, or influence values).
 An observation is an outlier if it has an extreme response value
 relative to expectation. The GLM response residuals compare the
-observation to its fitted latent mean on the response scale: \(\mathbf{r}_{r} = \mathbf{y} - g^{-1}(\hat{\mathbf{w}})\).
+observation to its fitted latent mean transformed to the response scale: \(\mathbf{r}_{r} = \mathbf{y} - g^{-1}(\hat{\mathbf{w}})\).
 Because responses often have constrained support in a GLM
 (e.g.,&nbsp;only two possible response values for binary data) and the
 variance of an observation generally depends on its mean, response
@@ -425,8 +424,8 @@ An observation is influential if it has a sizable impact on model fit.
 Influence is measured using Cook's distance
 [@cook1979influential; @cook1982residuals], which can be expressed as 
 \(\mathbf{c} = [\mathbf{r}^2_{s}/\text{tr}(\mathbf{H})][diag(\mathbf{H})/(\mathbf{1} - diag(\mathbf{H}))]\),
-where \(\mathbf{r}_{s}\) is the vector of standardized residuals. The larger the value of \(\text{c}_i\), the more severe the
-influence from the \(i\)th observation.
+where \(\mathbf{r}_{s}\) is the vector of standardized residuals. The larger the Cook's distance value, the more severe the
+influence.
 
 In a linear model, the \(R^2\) (R-squared) statistic quantifies the
 proportion of variability in the data captured by the explanatory
@@ -456,7 +455,7 @@ attributable to the explanatory variables.
 
 ## Predicting at new locations (i.e., kriging) {#predicting-at-new-locations}
 
-We may also predict values of the latent mean (on the link scale) at new
+We may also predict values of the latent mean at new
 locations by leveraging the spatial covariance between observed
 locations and new locations (spatial prediction is also called kriging;
 see @cressie1990origins). As in Section&nbsp;\ref{sec:fixed},
@@ -472,7 +471,7 @@ where \(\boldsymbol{\Sigma} = \COV(\mathbf{w}, \mathbf{w})\),
 \(\boldsymbol{\Sigma}_{\mathbf{u},\mathbf{w}} = \boldsymbol{\Sigma}_{\mathbf{w},\mathbf{u}}^\top\)
 and
 \(\boldsymbol{\Sigma}_{\mathbf{u},\mathbf{u}} = \COV(\mathbf{u}, \mathbf{u})\).
-Thus we may derive the conditional distribution of
+Thus, using properties of the multivariate Gaussian distribution, we may derive the conditional Gaussian distribution of
 \(\mathbf{u}|\mathbf{w}\), which has the following properties:
 \begin{align}
    \E(\mathbf{u} | \mathbf{w}) & = \mathbf{X}_{\mathbf{u}} \boldsymbol{\beta} + \boldsymbol{\Sigma}_{\mathbf{u}, \mathbf{w}}\boldsymbol{\Sigma}^{-1}(\mathbf{w} - \mathbf{X}\boldsymbol{\beta}), \\
@@ -647,12 +646,12 @@ glances(spbin, spbin2)[, c("model", "AIC", "AICc", "BIC")]
 The SPGLM with the \code{"gaussian"} spatial covariance
 (\code{spbin2}) has slightly lower (better) AIC, AICc, and BIC. 
 
-REML estimation (\pkg{spmodel} default) is often preferred to ML estimation because REML estimation tends to yield less biased covariance parameter estimates than ML estimation [@cressie1993asymptotic]. REML can be used for models with different sets of fixed effects when the model comparison method does not depend on the likelihood (e.g., cross-validation). However, when the goal is to compare models with different sets of fixed effects using likelihood-based methods like AIC or BIC, it is generally recommended to use ML estimation instead of REML estimation. This is because REML estimation can be viewed as using a transformed response built on error contrasts that varies with $\mathbf{X}$ [@wolfinger1993covariance; @bates2015lme4]. Some authors, including @zuur2009mixed, discuss using REML estimation to fit a final model after model selection using ML. @gurka2006selecting and @kubokawa2011conditional, among others, however, argue instead that REML-based model selection may be valid when the fixed effects vary across models.
+REML estimation (\pkg{spmodel} default) is often preferred to ML estimation because REML estimation tends to yield less biased covariance parameter estimates than ML estimation [@cressie1993asymptotic]. REML can be used for models with different sets of fixed effects when the model comparison method does not depend on the likelihood (e.g., cross-validation). However, when the goal is to compare models with different sets of fixed effects using likelihood-based methods like AIC or BIC, it is generally recommended to use ML estimation instead of REML estimation. This is because REML estimation can be viewed as using a transformed response built on error contrasts that depend on \(\mathbf{X}\) [@wolfinger1993covariance; @bates2015lme4]. Some authors, including @zuur2009mixed, discuss using REML estimation to fit a final model after model selection using ML. @gurka2006selecting and @kubokawa2011conditional, among others, however, argue instead that REML-based model selection may be valid when the fixed effects vary across models.
 
 ## Model Diagnostics {#model-diagnostics}
 
 \pkg{spmodel} provides a suite of tools for model diagnostics. One is
-\code{augment()}, which augments the data used in the model with several
+\code{augment()}, which augments the model data with
 model diagnostics (introduced in Section&nbsp;\ref{sec:diagnostics}):
 ```{r}
 augment(spbin)
@@ -674,7 +673,7 @@ extract model diagnostics from the model object.
 \begin{figure}[t!]
 \centering
 \includegraphics[width = 1\linewidth, trim=0 20 0 20,clip]{figures/figure-3.pdf}
-\caption{Moose presence model diagnostics, including leverage values (left) and standardized residuals (right).}
+\caption{Moose presence leverage values (left) and standardized residuals (right).}
 \label{fig-sp-diagnostic}
 \end{figure}
 
@@ -689,7 +688,7 @@ plot(spbin, which = c(4, 7))
 \begin{figure}[t!]
 \centering
 \includegraphics[width = 1\linewidth, trim=0 0 0 20,clip]{figures/figure-4.pdf}
-\caption{Moose presence model diagnostics, including Cook's distance (left) and the fitted spatial covariance as a function of distance (right).}
+\caption{Moose presence Cook's distance (left) and the fitted spatial covariance as a function of distance (right).}
 \label{fig-sp-diagnostic2}
 \end{figure}
 The \code{varcomp()} function partitions model variability into several
@@ -735,7 +734,7 @@ predict(spbin, newdata = moose_preds, interval = "prediction")[1:5, ]
 With \code{type = "response"}, prediction interval endpoints are obtained
 by applying the inverse link to the link-scale endpoints. With
 \code{se.fit = TRUE} and \code{delta = TRUE}, the delta method is used to
-calculate the returned response-scale standard error
+calculate the response-scale standard errors returned via \code{se.fit}
 [@oehlert1992note; @ver2012invented].
 
 We can also use \code{augment()} to augment the prediction data
